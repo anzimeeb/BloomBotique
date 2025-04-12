@@ -1,0 +1,605 @@
+@font-face {
+    font-family: 'Cigar-Free';
+    src: url(../fonts/cigra-free-demo/Cigra\ Free\ Demo.ttf);
+}
+
+@font-face {
+    font-family: 'Raleway';
+    src: url(../fonts/raleway-5/Raleway-Regular.ttf);
+}
+
+@font-face {
+    font-family: 'Bhentay';
+    src: url(../fonts/bhentay-typeface/Bhentay\ Regular.ttf);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Raleway;
+
+    h2 {
+        font-family: Raleway;
+        letter-spacing: 1;
+    }
+}
+
+a {
+    text-decoration: none;
+    color: black;
+
+}
+
+.bg-purple-custom {
+    background-color: #5F00A3;
+}
+
+.bg-white {
+    background-color: white;
+}
+
+/************************Account Login and Sign Up*****************************/
+
+.logoAccount img {
+    height: 150px;
+    object-fit: cover;
+}
+
+.account {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+#account-item1 {
+    width: 50%;
+    height: 100vh;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    h2 {
+        font-size: 40px;
+        font-weight: 900;
+    }
+}
+
+#account-item1 input[type="text"],
+input[type="password"] {
+    border-radius: 10px;
+    height: 50px;
+    width: 60vh;
+    margin: 10px;
+    padding: 12px 20px;
+    border: 2px black solid;
+}
+
+#account-item1 ::placeholder {
+    color: grey;
+    opacity: 1;
+    /* Firefox */
+}
+
+#account-item1 #forgotpw {
+    display: flex;
+    align-items: end;
+    justify-content: end;
+    padding-right: 13px;
+    text-decoration: underline;
+    font-size: small;
+    font-weight: bolder;
+    color: black;
+}
+
+#account-item1 p {
+    font-size: small;
+    margin: 20px;
+}
+
+#account-item1 #signup {
+    padding-right: 13px;
+    text-decoration: underline;
+    font-size: small;
+    font-weight: bolder;
+    color: black;
+}
+
+#account-item1 input[type="submit"] {
+    width: 60vh;
+    height: 50px;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#account-item1 input[type="submit"]:hover {
+    background-color: #2e2e2e;
+}
+
+#in_same {
+    display: flex;
+    margin: 10px 10px;
+    justify-content: space-between;
+
+    input[type="text"] {
+        border-radius: 10px;
+        height: 50px;
+        width: 29vh;
+        margin: 0px;
+        padding: 12px 20px;
+    }
+}
+
+#account-item2 {
+    width: 50%;
+    background-color: black;
+    height: 100vh;
+}
+
+#account-item2 img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/************************************Navigator***********************************/
+.secContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.nav-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: space-between;
+    align-items: center;
+    background-color: #5F00A3; /* or use your custom .bg-purple-custom */
+    padding: 1rem;
+    width: 150px;
+    height: 100vh;
+}
+
+.nav-item.active {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-left: 4px solid white;
+    border-radius: 0.5rem;
+}
+
+.nav-item.active a {
+    color: white !important;
+}
+
+.nav-item {
+    padding: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    width: 100%;
+    text-align: center;
+    border-radius: 0.5rem;
+}
+
+.nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Light hover effect */
+}
+
+.nav-item a:hover {
+    color: white !important; /* Highlight text color on hover */
+}
+
+.navCon {
+    background-color: white;
+    width: 20%;
+    padding: 30px;
+    display: flex;
+    justify-self: center;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.navCon .logo {
+    width: 150px;
+    height: auto;
+
+    img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+    }
+}
+
+.navCon .navigation {
+    text-align: left;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px;
+
+    a {
+        font-family: grifter;
+        letter-spacing: 1;
+        font-size: medium;
+    }
+
+}
+
+.navCon #pernav {
+    display: flex;
+    flex-direction: row;
+    padding: 10px 20px;
+    gap: 30px;
+    transition: all 0.3s ease;
+
+    a {
+        display: flex;
+        justify-content: center;
+        justify-items: center;
+        justify-self: center;
+        align-items: center;
+        font-family: grifter;
+        letter-spacing: 1;
+        font-size: medium;
+    }
+}
+
+.currentpage {
+    background-color: black;
+    border-radius: 10px;
+    color: white;
+
+    a {
+        color: white;
+    }
+}
+
+#pernav:hover {
+    background-color: black;
+    border-radius: 10px;
+    color: white;
+
+    a {
+        color: white;
+    }
+}
+
+.navCon #pernav img {
+    height: auto;
+    width: 30px;
+    object-fit: cover;
+}
+
+.navCon #pernav:hover #dash {
+    content: url('../img/ui_dashboard_w.png');
+    /* Specify the new image URL here */
+}
+
+.navCon #pernav:hover #orders {
+    content: url('../img/ui_orders_w.png');
+    /* Specify the new image URL here */
+}
+
+.navCon #pernav:hover #cust {
+    content: url('../img/ui_customers_w.png');
+    /* Specify the new image URL here */
+}
+
+.navCon #pernav:hover #prod {
+    content: url('../img/ui_products_w.png');
+    /* Specify the new image URL here */
+}
+
+.navCon #pernav:hover #emp {
+    content: url('../img/ui_employee_w.png');
+    /* Specify the new image URL here */
+}
+
+.navCon #pernav:hover #lg {
+    content: url('../img/ui_logout_w.png');
+    /* Specify the new image URL here */
+}
+
+.bodyContainer {
+    background-color: #f8f3ff;
+    width: 100%;
+    height: 100vh;
+    padding: 20px;
+}
+
+.header-admin {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.header-admin #title {
+    font-size: 50px;
+    letter-spacing: 1px;
+}
+
+.search-bar {
+    width: 350px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding-left: 45px;
+    background-image: url('../img/search.png');
+    background-size: 16px;
+    background-position: 20px center;
+    background-repeat: no-repeat;
+    font-size: 16px;
+    outline: none;
+}
+
+#notif{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    img{
+        width: 40px;
+        height: auto;
+        border-radius: 50%;
+        border: 2px black solid;
+        background-color: white;
+    }
+}
+
+#notif button{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    width: 50px;
+    background-image: url('../img/ui_notification.png');
+    background-size: 25px;
+    background-position: 20px center;
+    background-repeat: no-repeat;
+}
+
+#user{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-right: 10px;
+}
+
+
+.addProductBtn {
+    margin-top: 10px;
+    width: 200px;
+    height: 50px;
+    border-radius: 10px;
+    color: white;
+    padding: 10px 10px 10px 35px;
+    border: none;
+    background-color: black;
+    background-image: url('../img/ui_add.png');
+    background-size: 16px;
+    background-position: 20px center;
+    background-repeat: no-repeat;
+    font-family: grifter;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.addProductBtn:hover {
+    background-color: rgb(88, 88, 88);
+    cursor: pointer;
+}
+
+.table {
+    width: 100%;
+    height: 40vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-right: 10px;
+}
+
+.bgTable {
+    width: 100%;
+    height: 73vh;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.bgTable .headertable {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    padding: 15px;
+    gap: 10%;
+
+    p {
+        font-family: grifter;
+        letter-spacing: 1px;
+        color: #787878;
+        font-size: small;
+    }
+}
+
+.bgTable .itemtable {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    padding: 15px;
+    gap: 12%;
+
+    p {
+        font-family: inter;
+        color: black;
+        font-size: small;
+    }
+}
+
+
+
+/*tableeeeeeeeeee*/
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin: 0px 0;
+}
+
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-header {
+    text-align: left;
+    font-weight: bold;
+    font-size: 14px;
+    color: #666;
+    border-bottom: 2px solid #ddd;
+    padding: 10px;
+    padding-left: 15px;
+    font-family: grifter;
+    letter-spacing: 1px;
+}
+
+.table-row {
+    border-bottom: 1px solid #dfdfdf;
+}
+
+.table-cell {
+    font-size: 14px;
+    padding: 10px;
+    padding-left: 15px;
+    color: black;
+    text-align: left;
+}
+
+.table-row:hover {
+    background-color: #f9f9f9;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.pagination-btn {
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-weight: bold;
+}
+
+.pagination-btn:hover {
+    text-decoration: underline;
+}
+
+.pagination-numbers {
+    display: flex;
+    gap: 10px;
+}
+
+.pagination-number {
+    color: #666;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.pagination-number.active {
+    font-weight: bold;
+    color: white;
+    background-color: #666;
+    border-radius: 5px;
+}
+
+.product-table th {
+    border-bottom: 1px solid #ccc; /* Bottom border for each table cell */
+}
+
+.pagination-container {
+    margin-top: 20px;
+}
+
+
+/* Pop-up form styles */
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    width: 400px;
+    position: relative;
+}
+
+.popup-content h2 {
+    margin: 0 0 10px;
+}
+
+.popup-content label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+.popup-content input,
+.popup-content textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.popup-content button {
+    padding: 10px 15px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.popup-content button:hover {
+    background-color: gray;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    background-color: darkred;
+    cursor: pointer;
+}
