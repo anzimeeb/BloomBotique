@@ -1,10 +1,11 @@
 <?php
-    require_once 'header.php';
-    require_once '../connection.php';
+require_once 'header.php';
+require_once '../connection.php';
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,13 +13,14 @@
     <link rel="icon" href="images/logob.png">
     <link rel="stylesheet" href="../style.css">
 </head>
+
 <body>
     <!-- BANNER IMAGE -->
     <div class="banner2">
         <img src="../images/banner2.jpg" alt="BLOOM BOUTIQUE">
         <h1 class="banner-title">ORDER COMPLETED</h1>
     </div>
-    
+
     <div class="oc">
 
         <div class="confirm-complete">
@@ -28,7 +30,7 @@
         </div>
 
         <div class="group-order-completed">
-            <div class="column-order">            
+            <div class="column-order">
                 <label id="ordercomplete" for="order-dits">Order details</label>
                 <p class="get-details">#00012837482</p>
             </div>
@@ -56,10 +58,10 @@
             <p class="order-deitals">Order Details</p>
             <hr class="horizontal-divider">
 
-                <div class="ordercomplete-title">
-                    <p>Products</p>
-                    <p>Sub Total</p>
-                </div>
+            <div class="ordercomplete-title">
+                <p>Products</p>
+                <p>Sub Total</p>
+            </div>
 
             <div class="completeorder-contents">
                 <img src="../images/catalogue/blush_of_love.png" alt="">
@@ -86,17 +88,17 @@
             </div>
 
             <hr class="horizontal-divider">
-                <div class="other-details">
-                    <p class="shipping-fee">Shipping</p>
-                    <p class="shipping-price">Php 750.00</p>
-                </div>
+            <div class="other-details">
+                <p class="shipping-fee">Shipping</p>
+                <p class="shipping-price">Php 750.00</p>
+            </div>
             <hr class="horizontal-divider">
-                <div class="other-details">
-                    <p class="total-fee">Total</p>
-                    <p class="total-price">Php 750.00</p>
-                </div>
-                </div> <!--order complete end -->
-        </div>
+            <div class="other-details">
+                <p class="total-fee">Total</p>
+                <p class="total-price">Php 750.00</p>
+            </div>
+        </div> <!--order complete end -->
+    </div>
 
     <?php include_once 'footer.php'; ?>
 </body>

@@ -379,20 +379,18 @@ input[type="password"] {
     height: 50px;
     border-radius: 10px;
     color: white;
-    padding: 10px 10px 10px 35px;
+    padding: 10px 10px 10px px;
     border: none;
-    background-color: black;
-    background-image: url('../img/ui_add.png');
+    background-color: #5F00A3;
     background-size: 16px;
     background-position: 20px center;
     background-repeat: no-repeat;
-    font-family: grifter;
     letter-spacing: 1px;
     text-align: center;
 }
 
 .addProductBtn:hover {
-    background-color: rgb(88, 88, 88);
+    background-color: #54028e;
     cursor: pointer;
 }
 
@@ -478,6 +476,10 @@ input[type="password"] {
     padding-left: 15px;
     color: black;
     text-align: left;
+}
+
+.description-cell{
+    width: 300px;
 }
 
 .table-row:hover {
@@ -576,7 +578,7 @@ input[type="password"] {
 
 .popup-content button {
     padding: 10px 15px;
-    background-color: black;
+    background-color: #5F00A3;
     color: white;
     border: none;
     border-radius: 5px;

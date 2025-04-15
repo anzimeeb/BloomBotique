@@ -1,26 +1,73 @@
 <?php
-    require_once 'header.php';
-    require_once '../connection.php';
+require_once 'header.php';
+require_once '../connection.php';
 
-    if (isset($_GET['product_id'])) {
-        $product_id = intval($_GET['product_id']);
-    
-        // Fetch product details
-        $stmt = $conn->prepare("SELECT * FROM product_catalogue WHERE product_id = ?");
-        $stmt->bind_param("i", $product_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
+if (isset($_GET['product_id'])) {
+    $product_id = intval($_GET['product_id']);
 
-        if($result->num_rows > 0){
-            $row = $result->fetch_assoc();
-        }else{
-            die();
-        }
+    // Fetch product details
+    $stmt = $conn->prepare("SELECT * FROM products WHERE product_id = ?");
+    $stmt->bind_param("i", $product_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+    } else {
+        die();
     }
+}
+
+if (isset($_POST['add_to_cart'])) {
+    // Product details
+    $productId = $_POST['product_id'];  // Make sure the product ID is included
+    $productName = $_POST['product_name'];  // Product name
+    $productPrice = $_POST['product_price'];  // Product price
+    $quantity = $_POST['quantity'];  // Quantity from the form
+    $image = $_POST['product_image'];
+    $discount = $_POST['product_discount'];
+    $message = $_POST['message'];
+
+    // Check if there's already a cart cookie
+    if (isset($_COOKIE['cart'])) {
+        // Get the existing cart cookie (decode it from JSON)
+        $cart = json_decode($_COOKIE['cart'], true);
+    } else {
+        // If no cart cookie, initialize an empty cart
+        $cart = [];
+    }
+
+    // Check if the product is already in the cart
+    if (isset($cart[$productId])) {
+        // If it is, update the quantity
+        $cart[$productId]['quantity'] += $quantity;
+    } else {
+        // If not, add a new product to the cart
+        $cart[$productId] = [
+
+            'id' => $productId,
+            'name' => $productName,
+            'price' => $productPrice,
+            'image' => $image,
+            'quantity' => $quantity,
+            'discount' => $discount,
+            'message' => $message,
+        ];
+    }
+
+    // Save the updated cart back into the cookie (with a 1-week expiration)
+    setcookie('cart', json_encode($cart), time() + 3600 * 24 * 7, '/');
+
+    // Redirect to the cart page
+    header("Location: cart.php");
+    exit();
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,7 +85,7 @@
 <!-- PRODUCT DETAILED INFORMATION -->
 <div class="more-info"><!-- main -->
     <div class="cat-product-image"><!-- image -->
-        <?php echo '<img src="data:image/png;base64,' . base64_encode($row["product_image"]) . '" alt="Product Image">'; ?>
+        <img src="<?php echo htmlspecialchars($row["product_image"]); ?>" alt="Best Seller Image">
     </div><!-- end image -->
 
     <div class="detailed-info"><!-- info -->
@@ -46,12 +93,29 @@
             <p class="info-cat-category"><?= $row['product_category']; ?></p>
             <p class="status"><?= $row['product_status']; ?></p>
         </div>
-            <h2 class="info-cat-name"><?= $row['product_name']; ?></h2>
-            <p class="info-cat-price"><strong>₱<?= number_format($row['new_price'], 2); ?></strong></p>
-            <p class="info-cat-description"><?= $row['product_description']; ?></p>
-            <br>
 
-            <div class="size-container"><!-- size container -->
+        <h2 class="info-cat-name"><?= $row['product_name']; ?></h2>
+
+        <?php
+        $old_price = $row['product_price'];
+        $discount = $row['product_discount'];
+        $new_price = $old_price - ($old_price * ($discount / 100));
+        ?>
+
+        <p class="info-cat-price">
+            <strong>₱<?= number_format($new_price, 2); ?></strong>
+            <?php if ($discount > 0): ?>
+                <span class="old-price" style="color: #999; font-size: 0.9em; margin-left: 10px;">
+                    <del>₱<?= number_format($old_price, 2); ?></del>
+                </span>
+            <?php endif; ?>
+        </p>
+
+        <p class="info-cat-description"><?= $row['product_description']; ?></p>
+        <br>
+
+        <!-- SIZE OPTIONS -->
+        <div class="size-container">
             <div class="size">
                 <img src="../images/size.png" alt="Size Image">
                 <h5>Standard</h5>
@@ -69,38 +133,48 @@
                 <h5>Large</h5>
                 <h5 class="size-name">+200</h5>
             </div>
-        </div> <!-- end size container -->
-            <br>
-            <label class="card-message">Card Message</label>
-            <br>
-            <textarea id="message"></textarea>
+        </div>
+        <br>
 
-<!-- QUANTITY BUTTON -->
-<?php
-    $quantity = isset($_POST['quantity']) ? (int)$_POST['quantity'] : 1;
-        if (isset($_POST['increase'])) {
-        $quantity++;
-    }
-        if (isset($_POST['decrease']) && $quantity > 1) {
-        $quantity--;
-    }
-?>
+        <!-- QUANTITY HANDLER -->
+        <?php
+        $quantity = isset($_POST['quantity']) ? (int) $_POST['quantity'] : 1;
+        if (isset($_POST['increase']))
+            $quantity++;
+        if (isset($_POST['decrease']) && $quantity > 1)
+            $quantity--;
+        ?>
 
-<br><br>
-        <div class="cat-qbb"><!-- cat-qbb -->
+        <div>
             <form method="post" action="">
-                <div class="quantity-selector">
-                    <button type="submit" name="decrease">-</button>
-                    <input type="text" name="quantity" value="<?= $quantity ?>" readonly>
-                    <button type="submit" name="increase">+</button>
+                <!-- CARD MESSAGE -->
+                <label class="card-message" for="message">Card Message</label>
+                <br><br>
+                <textarea name="message" id="message" placeholder="Enter your message here..."></textarea>
+                <br><br>
+                <!-- Hidden input for product details -->
+                <input type="hidden" name="product_id" value="<?= $product_id; ?>"> <!-- Set the correct product ID -->
+                <input type="hidden" name="product_name" value="<?= $row['product_name']; ?>">
+                <!-- Set the correct product name -->
+                <input type="hidden" name="product_price" value="<?= $row['product_price']; ?>">
+                <!-- Set the correct product price -->
+                <input type="hidden" name="product_image" value="<?= htmlspecialchars($row['product_image']); ?>">
+                <input type="hidden" name="product_discount" value="<?= $row['product_discount']; ?>">
+
+                <div class="cat-qbb">
+                    <div class="quantity-selector">
+                        <button type="submit" name="decrease">-</button>
+                        <input type="text" name="quantity" value="<?= $quantity ?>" readonly>
+                        <button type="submit" name="increase">+</button>
+                    </div>
+
+                    <button type="submit" name="add_to_cart" class="add-to-cart-btn">Add to Cart</button>
+                    <a href="billing.php"><button class="buy-now-btn">Buy Now</button></a>
                 </div>
             </form>
-                    <!-- BUTTONS -->
-                    <a href="cart.php"><button class="add-to-cart-btn">Add to Cart</button></a>
-                    <a href="billing.php"><button class="buy-now-btn">Buy Now</button></a>
-        </div><!-- end cat-qbb -->
-
+        </div>
     </div><!-- end info -->
+
 </div><!-- end main -->
 
 <hr>
@@ -113,73 +187,76 @@
 
 
 <!-- ADDITIONAL INFORMATION -->
- <div id="additionalinfo" class="linksection">
-<div class="addmain"><!-- main additional info -->
-<div class="addinfo"><!-- add info -->
-    <h3>Everlasting Love Package</h3>
-    <p>Includes:</p>
-        <ul>
-            <li><strong>Bridal Bouquet:</strong> White lilies, peonies, and roses with baby's breath and eucalyptus</li>
-            <li><strong>Groom's Boutonniere:</strong> White rose with eucalyptus</li>
-            <li><strong>Bridesmaids' Bouquets:</strong> A mix of soft pink roses, tulips, and baby’s breath</li>
-        </ul>
-    <p><strong>Reception Centerpieces:</strong> Elegant floral arrangements with white lilies, roses, and Queen Anne’s Lace</p>
-</div><!-- end add info -->
-</div><!-- end main additional info -->
+<div id="additionalinfo" class="linksection">
+    <div class="addmain"><!-- main additional info -->
+        <div class="addinfo"><!-- add info -->
+            <h3>Everlasting Love Package</h3>
+            <p>Includes:</p>
+            <ul>
+                <li><strong>Bridal Bouquet:</strong> White lilies, peonies, and roses with baby's breath and eucalyptus
+                </li>
+                <li><strong>Groom's Boutonniere:</strong> White rose with eucalyptus</li>
+                <li><strong>Bridesmaids' Bouquets:</strong> A mix of soft pink roses, tulips, and baby’s breath</li>
+            </ul>
+            <p><strong>Reception Centerpieces:</strong> Elegant floral arrangements with white lilies, roses, and Queen
+                Anne’s Lace</p>
+        </div><!-- end add info -->
+    </div><!-- end main additional info -->
 </div>
 
 
 
 <!-- SEND REVIEW -->
 <div id="sendreview" class="linksection">
-<div class="review-main" id="sendreview"><!-- main review container -->
-    <div class="send-review" id="review-id">
-        <h3>Add your review</h3>
-        <p>Lorem ipsum dolor sit amet. Ut eaque consectetur sed voluptatibus doloremque ea nobis quis 33 laboriosam aliquid est deleniti eaque ut blanditiis nobis.</p>
+    <div class="review-main" id="sendreview"><!-- main review container -->
+        <div class="send-review" id="review-id">
+            <h3>Add your review</h3>
+            <p>Lorem ipsum dolor sit amet. Ut eaque consectetur sed voluptatibus doloremque ea nobis quis 33 laboriosam
+                aliquid est deleniti eaque ut blanditiis nobis.</p>
 
-        <form method="POST" action="">
-            <div class="name-email">
-                <div class="send-input-grp">
-                    <label for="name">Name</label>
-                    <input type="text" name="name" required>
+            <form method="POST" action="">
+                <div class="name-email">
+                    <div class="send-input-grp">
+                        <label for="name">Name</label>
+                        <input type="text" name="name" required>
+                    </div>
+
+                    <div class="send-input-grp">
+                        <label for="email">Email</label>
+                        <input type="text" name="email" required>
+                    </div>
                 </div>
 
                 <div class="send-input-grp">
-                    <label for="email">Email</label>
-                    <input type="text" name="email" required>
+                    <label>Your Rating</label>
+                    <div class="star-rating">
+                        ★ ★ ★ ★ ★
+                    </div>
                 </div>
-            </div>
 
-            <div class="send-input-grp">
-                <label>Your Rating</label>
-                <div class="star-rating">
-                    ★ ★ ★ ★ ★
+                <div class="send-input-grp">
+                    <label for="title">Add Review Title</label>
+                    <input type="text" name="title" required>
                 </div>
-            </div>
 
-            <div class="send-input-grp">
-                <label for="title">Add Review Title</label>
-                <input type="text" name="title" required>
-            </div>
+                <div class="send-input-grp">
+                    <label for="reviewer-input">Add Detailed Review</label>
+                    <textarea id="reviewer-input" required></textarea>
+                </div>
 
-            <div class="send-input-grp">
-                <label for="reviewer-input">Add Detailed Review</label>
-                <textarea id="reviewer-input" required></textarea>
-            </div>
+                <div class="send-input-grp">
+                    <label>Photo / Video (Optional)</label>
+                    <label class="upload-icon">
+                        <img src="../images/upload.png" alt="Upload Icon">
+                        <p>Upload photo</p>
+                        <input type="file" name="evidence" accept="image/*">
+                    </label>
+                </div>
 
-            <div class="send-input-grp">
-                <label>Photo / Video (Optional)</label>
-                <label class="upload-icon">
-                    <img src="../images/upload.png" alt="Upload Icon">
-                    <p>Upload photo</p>
-                    <input type="file" name="evidence" accept="image/*">
-                </label>
-            </div>
-
-            <input type="submit" name="review-submit" value="Submit">
-        </form>
-    </div>
-</div><!-- end main review container -->
+                <input type="submit" name="review-submit" value="Submit">
+            </form>
+        </div>
+    </div><!-- end main review container -->
 </div>
 
 <!-- reviews -->
@@ -212,7 +289,7 @@
                         
                 </div>
         </div> -->
-    </div><!-- end reviews -->
+</div><!-- end reviews -->
 
 
-<?php include_once'footer.php';?>
+<?php include_once 'footer.php'; ?>

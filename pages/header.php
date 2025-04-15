@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,7 +47,7 @@
         <div class="auth-links">
                 <?php
                 if (isset($_SESSION["customerEmail"])) {
-                    echo '<a href="pages/profile_personalInfo.php" class="login-btn">Hi! <img src="images/profile.png" alt="Profile"></a>';
+                    echo '<a href="profile_personalInfo.php" class="login-btn">Hi! <img src="../images/profile.png" alt="Profile"></a>';
                 } else {
                     echo '<a href="../account/login.php" class="login-btn"><svg xmlns="http://www.w3.org/2000/svg" width="16"
                         height="16" fill="bg-purple-custom" class="bi bi-person-fill" viewBox="0 0 16 16">

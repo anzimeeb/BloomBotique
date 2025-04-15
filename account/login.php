@@ -25,6 +25,7 @@
                     <label class="label">Password</label>
                     <input type="password" name="pass" required><br>
                     <a id="forgotpw" href="forgotpassword.php">Forgot Password?</a><br>
+                    <input type="hidden" name="redirect" value="<?= isset($_GET['redirect']) ? htmlspecialchars($_GET['redirect']) : '' ?>">
                     <input type="submit" name="login" value="Login"><br>
                     <p>Don't have an account? <a id="signup" href="signup.php">Sign Up</a></p>
                 </form>

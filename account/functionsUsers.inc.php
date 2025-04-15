@@ -1,8 +1,9 @@
 <?php
 
-function emptyInputSignup($firstname,$lastname,$username, $email,$password,$password_confirm): bool{
+function emptyInputSignup($firstname, $lastname, $username, $email, $password, $password_confirm): bool
+{
     $result = true;
-    if(empty($firstname) || empty($lastname) || empty($username)|| empty($email) || empty($password) || empty($password_confirm)){
+    if (empty($firstname) || empty($lastname) || empty($username) || empty($email) || empty($password) || empty($password_confirm)) {
         $result = true;
     } else {
         $result = false;
@@ -10,9 +11,10 @@ function emptyInputSignup($firstname,$lastname,$username, $email,$password,$pass
     return $result;
 }
 
-function invalidEmail($email): bool{
+function invalidEmail($email): bool
+{
     $result = true;
-    if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $result = true;
     } else {
         $result = false;
@@ -20,9 +22,10 @@ function invalidEmail($email): bool{
     return $result;
 }
 
-function pwdMatch($password, $password_confirm): bool{
+function pwdMatch($password, $password_confirm): bool
+{
     $result = true;
-    if($password !== $password_confirm){
+    if ($password !== $password_confirm) {
         $result = true;
     } else {
         $result = false;
@@ -30,11 +33,12 @@ function pwdMatch($password, $password_confirm): bool{
     return $result;
 }
 
-function emailExist($conn, $email, $username){
+function emailExist($conn, $email, $username)
+{
     $sql = "SELECT * FROM customerinfo WHERE customerEmail = ? OR customerUsername =?;";
     $stmt = mysqli_stmt_init($conn);
-    
-    if(!mysqli_stmt_prepare($stmt, $sql)){
+
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
         header("location:signup.php?error=stmtfailed");
         exit();
     }
@@ -44,7 +48,7 @@ function emailExist($conn, $email, $username){
 
     $resultData = mysqli_stmt_get_result($stmt);
 
-    if($row = mysqli_fetch_assoc($resultData)){
+    if ($row = mysqli_fetch_assoc($resultData)) {
         mysqli_stmt_close($stmt); // Close statement before returning
         return $row;
     } else {
@@ -53,7 +57,8 @@ function emailExist($conn, $email, $username){
     }
 }
 
-function createUser($conn, $firstname, $lastname, $pNumber, $username, $email, $password, $password_confirm) {
+function createUser($conn, $firstname, $lastname, $pNumber, $username, $email, $password, $password_confirm)
+{
     // Check if passwords match
     if ($password !== $password_confirm) {
         header("location:signup.php?error=passwordsdonotmatch");
@@ -89,9 +94,10 @@ function createUser($conn, $firstname, $lastname, $pNumber, $username, $email, $
     exit();
 }
 
-function emptyInputLogin($email,$password){
+function emptyInputLogin($email, $password)
+{
     $result = true;
-    if(empty($email) || empty($password)){
+    if (empty($email) || empty($password)) {
         $result = true;
     } else {
         $result = false;
@@ -99,38 +105,46 @@ function emptyInputLogin($email,$password){
     return $result;
 }
 
-function loginUser($conn, $email, $username, $password){
+function loginUser($conn, $email, $username, $password)
+{
     $emailExist = emailExist($conn, $email, $username);
 
-    if($emailExist==false){
+    if ($emailExist == false) {
         header("location:login.php?error=wronglogin");
         exit();
     }
 
     $pwdhashed = $emailExist["customerPassword"];
     $checkPwd = password_verify($password, $pwdhashed);
-    if($checkPwd == false){
+    if ($checkPwd == false) {
         header("location:login.php?error=wronglogin");
         exit();
-    } else if($checkPwd == true){
+    } else if ($checkPwd == true) {
         session_start();
-        $_SESSION["customerEmail"]=$emailExist["customerEmail"];
-        echo "<br>loginsuccessfully<br>";
-        header("location:../index.php");
-        exit();
+        $_SESSION["customerEmail"] = $emailExist["customerEmail"];
+        echo "<br>login successfully<br>";
+        // Get the redirect from POST, not GET
+        $redirect = isset($_POST['redirect']) ? $_POST['redirect'] : '';
+
+        if ($redirect === 'tocart') {
+            header("Location: ../pages/cart.php");
+        } else {
+            header("Location: ../index.php");
+        }
     }
 }
 
-function otpInfoInsert($conn, $otp, $expiry, $email){
+function otpInfoInsert($conn, $otp, $expiry, $email)
+{
     $sql = "INSERT INTO customerotpinfo (otp, otp_expiry, email) VALUES (?, ?, ?)";
     $stmt = mysqli_stmt_init($conn);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
         header("location:otpInput.php?error=stmtfailed");
         exit();
     }
-    
+
     mysqli_stmt_bind_param($stmt, "sss", $otp, $expiry, $email);
-    mysqli_stmt_execute($stmt); 
+    mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
 }
 

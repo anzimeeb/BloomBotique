@@ -27,17 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Listing</title>
-    <link rel="icon" href="images/logob.png">
-    <link rel="stylesheet" href="../style.css">
-</head>
-
 <!-- BANNER IMAGE -->
 <div class="banner2">
     <img src="../images/banner2.jpg" alt="BLOOM BOUTIQUE">

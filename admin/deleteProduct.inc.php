@@ -4,11 +4,11 @@ session_start();
 
 // Check if the request method is POST and the ID is set
 if (isset($_POST['deleteProd'])) {
-    $productId = intval($_POST['productId']); // Sanitize input
-    
+    $productId = intval($_POST['product_id']); // Matches your edit form hidden input name
+
     try {
         // Prepare the SQL statement
-        $sql = "DELETE FROM productinfo WHERE productId = ?";
+        $sql = "DELETE FROM products WHERE product_id = ?";
         $stmt = $conn->prepare($sql);
 
         $stmt->bind_param("i", $productId);
@@ -18,7 +18,7 @@ if (isset($_POST['deleteProd'])) {
         } else {
             throw new Exception("Failed to delete product: " . $stmt->error);
         }
-        
+
         $stmt->close();
     } catch (Exception $e) {
         // Handle exceptions and redirect with an error message

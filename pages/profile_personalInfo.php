@@ -2,8 +2,6 @@
 require_once 'header.php';
 require_once '../connection.php';
 
-session_start();
-
 if (!isset($_SESSION['customerEmail'])) {
     header("location:admin-login.php");
 }
@@ -22,17 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     }
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
-    <link rel="icon" href="images/logob.png">
-    <link rel="stylesheet" href="../style.css">
-</head>
 
 <body>
     <!-- BANNER IMAGE -->

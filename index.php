@@ -2,7 +2,7 @@
 session_start();
 require_once 'connection.php';
 
-$sql = "SELECT * FROM bestseller";
+$sql = "SELECT * FROM products WHERE product_bestseller = 1 AND product_status = 1";
 $best = $conn->query($sql);
 ?>
 
@@ -76,25 +76,28 @@ $disc = $conn->query($sql);
 
     <?php
     $occasions = [
-        ['name' => "Weddings", 'icon' => 'images/weddings.png', 'link' => 'pages/catalogue.php'],
-        ['name' => "Graduation", 'icon' => 'images/graduation.png', 'link' => 'pages/catalogue.php'],
-        ['name' => "Birthday", 'icon' => 'images/bday.png', 'link' => 'pages/catalogue.php'],
-        ['name' => "Burial", 'icon' => 'images/burial.png', 'link' => 'pages/catalogue.php']
+        ['name' => "Wedding", 'icon' => 'images/weddings.png'],
+        ['name' => "Graduation", 'icon' => 'images/graduation.png'],
+        ['name' => "Birthday", 'icon' => 'images/bday.png'],
+        ['name' => "Burial", 'icon' => 'images/burial.png']
     ];
     ?>
 
     <!-- FOR EACH -->
     <div class="occasions-icon">
         <?php foreach ($occasions as $occasion): ?>
-            <div class="occasion">
-                <a href="<?= $occasion['link'] ?>"></a>
-                <button class="icon-button">
-                    <img src="<?= $occasion['icon'] ?>" alt="<?= $occasion['name'] ?>">
-                </button>
-                <p><?= $occasion['name'] ?></p>
-            </div>
+            <a href="pages/catalogue.php?options[]=<?= urlencode($occasion['name']) ?>" class="occasion-link">
+                <div class="occasion">
+                    <button class="icon-button" type="button">
+                        <img src="<?= $occasion['icon'] ?>" alt="<?= $occasion['name'] ?>">
+                    </button>
+                    <p><?= $occasion['name'] ?></p>
+                </div>
+            </a>
         <?php endforeach; ?>
     </div>
+
+
 
     <!-- DISCOUNT BANNER -->
     <div class="image-container">
@@ -165,27 +168,40 @@ $disc = $conn->query($sql);
             <button id="prev-btn" class="scroll-btn prev-btn">&lt;</button>
             <div class="products-container">
                 <?php
-                while ($row = mysqli_fetch_assoc($best)) {
-                    ?>
-                    <div class="product-card">
-                        <div class="bs-image">
-                            <a href="pages/catalogue_product.php">
-                                <?php echo '<img src="data:image;base64, ' . base64_encode($row["bs_image"]) . '" alt="Best Seller Image">'; ?>
-                            </a>
-                        </div>
-                        <div class="rating-occasion">
-                            <p class="occasion-name"><?php echo $row["bs_category"]; ?></p>
-                            <div class="rating">
-                                <img src="images/star.png" alt="Star" width="15">
-                                <span><?php echo $row["bs_rate"] ?></span>
+                if (mysqli_num_rows($best) > 0) {
+                    while ($row = mysqli_fetch_assoc($best)) {
+                        $price = $row["product_price"];
+                        $discount = $row["product_discount"];
+                        $finalPrice = ($discount > 0)
+                            ? number_format($price - ($price * ($discount / 100)), 2)
+                            : number_format($price, 2);
+                        ?>
+                        <div class="product-card">
+                            <div class="bs-image">
+                                <a href="pages/catalogue_product.php?product_id=<?php echo $row['product_id']; ?>">
+                                    <img src="uploads/<?php echo htmlspecialchars($row["product_image"]); ?>"
+                                        alt="Best Seller Image">
+                                </a>
                             </div>
+                            <div class="rating-occasion">
+                                <p class="occasion-name"><?php echo htmlspecialchars($row["product_category"]); ?></p>
+                                <div class="rating">
+                                    <img src="images/star.png" alt="Star" width="15">
+                                    <span>4.9</span>
+                                </div>
+                            </div>
+                            <p class="product-name"><?php echo htmlspecialchars($row["product_name"]); ?></p>
+                            <p class="price">
+                                $<?php echo $finalPrice; ?>
+                                <?php if ($discount > 0): ?>
+                                    <span class="old-price"><del>$<?php echo number_format($price, 2); ?></del></span>
+                                <?php endif; ?>
+                            </p>
                         </div>
-                        <p class="product-name"><?php echo $row["bs_name"]; ?></p>
-                        <p class="price">$<?php echo $row["bs_newprice"]; ?>
-                            <span class="old-price"><del>$<?php echo $row["bs_oldprice"]; ?></del></span>
-                        </p>
-                    </div>
-                    <?php
+                        <?php
+                    }
+                } else {
+                    echo "<p style='padding: 1rem;'>No bestsellers available at the moment.</p>";
                 }
                 ?>
             </div>
