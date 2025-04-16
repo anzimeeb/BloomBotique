@@ -3172,7 +3172,14 @@ input:focus {
 .myorders {
   flex: 1;
   background-color: transparent;
+  border-radius: 20px;
+}
+
+.perOrder {
+  display: flex;
+  flex-direction: column;
   border: 1px solid #ededed;
+  margin-bottom: 10px;
   border-radius: 20px;
 }
 
@@ -3192,6 +3199,10 @@ input:focus {
   color: white;
   padding: 10px 0px;
   text-align: center;
+}
+
+.column-group label{
+  color: white;
 }
 
 #myorders {

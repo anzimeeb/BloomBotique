@@ -139,7 +139,8 @@ function getCartFromDatabase($conn, $userId)
     return $cart;  // Return the cart data
 }
 
-function updateCartMessagesFromCookies($conn, $userId) {
+function updateCartMessagesFromCookies($conn, $userId)
+{
     foreach ($_COOKIE as $key => $value) {
         if (strpos($key, 'message_') === 0) {
             $productId = str_replace('message_', '', $key);
@@ -153,7 +154,8 @@ function updateCartMessagesFromCookies($conn, $userId) {
     }
 }
 
-function placeOrder($conn, $userId, $postData) {
+function placeOrder($conn, $userId, $postData)
+{
     // Start transaction
     $conn->begin_transaction();
 
@@ -205,9 +207,9 @@ function placeOrder($conn, $userId, $postData) {
 
         // Insert order items
         while ($row = $result->fetch_assoc()) {
-            $quantity = (int)$row['quantity'];
-            $price = (float)$row['product_price'];
-            $discount = (float)$row['product_discount'];
+            $quantity = (int) $row['quantity'];
+            $price = (float) $row['product_price'];
+            $discount = (float) $row['product_discount'];
             $message = $row['message'] ?? null;
 
             $itemStmt = $conn->prepare("INSERT INTO order_items 
@@ -266,6 +268,64 @@ function placeOrder($conn, $userId, $postData) {
         header("Location: error.php?message=" . urlencode("Something went wrong while placing your order."));
         exit();
     }
+}
+
+function getUserProfile($conn, $email)
+{
+    // Query to get user details from customerinfo table using customerEmail
+    $query = "SELECT * FROM customerinfo WHERE customerEmail = ?";
+
+    // Prepare and execute the query
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('s', $email);  // Bind email to the query
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // If a user is found, return the data as an associative array
+    if ($result->num_rows > 0) {
+        return $result->fetch_assoc();  // Return the user's details
+    } else {
+        return null;  // No user found with that email
+    }
+}
+
+function getUserOrders($conn, $userId)
+{
+    // Query to get the order details for the logged-in user
+    $query = "SELECT o.order_id, o.payment_method, o.total_amount, o.order_status, o.created_at, 
+                     oi.product_id, oi.quantity, p.product_name, p.product_category, p.product_image
+              FROM orders o
+              JOIN order_items oi ON o.order_id = oi.order_id
+              JOIN products p ON oi.product_id = p.product_id
+              WHERE o.user_id = ?";
+
+    // Prepare the query and bind parameters
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('s', $userId);
+    $stmt->execute();
+
+    // Fetch the result
+    $result = $stmt->get_result();
+
+    // Store the orders in an array
+    $orders = [];
+    while ($row = $result->fetch_assoc()) {
+        // Group by order_id
+        $orders[$row['order_id']]['order_id'] = $row['order_id'];
+        $orders[$row['order_id']]['payment_method'] = $row['payment_method'];
+        $orders[$row['order_id']]['total_amount'] = $row['total_amount'];
+        $orders[$row['order_id']]['order_status'] = $row['order_status'];
+        $orders[$row['order_id']]['created_at'] = $row['created_at'];
+        $orders[$row['order_id']]['items'][] = [
+            'product_id' => $row['product_id'],
+            'quantity' => $row['quantity'],
+            'product_name' => $row['product_name'],
+            'product_category' => $row['product_category'],
+            'product_image' => $row['product_image']
+        ];
+    }
+
+    return $orders; // Return the orders array
 }
 
 

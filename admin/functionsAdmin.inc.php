@@ -52,7 +52,6 @@ function emailExist($conn, $email, $username) {
     }
 }
 
-
 function createEmployee($conn, $firstname, $lastname, $username, $email, $employeeShift, $password, $employeeRole) {
     $sql = "INSERT INTO employeeUsers (employeeFN, employeeLN, employeeUsername, employeeEmail, employeeShift, employeePassword, employeeRole) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_stmt_init($conn);
