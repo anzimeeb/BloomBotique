@@ -1,17 +1,20 @@
 <?php
-require_once 'header.php';
-require_once '../connection.php';
 
-// Initialize variables to store selections
-$selectedSize = isset($_POST['size']) ? $_POST['size'] : '';
-$selectedMainFlower = isset($_POST['main_flower']) ? $_POST['main_flower'] : '';
-$selectedFiller = isset($_POST['filler']) ? $_POST['filler'] : '';
-$selectedWrapper = isset($_POST['wrapper']) ? $_POST['wrapper'] : '';
-$selectedRibbon = isset($_POST['ribbon']) ? $_POST['ribbon'] : '';
-$message = isset($_POST['message']) ? $_POST['message'] : '';
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_to_cart'])) {
+    $main_flower = $_POST['main_flower'] ?? '';
+    $ribbon = $_POST['ribbon'] ?? '';
+    $wrapper = $_POST['wrapper'] ?? '';
+    $message = $_POST['message'] ?? '';
 
-// Process form submission
-if (isset($_POST['add_to_cart'])) {
+    // Store to session or cart logic here
+    $_SESSION['cart'][] = [
+        'main_flower' => $main_flower,
+        'ribbon' => $ribbon,
+        'wrapper' => $wrapper,
+        'message' => $message,
+    ];
+
     $cartSuccess = true;
 }
 ?>
@@ -21,208 +24,334 @@ if (isset($_POST['add_to_cart'])) {
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bloom - Create Your Own Bouquet</title>
-    <link rel="icon" href="../images/logob.png">
-    <link rel="stylesheet" href="../admin.css">
+    <title>Custom Bouquet</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Make sure this file exists -->
 </head>
 
 <body>
-    <!-- BANNER IMAGE -->
-    <div class="banner2">
-        <img src="../images/banner2.jpg" alt="BLOOM BOUTIQUE">
-        <h1 class="banner-title">YOUR PROFILE</h1>
-    </div>
+    <?php include_once 'header.php'; ?>
 
-    <div class="container">
-        <!-- Left side - Customization options -->
-        <div class="customizer">
-            <h2>Create your own</h2>
+    <form method="POST" action="">
+        <div class="container">
 
-            <form method="post" action="">
-                <!-- Size selection -->
+            <!-- Left side - Form -->
+            <div class="form-area">
+                <!-- Size -->
                 <div class="section-title">Size</div>
-                <div class="options-grid">
-                    <label class="option-button <?php echo $selectedSize == 'small' ? 'selected' : ''; ?>">
-                        <input type="radio" name="size" value="small" style="display: none;" <?php echo $selectedSize == 'small' ? 'checked' : ''; ?>>
-                        <div style="text-align: center;">
-                            <div style="font-size: 24px;">🌷</div>
-                            <div style="font-size: 12px;">Small</div>
-                        </div>
+                <div class="scrollable-options" id="size-options">
+                    <label class="option-button">
+                        <input type="radio" name="size" value="Small"> Small
                     </label>
-                    <label class="option-button <?php echo $selectedSize == 'medium' ? 'selected' : ''; ?>">
-                        <input type="radio" name="size" value="medium" style="display: none;" <?php echo $selectedSize == 'medium' ? 'checked' : ''; ?>>
-                        <div style="text-align: center;">
-                            <div style="font-size: 24px;">🌷</div>
-                            <div style="font-size: 12px;">Medium</div>
-                        </div>
+                    <label class="option-button">
+                        <input type="radio" name="size" value="Medium"> Medium
                     </label>
-                    <label class="option-button <?php echo $selectedSize == 'large' ? 'selected' : ''; ?>">
-                        <input type="radio" name="size" value="large" style="display: none;" <?php echo $selectedSize == 'large' ? 'checked' : ''; ?>>
-                        <div style="text-align: center;">
-                            <div style="font-size: 24px;">🌷</div>
-                            <div style="font-size: 12px;">Large</div>
-                        </div>
+                    <label class="option-button">
+                        <input type="radio" name="size" value="Large"> Large
                     </label>
                 </div>
 
                 <!-- Main Flowers -->
                 <div class="section-title">Main Flowers</div>
-                <div class="options-grid">
-                    <label class="option-button <?php echo $selectedMainFlower == 'rose-red' ? 'selected' : ''; ?>">
-                        <input type="radio" name="main_flower" value="rose-red" style="display: none;" <?php echo $selectedMainFlower == 'rose-red' ? 'checked' : ''; ?>>
-                        <div style="color: red; font-size: 24px;">🌹</div>
+                <div class="scrollable-options" id="main-flower-options">
+                    <label class="option-button">
+                        🌹 Red Rose
+                        <input type="number" name="main_flower[Rose/IMG_0599]" min="0" value="0">
                     </label>
-                    <label class="option-button <?php echo $selectedMainFlower == 'lily-white' ? 'selected' : ''; ?>">
-                        <input type="radio" name="main_flower" value="lily-white" style="display: none;" <?php echo $selectedMainFlower == 'lily-white' ? 'checked' : ''; ?>>
-                        <div style="color: white; font-size: 24px;">🌸</div>
+                    <label class="option-button">
+                        🌷 Pink Tulip
+                        <input type="number" name="main_flower[Tulips/IMG_0620]" min="0" value="0">
                     </label>
-                    <label
-                        class="option-button <?php echo $selectedMainFlower == 'orchid-purple' ? 'selected' : ''; ?>">
-                        <input type="radio" name="main_flower" value="orchid-purple" style="display: none;" <?php echo $selectedMainFlower == 'orchid-purple' ? 'checked' : ''; ?>>
-                        <div style="color: purple; font-size: 24px;">🌺</div>
+                    <label class="option-button">
+                        🌻 Sunflower
+                        <input type="number" name="main_flower[SunfloweR/IMG_0624]" min="0" value="0">
                     </label>
-                    <label
-                        class="option-button <?php echo $selectedMainFlower == 'carnation-pink' ? 'selected' : ''; ?>">
-                        <input type="radio" name="main_flower" value="carnation-pink" style="display: none;" <?php echo $selectedMainFlower == 'carnation-pink' ? 'checked' : ''; ?>>
-                        <div style="color: pink; font-size: 24px;">🌸</div>
+                    <label class="option-button">
+                        🌼 Daisy
+                        <input type="number" name="main_flower[Daisies/IMG_0629]" min="0" value="0">
                     </label>
-                    <label class="option-button <?php echo $selectedMainFlower == 'peony-red' ? 'selected' : ''; ?>">
-                        <input type="radio" name="main_flower" value="peony-red" style="display: none;" <?php echo $selectedMainFlower == 'peony-red' ? 'checked' : ''; ?>>
-                        <div style="color: red; font-size: 24px;">🌺</div>
+                    <label class="option-button">
+                        🌺 Gerbera
+                        <input type="number" name="main_flower[Gerberas/IMG_0633]" min="0" value="0">
                     </label>
-                    <label class="option-button <?php echo $selectedMainFlower == 'rose-coral' ? 'selected' : ''; ?>">
-                        <input type="radio" name="main_flower" value="rose-coral" style="display: none;" <?php echo $selectedMainFlower == 'rose-coral' ? 'checked' : ''; ?>>
-                        <div style="color: coral; font-size: 24px;">🌹</div>
+                    <label class="option-button">
+                        🌸 Lilies
+                        <input type="number" name="main_flower[Lilies/IMG_0631]" min="0" value="0">
                     </label>
-                </div>
-
-                <!-- Fillers -->
-                <div class="section-title">Fillers</div>
-                <div class="options-grid">
-                    <label class="option-button <?php echo $selectedFiller == 'fern1' ? 'selected' : ''; ?>">
-                        <input type="radio" name="filler" value="fern1" style="display: none;" <?php echo $selectedFiller == 'fern1' ? 'checked' : ''; ?>>
-                        <div style="color: green; font-size: 24px;">🌿</div>
+                    <label class="option-button">
+                        🌸 Peonies
+                        <input type="number" name="main_flower[Peonies/IMG_0627" min="0" value="0">
                     </label>
-                    <label class="option-button <?php echo $selectedFiller == 'eucalyptus' ? 'selected' : ''; ?>">
-                        <input type="radio" name="filler" value="eucalyptus" style="display: none;" <?php echo $selectedFiller == 'eucalyptus' ? 'checked' : ''; ?>>
-                        <div style="color: green; font-size: 24px;">🌿</div>
-                    </label>
-                    <label class="option-button <?php echo $selectedFiller == 'baby-breath' ? 'selected' : ''; ?>">
-                        <input type="radio" name="filler" value="baby-breath" style="display: none;" <?php echo $selectedFiller == 'baby-breath' ? 'checked' : ''; ?>>
-                        <div style="font-size: 24px;">❀</div>
-                    </label>
-                    <label class="option-button <?php echo $selectedFiller == 'lavender' ? 'selected' : ''; ?>">
-                        <input type="radio" name="filler" value="lavender" style="display: none;" <?php echo $selectedFiller == 'lavender' ? 'checked' : ''; ?>>
-                        <div style="font-size: 24px;">❀</div>
-                    </label>
-                    <label class="option-button <?php echo $selectedFiller == 'grass' ? 'selected' : ''; ?>">
-                        <input type="radio" name="filler" value="grass" style="display: none;" <?php echo $selectedFiller == 'grass' ? 'checked' : ''; ?>>
-                        <div style="color: green; font-size: 24px;">🌿</div>
-                    </label>
-                    <label class="option-button <?php echo $selectedFiller == 'fern2' ? 'selected' : ''; ?>">
-                        <input type="radio" name="filler" value="fern2" style="display: none;" <?php echo $selectedFiller == 'fern2' ? 'checked' : ''; ?>>
-                        <div style="color: green; font-size: 24px;">🌿</div>
-                    </label>
-                </div>
-
-                <!-- Wrapper -->
-                <div class="section-title">Wrapper</div>
-                <div class="options-grid">
-                    <label class="option-button <?php echo $selectedWrapper == 'black' ? 'selected' : ''; ?>">
-                        <input type="radio" name="wrapper" value="black" style="display: none;" <?php echo $selectedWrapper == 'black' ? 'checked' : ''; ?>>
-                        <div style="background-color: black; width: 30px; height: 30px; border-radius: 50%;"></div>
-                    </label>
-                    <label class="option-button <?php echo $selectedWrapper == 'green' ? 'selected' : ''; ?>">
-                        <input type="radio" name="wrapper" value="green" style="display: none;" <?php echo $selectedWrapper == 'green' ? 'checked' : ''; ?>>
-                        <div style="background-color: green; width: 30px; height: 30px; border-radius: 50%;"></div>
-                    </label>
-                    <label class="option-button <?php echo $selectedWrapper == 'pink' ? 'selected' : ''; ?>">
-                        <input type="radio" name="wrapper" value="pink" style="display: none;" <?php echo $selectedWrapper == 'pink' ? 'checked' : ''; ?>>
-                        <div style="background-color: pink; width: 30px; height: 30px; border-radius: 50%;"></div>
-                    </label>
-                    <label class="option-button <?php echo $selectedWrapper == 'blue' ? 'selected' : ''; ?>">
-                        <input type="radio" name="wrapper" value="blue" style="display: none;" <?php echo $selectedWrapper == 'blue' ? 'checked' : ''; ?>>
-                        <div style="background-color: lightblue; width: 30px; height: 30px; border-radius: 50%;"></div>
-                    </label>
-                    <label class="option-button <?php echo $selectedWrapper == 'red' ? 'selected' : ''; ?>">
-                        <input type="radio" name="wrapper" value="red" style="display: none;" <?php echo $selectedWrapper == 'red' ? 'checked' : ''; ?>>
-                        <div style="background-color: red; width: 30px; height: 30px; border-radius: 50%;"></div>
-                    </label>
-                    <label class="option-button <?php echo $selectedWrapper == 'purple' ? 'selected' : ''; ?>">
-                        <input type="radio" name="wrapper" value="purple" style="display: none;" <?php echo $selectedWrapper == 'purple' ? 'checked' : ''; ?>>
-                        <div style="background-color: purple; width: 30px; height: 30px; border-radius: 50%;"></div>
+                    <label class="option-button">
+                        🌟 Stargazer
+                        <input type="number" name="main_flower[Stargazer/IMG_0622]" min="0" value="0">
                     </label>
                 </div>
 
                 <!-- Ribbon -->
                 <div class="section-title">Ribbon</div>
-                <div class="options-grid">
-                    <?php for ($i = 1; $i <= 6; $i++): ?>
-                        <label class="option-button <?php echo $selectedRibbon == 'ribbon-' . $i ? 'selected' : ''; ?>">
-                            <input type="radio" name="ribbon" value="ribbon-<?php echo $i; ?>" style="display: none;" <?php echo $selectedRibbon == 'ribbon-' . $i ? 'checked' : ''; ?>>
-                            <div style="background-color: pink; width: 40px; height: 20px; position: relative;">
-                                <div
-                                    style="position: absolute; left: 10px; top: -5px; width: 20px; height: 10px; border-radius: 10px 10px 0 0; background-color: pink;">
-                                </div>
-                                <div
-                                    style="position: absolute; left: 10px; bottom: -5px; width: 20px; height: 10px; border-radius: 0 0 10px 10px; background-color: pink;">
-                                </div>
-                            </div>
-                        </label>
-                    <?php endfor; ?>
+                <div class="options-grid scrollable-options" id="ribbon-options">
+                    <label class="option-button">
+                        <input type="radio" name="ribbon" value="None">
+                        🚫 None
+                    </label>
+                    <label class="option-button">
+                        <input type="radio" name="ribbon" value="Satin.png">
+                        ❤️ Red Satin
+                    </label>
+                    <label class="option-button">
+                        <input type="radio" name="ribbon" value="Patterned.png">
+                        💙 Patterned Blue
+                    </label>
                 </div>
 
-                <!-- Card Message -->
+                <!-- Wrapper -->
+                <div class="section-title">Wrapper</div>
+                <div class="options-grid scrollable-options" id="wrapper-options">
+                    <label class="option-button">
+                        <input type="radio" name="wrapper" value="B.png">
+                        🤍 White Wrapper
+                    </label>
+                    <label class="option-button">
+                        <input type="radio" name="wrapper" value="P.png">
+                        💗 Pink Wrapper
+                    </label>
+                </div>
+
+                <!-- Fillers -->
+                <div class="section-title">Fillers</div>
+                <div class="options-grid scrollable-options" id="filler-options">
+                    <label class="option-button">
+                        <input type="radio" name="filler" value="None">
+                        🚫 None
+                    </label>
+                    <label class="option-button">
+                        <input type="radio" name="filler" value="Babysbreath.png">
+                        🌿 Baby's Breath
+                    </label>
+                    <label class="option-button">
+                        <input type="radio" name="filler" value="Eucalyptus_.png">
+                        🌿 Eucalyptus
+                    </label>
+                    <label class="option-button">
+                        <input type="radio" name="filler" value="Lavender.png">
+                        🌿 Lavender
+                    </label>
+                    <label class="option-button">
+                        <input type="radio" name="filler" value="QueenAnneslace.png">
+                        🌿 Queen Anne's Lace
+                    </label>
+                    <label class="option-button">
+                        <input type="radio" name="filler" value="Asters.png">
+                        🌿 Asters
+                    </label>
+                </div>
+
+                <!-- Card -->
                 <div class="section-title">Card</div>
                 <textarea class="message-card" name="message"
-                    placeholder="Enter your message here..."><?php echo htmlspecialchars($message); ?></textarea>
-            </form>
-        </div>
+                    placeholder="Enter your message here..."><?php echo isset($message) ? htmlspecialchars($message) : ''; ?></textarea>
 
-        <!-- Right side - Preview -->
-        <div class="preview">
-            <?php if (isset($cartSuccess)): ?>
-                <div style="color: green; text-align: center;">
-                    <p>Your custom bouquet has been added to the cart!</p>
+                <!-- Add to Cart -->
+                <div class="add-to-cart-container">
+                    <button type="submit" name="add_to_cart" class="add-to-cart">Add to Cart</button>
                 </div>
-            <?php else: ?>
-                <div style="text-align: center;">
-                    <img src="bouquet-preview.jpg" alt="Bouquet Preview" class="bouquet-preview"
-                        onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'300\' viewBox=\'0 0 300 300\'><rect width=\'300\' height=\'300\' fill=\'%23f8f8f8\'/><text x=\'50%\' y=\'50%\' font-size=\'18\' text-anchor=\'middle\' fill=\'%23999\'>Bouquet Preview</text></svg>';">
-                </div>
-            <?php endif; ?>
-        </div>
-    </div>
 
-    <div class="add-to-cart-container">
-        <button type="submit" name="add_to_cart" class="add-to-cart">Add to Cart</button>
-    </div>
+            </div>
+
+
+            <!-- Right side - Preview -->
+            <div class="preview">
+                <div id="preview" style="margin-top: 20px;">
+                    <h4>Live Preview:</h4>
+                    <div id="main-flower-preview"
+                        style="position: relative; width: 200px; height: 200px; margin: 0 auto;">
+                        <!-- Images will be stacked here -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
 
     <?php include_once 'footer.php'; ?>
 
     <script>
-        // JavaScript to handle the selection UI
+        function updatePreview() {
+            const flowerInputs = document.querySelectorAll('input[name^="main_flower["]');
+            const previewDiv = document.getElementById("main-flower-preview");
+            const filler = document.querySelector('input[name="filler"]:checked')?.value;
+            const ribbon = document.querySelector('input[name="ribbon"]:checked')?.value;
+            const wrapper = document.querySelector('input[name="wrapper"]:checked')?.value;
+
+            previewDiv.innerHTML = ""; // Clear previous preview
+
+            // Add wrapper first (background)
+            if (wrapper) {
+                let wrapperImg = document.createElement('img');
+                wrapperImg.src = "../images/customize/BOUQUETS/" + wrapper;
+                wrapperImg.alt = "Wrapper";
+                wrapperImg.style.position = "absolute";
+                wrapperImg.style.top = "0";
+                wrapperImg.style.left = "0";
+                wrapperImg.style.width = "100%";
+                wrapperImg.style.height = "100%";
+                wrapperImg.style.zIndex = "1"; // Background layer
+                previewDiv.appendChild(wrapperImg);
+            }
+
+            // Add main flowers
+            flowerInputs.forEach(input => {
+                if (parseInt(input.value) > 0) {
+                    const flowerName = input.name.match(/\[(.*?)\]/)[1];
+                    let flowerImg = document.createElement('img');
+                    flowerImg.src = "../images/customize/FLOWERS/" + flowerName + ".png"; // Assuming flower image filenames
+                    flowerImg.alt = flowerName;
+                    flowerImg.style.position = "absolute";
+                    flowerImg.style.top = "0";
+                    flowerImg.style.left = "0";
+                    flowerImg.style.width = "80%";
+                    flowerImg.style.height = "80%";
+                    flowerImg.style.margin = "auto";
+                    flowerImg.style.zIndex = "2"; // Main flower layer
+                    previewDiv.appendChild(flowerImg);
+                }
+            });
+
+            // Add fillers (after main flowers but before ribbon)
+            if (filler) {
+                let fillerImg = document.createElement('img');
+                fillerImg.src = "../images/customize/FILLERS/" + filler; // Assuming filler image filenames
+                fillerImg.alt = filler;
+                fillerImg.style.position = "absolute";
+                fillerImg.style.top = "0";
+                fillerImg.style.left = "0";
+                fillerImg.style.width = "70%"; // Maybe slightly smaller than main flowers
+                fillerImg.style.height = "70%";
+                fillerImg.style.margin = "auto";
+                fillerImg.style.zIndex = "2"; // Same layer as flowers
+                previewDiv.appendChild(fillerImg);
+            }
+
+            // Add ribbon last (foreground)
+            if (ribbon) {
+                let ribbonImg = document.createElement('img');
+                ribbonImg.src = "../images/customize/RIBBONS/" + ribbon;
+                ribbonImg.alt = "Ribbon";
+                ribbonImg.style.position = "absolute";
+                ribbonImg.style.bottom = "0";
+                ribbonImg.style.left = "50%";
+                ribbonImg.style.transform = "translateX(-50%)";
+                ribbonImg.style.width = "50%";
+                ribbonImg.style.height = "auto";
+                ribbonImg.style.zIndex = "3"; // Foreground ribbon
+                previewDiv.appendChild(ribbonImg);
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
-            const optionButtons = document.querySelectorAll('.option-button');
-
-            optionButtons.forEach(button => {
-                button.addEventListener('click', function () {
-                    // Find the input inside this button
-                    const input = this.querySelector('input');
-                    input.checked = true;
-
-                    // Remove selected class from other buttons in the same group
-                    const groupButtons = document.querySelectorAll(`input[name="${input.name}"]`).forEach(groupInput => {
+            // Handle radio clicks (ribbon, wrapper, size)
+            document.querySelectorAll('.option-button input[type="radio"]').forEach(input => {
+                input.addEventListener('change', function () {
+                    // Mark selected visually
+                    document.querySelectorAll(`input[name="${this.name}"]`).forEach(groupInput => {
                         groupInput.closest('.option-button').classList.remove('selected');
                     });
+                    this.closest('.option-button').classList.add('selected');
 
-                    // Add selected class to this button
-                    this.classList.add('selected');
+                    updatePreview(); // <-- Important: Update preview after radio change
+                });
+            });
+
+            // Handle number input changes (main flowers)
+            document.querySelectorAll('.option-button input[type="number"]').forEach(input => {
+                input.addEventListener('input', function (e) {
+                    if (parseInt(this.value) > 0) {
+                        this.closest('.option-button').classList.add('selected');
+                    } else {
+                        this.closest('.option-button').classList.remove('selected');
+                    }
+                    updatePreview(); // <-- Update preview whenever flower quantity changes
+                });
+
+                // Also allow clicking the whole button to select/deselect
+                input.closest('.option-button').addEventListener('click', function (e) {
+                    if (e.target.tagName !== 'INPUT') { // Ignore direct number input clicks
+                        const numberInput = this.querySelector('input[type="number"]');
+                        if (parseInt(numberInput.value) > 0) {
+                            numberInput.value = 0;
+                            this.classList.remove('selected');
+                        } else {
+                            numberInput.value = 1;
+                            this.classList.add('selected');
+                        }
+                        updatePreview();
+                    }
                 });
             });
         });
+
+        // Keep your working scroll behavior
+        document.querySelectorAll('.scrollable-options').forEach(container => {
+            container.addEventListener('wheel', function (e) {
+                if (e.deltaY > 0) {
+                    container.scrollBy({ left: 100, behavior: 'smooth' });
+                } else {
+                    container.scrollBy({ left: -100, behavior: 'smooth' });
+                }
+                e.preventDefault();
+            });
+        });
+
+        // This will run every time the size is changed OR a flower quantity is changed
+        function setupMainFlowerLimits() {
+            const flowerInputs = document.querySelectorAll('input[name^="main_flower["]');
+            const sizeInputs = document.querySelectorAll('input[name="size"]');
+
+            function getMaxFlowers() {
+                const selectedSize = document.querySelector('input[name="size"]:checked')?.value || 'Small';
+                if (selectedSize === 'Medium') return 12;
+                if (selectedSize === 'Large') return 20;
+                return 6; // Default is Small
+            }
+
+            function enforceFlowerLimit(changedInput = null) {
+                const maxFlowers = getMaxFlowers();
+                let total = 0;
+
+                flowerInputs.forEach(input => {
+                    total += parseInt(input.value) || 0;
+                });
+
+                if (total > maxFlowers && changedInput) {
+                    const overBy = total - maxFlowers;
+                    let newValue = (parseInt(changedInput.value) || 0) - overBy;
+                    changedInput.value = Math.max(0, newValue);
+                    alert(`You can only select up to ${maxFlowers} main flowers for this size.`);
+                }
+
+                updatePreview(); // Update bouquet preview
+            }
+
+            // Listen to changes on each flower input
+            flowerInputs.forEach(input => {
+                input.addEventListener('input', function () {
+                    enforceFlowerLimit(this);
+                });
+            });
+
+            // Also listen to size change and re-check limits
+            sizeInputs.forEach(input => {
+                input.addEventListener('change', function () {
+                    enforceFlowerLimit();
+                });
+            });
+        }
+
+        // Call it once when the page loads
+        setupMainFlowerLimits();
+
     </script>
+
 </body>
 
 </html>

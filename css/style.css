@@ -1793,6 +1793,10 @@ textarea {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+.form-area{
+  width: 500px;
+}
+
 .customizer h2 {
   text-align: center;
   color: #333;
@@ -1816,7 +1820,7 @@ textarea {
   margin-bottom: 20px;
 }
 
-.option-button {
+/* .option-button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1826,6 +1830,22 @@ textarea {
   cursor: pointer;
   transition: all 0.3s ease;
   background-color: white;
+  padding: 0px 5px;
+} */
+
+.option-button {
+  flex: 0 0 auto;
+  min-width: 120px; /* important for nice spacing */
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  scroll-snap-align: start;
 }
 
 .option-button:hover {
@@ -1838,6 +1858,22 @@ textarea {
   background-color: #fdf1f5;
   box-shadow: 0 0 8px rgba(241, 156, 183, 0.5);
 }
+
+.option-button input[type="radio"],
+.option-button input[type="number"] {
+  display: none;
+}
+
+/* .option-button:hover {
+  border-color: #aaa;
+  transform: translateY(-2px);
+}
+
+.option-button.selected {
+  border-color: #f19cb7;
+  background-color: #fdf1f5;
+  box-shadow: 0 0 8px rgba(241, 156, 183, 0.5);
+} */
 
 /* Option Content */
 .option-button .option-text {
@@ -1856,6 +1892,11 @@ textarea {
   width: 30px;
   height: 30px;
   border-radius: 50%;
+}
+
+.option-button.selected input[type="number"] {
+  display: block;
+  width: 30px;
 }
 
 .option-button .ribbon-shape {
@@ -1897,6 +1938,29 @@ textarea {
   margin-bottom: 20px;
 }
 
+.scrollable-options {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  gap: 10px;
+  padding-bottom: 10px;
+  scroll-snap-type: x mandatory;
+}
+
+.scrollable-options::-webkit-scrollbar {
+  height: 8px;
+}
+
+.scrollable-options::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+.scrollable-options::-webkit-scrollbar-thumb:hover {
+  background-color: #aaa;
+}
+
 /* Preview Section */
 .preview {
   flex: 1;
@@ -1919,6 +1983,13 @@ textarea {
   max-width: 100%;
   max-height: 400px;
   border-radius: 8px;
+}
+
+#main-flower-preview {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+  background: #fff;
 }
 
 .price-display {
