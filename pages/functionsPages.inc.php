@@ -328,5 +328,96 @@ function getUserOrders($conn, $userId)
     return $orders; // Return the orders array
 }
 
+function saveCustomFlower($conn, $userId) {
+    if (!isset($_POST['save_customflower'])) {
+        return false;
+    }
+
+    // 1. Get size, ribbon, wrapper, filler, and message
+    $size = $_POST['size'] ?? '';
+    $ribbon = $_POST['ribbon'] ?? null;
+    $wrapper = $_POST['wrapper'] ?? null;
+    $filler = $_POST['filler'] ?? null;
+    $card = $_POST['message'] ?? null; // corrected: your form input is "message", not "card"
+
+    // 2. Process main flowers
+    $mainFlowersInput = $_POST['main_flower'] ?? [];
+    $mainFlowers = [];
+
+    foreach ($mainFlowersInput as $flowerKey => $quantity) {
+        if ((int)$quantity > 0) {
+            $flowerName = explode('/', $flowerKey)[0]; // Just get the flower name (before the slash)
+            $mainFlowers[] = $flowerName . $quantity; // Example: Rose3
+        }
+    }
+
+    $mainFlowersString = implode(',', $mainFlowers); // Final format: "Rose3,Daisy2"
+
+    // 3. Calculate price based on size
+    switch ($size) {
+        case 'Small':
+            $price = 499.00;
+            break;
+        case 'Medium':
+            $price = 699.00;
+            break;
+        case 'Large':
+            $price = 899.00;
+            break;
+        default:
+            $price = 0;
+    }
+
+    // 4. Insert into customflowers table
+    $stmt = $conn->prepare("INSERT INTO customflowers (user_id, size, main_flower, fillers, wrapper, ribbon, card, price, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+
+    if (!$stmt) {
+        header("Location: ../customize.php?error=prepare_failed");
+        exit();
+    }
+
+    $stmt->bind_param(
+        "issssssd",
+        $userId,
+        $size,
+        $mainFlowersString,
+        $filler,
+        $wrapper,
+        $ribbon,
+        $card,
+        $price
+    );
+
+    if ($stmt->execute()) {
+        $customFlowerId = $stmt->insert_id; // 👈 Get ID of the newly inserted custom flower
+        
+        // 5. Now insert into cart
+        $cartStmt = $conn->prepare("INSERT INTO cart (user_id, custom_flower_id, quantity, added_at, message) VALUES (?, ?, 1, NOW(), ?)");
+
+        if (!$cartStmt) {
+            header("Location: customize.php?error=cart_prepare_failed");
+            exit();
+        }
+
+        $cartStmt->bind_param(
+            "iis",
+            $userId,
+            $customFlowerId,
+            $card
+        );
+
+        if ($cartStmt->execute()) {
+            header("Location: customize.php?success=addedtocart");
+            exit();
+        } else {
+            header("Location: customize.php?error=cart_execute_failed");
+            exit();
+        }
+    } else {
+        header("Location: customize.php?error=execute_failed");
+        exit();
+    }
+}
+
 
 ?>

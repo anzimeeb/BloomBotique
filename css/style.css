@@ -1981,7 +1981,7 @@ textarea {
 
 .bouquet-preview {
   max-width: 100%;
-  max-height: 400px;
+  height: 800px;
   border-radius: 8px;
 }
 
@@ -1990,6 +1990,10 @@ textarea {
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
   background: #fff;
+  width: 500px;
+  height: 500px;
+  position: relative;
+  margin: 0 auto;
 }
 
 .price-display {

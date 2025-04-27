@@ -1,22 +1,7 @@
 <?php
+include_once 'header.php';
+include 'functionsPages.inc.php';
 
-// Handle form submission
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_to_cart'])) {
-    $main_flower = $_POST['main_flower'] ?? '';
-    $ribbon = $_POST['ribbon'] ?? '';
-    $wrapper = $_POST['wrapper'] ?? '';
-    $message = $_POST['message'] ?? '';
-
-    // Store to session or cart logic here
-    $_SESSION['cart'][] = [
-        'main_flower' => $main_flower,
-        'ribbon' => $ribbon,
-        'wrapper' => $wrapper,
-        'message' => $message,
-    ];
-
-    $cartSuccess = true;
-}
 ?>
 
 <!DOCTYPE html>
@@ -29,9 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_to_cart'])) {
 </head>
 
 <body>
-    <?php include_once 'header.php'; ?>
-
-    <form method="POST" action="">
+    <form method="POST" action="customize.inc.php">
         <div class="container">
 
             <!-- Left side - Form -->
@@ -96,11 +79,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_to_cart'])) {
                     </label>
                     <label class="option-button">
                         <input type="radio" name="ribbon" value="Satin.png">
-                        ❤️ Red Satin
+                        ❤️ Satin
                     </label>
                     <label class="option-button">
                         <input type="radio" name="ribbon" value="Patterned.png">
-                        💙 Patterned Blue
+                        💙 Patterned
+                    </label>
+                    <label class="option-button">
+                        <input type="radio" name="ribbon" value="Grossgrain_.png">
+                        💙 Gross Grain
                     </label>
                 </div>
 
@@ -109,11 +96,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_to_cart'])) {
                 <div class="options-grid scrollable-options" id="wrapper-options">
                     <label class="option-button">
                         <input type="radio" name="wrapper" value="B.png">
-                        🤍 White Wrapper
+                        💙 Blue Wrapper
                     </label>
                     <label class="option-button">
                         <input type="radio" name="wrapper" value="P.png">
-                        💗 Pink Wrapper
+                        🩷 Pink Wrapper
+                    </label>
+                    <label class="option-button">
+                        <input type="radio" name="wrapper" value="B1.png">
+                        🖤 Black Wrapper
+                    </label>
+                    <label class="option-button">
+                        <input type="radio" name="wrapper" value="G.png">
+                        💚 Green Wrapper
+                    </label>
+                    <label class="option-button">
+                        <input type="radio" name="wrapper" value="R.png">
+                        ❤️ Red Wrapper
+                    </label>
+                    <label class="option-button">
+                        <input type="radio" name="wrapper" value="V.png">
+                        💜 Violet Wrapper
                     </label>
                 </div>
 
@@ -148,12 +151,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_to_cart'])) {
 
                 <!-- Card -->
                 <div class="section-title">Card</div>
-                <textarea class="message-card" name="message"
+                <textarea class="message-card" name="card"
                     placeholder="Enter your message here..."><?php echo isset($message) ? htmlspecialchars($message) : ''; ?></textarea>
 
                 <!-- Add to Cart -->
                 <div class="add-to-cart-container">
-                    <button type="submit" name="add_to_cart" class="add-to-cart">Add to Cart</button>
+                    <button type="submit" name="save_customflower" class="add-to-cart">Add to Cart</button>
                 </div>
 
             </div>
@@ -163,8 +166,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_to_cart'])) {
             <div class="preview">
                 <div id="preview" style="margin-top: 20px;">
                     <h4>Live Preview:</h4>
-                    <div id="main-flower-preview"
-                        style="position: relative; width: 200px; height: 200px; margin: 0 auto;">
+                    <div id="main-flower-preview">
                         <!-- Images will be stacked here -->
                     </div>
                 </div>
@@ -200,20 +202,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_to_cart'])) {
             }
 
             // Add main flowers
+            // Add a flower container inside the previewDiv
+            let flowerAreaDiv = document.createElement('div');
+            flowerAreaDiv.style.position = "absolute";
+            flowerAreaDiv.style.top = "20%";    // Adjust to your preferred "flower area"
+            flowerAreaDiv.style.left = "30%";
+            flowerAreaDiv.style.width = "40%";
+            flowerAreaDiv.style.height = "40%";
+            flowerAreaDiv.style.zIndex = "2";
+            flowerAreaDiv.style.pointerEvents = "none"; // Flowers won't block clicks
+            previewDiv.appendChild(flowerAreaDiv);
+
+            // Add main flowers
             flowerInputs.forEach(input => {
-                if (parseInt(input.value) > 0) {
+                const quantity = parseInt(input.value);
+                if (quantity > 0) {
                     const flowerName = input.name.match(/\[(.*?)\]/)[1];
-                    let flowerImg = document.createElement('img');
-                    flowerImg.src = "../images/customize/FLOWERS/" + flowerName + ".png"; // Assuming flower image filenames
-                    flowerImg.alt = flowerName;
-                    flowerImg.style.position = "absolute";
-                    flowerImg.style.top = "0";
-                    flowerImg.style.left = "0";
-                    flowerImg.style.width = "80%";
-                    flowerImg.style.height = "80%";
-                    flowerImg.style.margin = "auto";
-                    flowerImg.style.zIndex = "2"; // Main flower layer
-                    previewDiv.appendChild(flowerImg);
+
+                    for (let i = 0; i < quantity; i++) {
+                        let flowerImg = document.createElement('img');
+                        flowerImg.src = "../images/customize/FLOWERS/" + flowerName + ".png";
+                        flowerImg.alt = flowerName;
+                        flowerImg.style.position = "absolute";
+                        flowerImg.style.top = Math.random() * 80 + "%";   // Random inside container
+                        flowerImg.style.left = Math.random() * 80 + "%";  // Random inside container
+                        flowerImg.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 30 - 15}deg)`; // Center & random rotate
+                        flowerImg.style.width = "60%"; // Slightly smaller maybe
+                        flowerImg.style.height = "auto";
+                        flowerImg.style.zIndex = "2";
+                        flowerAreaDiv.appendChild(flowerImg);
+                    }
                 }
             });
 
@@ -223,10 +241,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_to_cart'])) {
                 fillerImg.src = "../images/customize/FILLERS/" + filler; // Assuming filler image filenames
                 fillerImg.alt = filler;
                 fillerImg.style.position = "absolute";
-                fillerImg.style.top = "0";
-                fillerImg.style.left = "0";
-                fillerImg.style.width = "70%"; // Maybe slightly smaller than main flowers
-                fillerImg.style.height = "70%";
+                fillerImg.style.top = "20%";
+                fillerImg.style.left = "20%";
+                fillerImg.style.width = "40%"; // Maybe slightly smaller than main flowers
+                fillerImg.style.height = "40%";
                 fillerImg.style.margin = "auto";
                 fillerImg.style.zIndex = "2"; // Same layer as flowers
                 previewDiv.appendChild(fillerImg);
@@ -238,9 +256,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_to_cart'])) {
                 ribbonImg.src = "../images/customize/RIBBONS/" + ribbon;
                 ribbonImg.alt = "Ribbon";
                 ribbonImg.style.position = "absolute";
-                ribbonImg.style.bottom = "0";
+                ribbonImg.style.bottom = "34px";
                 ribbonImg.style.left = "50%";
-                ribbonImg.style.transform = "translateX(-50%)";
+                ribbonImg.style.transform = "translateX(-55%)";
                 ribbonImg.style.width = "50%";
                 ribbonImg.style.height = "auto";
                 ribbonImg.style.zIndex = "3"; // Foreground ribbon
