@@ -10,25 +10,35 @@ include 'functionsPages.inc.php';
 <head>
     <meta charset="UTF-8">
     <title>Custom Bouquet</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Make sure this file exists -->
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 
 <body>
+    <!-- BANNER IMAGE -->
+    <div class="banner2">
+        <img src="../images/banner2.jpg" alt="BLOOM BOUTIQUE">
+        <h1 class="banner-title">CUSTOMIZE</h1>
+    </div>
+
     <form method="POST" action="customize.inc.php">
         <div class="container">
 
             <!-- Left side - Form -->
             <div class="form-area">
+                <h3>Create Your Own</h3>
                 <!-- Size -->
                 <div class="section-title">Size</div>
                 <div class="scrollable-options" id="size-options">
                     <label class="option-button">
+                        <img src="../images/size.png" alt="">
                         <input type="radio" name="size" value="Small"> Small
                     </label>
                     <label class="option-button">
+                        <img src="../images/size.png" alt="">
                         <input type="radio" name="size" value="Medium"> Medium
                     </label>
                     <label class="option-button">
+                        <img src="../images/size.png" alt="">
                         <input type="radio" name="size" value="Large"> Large
                     </label>
                 </div>
@@ -37,86 +47,44 @@ include 'functionsPages.inc.php';
                 <div class="section-title">Main Flowers</div>
                 <div class="scrollable-options" id="main-flower-options">
                     <label class="option-button">
-                        🌹 Red Rose
-                        <input type="number" name="main_flower[Rose/IMG_0599]" min="0" value="0">
+                        <!-- 🌹 Red Rose -->
+                        <img src="../images/red-rose.png" alt="">
+                        <input type="number" name="main_flower[Rose/IMG_0599]" min="0" value="0"> Red Rose
                     </label>
                     <label class="option-button">
-                        🌷 Pink Tulip
-                        <input type="number" name="main_flower[Tulips/IMG_0620]" min="0" value="0">
+                        <!-- 🌷 Pink Tulip -->
+                        <img src="../images/red-rose.png" alt="">
+                        <input type="number" name="main_flower[Tulips/IMG_0620]" min="0" value="0">Pink Tulip
                     </label>
                     <label class="option-button">
-                        🌻 Sunflower
-                        <input type="number" name="main_flower[SunfloweR/IMG_0624]" min="0" value="0">
+                        <!-- 🌻 Sunflower -->
+                        <img src="../images/red-rose.png" alt="">
+                        <input type="number" name="main_flower[SunfloweR/IMG_0624]" min="0" value="0">Sunflower
                     </label>
                     <label class="option-button">
-                        🌼 Daisy
-                        <input type="number" name="main_flower[Daisies/IMG_0629]" min="0" value="0">
+                        <!-- 🌼 Daisy -->
+                        <img src="../images/red-rose.png" alt="">
+                        <input type="number" name="main_flower[Daisies/IMG_0629]" min="0" value="0">Daisy
                     </label>
                     <label class="option-button">
-                        🌺 Gerbera
-                        <input type="number" name="main_flower[Gerberas/IMG_0633]" min="0" value="0">
+                        <!-- 🌺 Gerbera -->
+                        <img src="../images/red-rose.png" alt="">
+                        <input type="number" name="main_flower[Gerberas/IMG_0633]" min="0" value="0">Gerbera
                     </label>
                     <label class="option-button">
-                        🌸 Lilies
-                        <input type="number" name="main_flower[Lilies/IMG_0631]" min="0" value="0">
+                        <!-- 🌸 Lilies -->
+                        <img src="../images/red-rose.png" alt="">
+                        <input type="number" name="main_flower[Lilies/IMG_0631]" min="0" value="0">Lily
                     </label>
                     <label class="option-button">
-                        🌸 Peonies
-                        <input type="number" name="main_flower[Peonies/IMG_0627" min="0" value="0">
+                        <!-- 🌸 Peonies -->
+                        <img src="../images/red-rose.png" alt="">
+                        <input type="number" name="main_flower[Peonies/IMG_0627" min="0" value="0">Peony
                     </label>
                     <label class="option-button">
-                        🌟 Stargazer
-                        <input type="number" name="main_flower[Stargazer/IMG_0622]" min="0" value="0">
-                    </label>
-                </div>
-
-                <!-- Ribbon -->
-                <div class="section-title">Ribbon</div>
-                <div class="options-grid scrollable-options" id="ribbon-options">
-                    <label class="option-button">
-                        <input type="radio" name="ribbon" value="None">
-                        🚫 None
-                    </label>
-                    <label class="option-button">
-                        <input type="radio" name="ribbon" value="Satin.png">
-                        ❤️ Satin
-                    </label>
-                    <label class="option-button">
-                        <input type="radio" name="ribbon" value="Patterned.png">
-                        💙 Patterned
-                    </label>
-                    <label class="option-button">
-                        <input type="radio" name="ribbon" value="Grossgrain_.png">
-                        💙 Gross Grain
-                    </label>
-                </div>
-
-                <!-- Wrapper -->
-                <div class="section-title">Wrapper</div>
-                <div class="options-grid scrollable-options" id="wrapper-options">
-                    <label class="option-button">
-                        <input type="radio" name="wrapper" value="B.png">
-                        💙 Blue Wrapper
-                    </label>
-                    <label class="option-button">
-                        <input type="radio" name="wrapper" value="P.png">
-                        🩷 Pink Wrapper
-                    </label>
-                    <label class="option-button">
-                        <input type="radio" name="wrapper" value="B1.png">
-                        🖤 Black Wrapper
-                    </label>
-                    <label class="option-button">
-                        <input type="radio" name="wrapper" value="G.png">
-                        💚 Green Wrapper
-                    </label>
-                    <label class="option-button">
-                        <input type="radio" name="wrapper" value="R.png">
-                        ❤️ Red Wrapper
-                    </label>
-                    <label class="option-button">
-                        <input type="radio" name="wrapper" value="V.png">
-                        💜 Violet Wrapper
+                        <!-- 🌟 Stargazer -->
+                        <img src="../images/red-rose.png" alt="">
+                        <input type="number" name="main_flower[Stargazer/IMG_0622]" min="0" value="0">Stargazer
                     </label>
                 </div>
 
@@ -124,56 +92,103 @@ include 'functionsPages.inc.php';
                 <div class="section-title">Fillers</div>
                 <div class="options-grid scrollable-options" id="filler-options">
                     <label class="option-button">
-                        <input type="radio" name="filler" value="None">
-                        🚫 None
+                        <img src="../images/filler.png" alt="">
+                        <input type="radio" name="filler" value="None">None
                     </label>
                     <label class="option-button">
-                        <input type="radio" name="filler" value="Babysbreath.png">
-                        🌿 Baby's Breath
+                        <img src="../images/filler.png" alt="">
+                        <input type="radio" name="filler" value="Babysbreath.png">Baby's Breath
                     </label>
                     <label class="option-button">
-                        <input type="radio" name="filler" value="Eucalyptus_.png">
-                        🌿 Eucalyptus
+                        <img src="../images/filler.png" alt="">
+                        <input type="radio" name="filler" value="Eucalyptus_.png">Eucalyptus
                     </label>
                     <label class="option-button">
-                        <input type="radio" name="filler" value="Lavender.png">
-                        🌿 Lavender
+                        <img src="../images/filler.png" alt="">
+                        <input type="radio" name="filler" value="Lavender.png">Lavender
                     </label>
                     <label class="option-button">
-                        <input type="radio" name="filler" value="QueenAnneslace.png">
-                        🌿 Queen Anne's Lace
+                        <img src="../images/filler.png" alt="">
+                        <input type="radio" name="filler" value="QueenAnneslace.png">Queen's Lace
                     </label>
                     <label class="option-button">
-                        <input type="radio" name="filler" value="Asters.png">
-                        🌿 Asters
+                        <img src="../images/filler.png" alt="">
+                        <input type="radio" name="filler" value="Asters.png">Asters
+                    </label>
+                </div>
+
+                <!-- Ribbon -->
+                <div class="section-title">Ribbon</div>
+                <div class="options-grid scrollable-options" id="ribbon-options">
+                    <label class="option-button">
+                        <img src="../images/ribbon.png" alt="">
+                        <input type="radio" name="ribbon" value="None">None
+                    </label>
+                    <label class="option-button">
+                        <img src="../images/ribbon.png" alt="">
+                        <input type="radio" name="ribbon" value="Satin.png">Satin
+                    </label>
+                    <label class="option-button">
+                        <img src="../images/ribbon.png" alt="">
+                        <input type="radio" name="ribbon" value="Patterned.png">Patterned
+                    </label>
+                    <label class="option-button">
+                        <img src="../images/ribbon.png" alt="">
+                        <input type="radio" name="ribbon" value="Grossgrain_.png">Gross Grain
+                    </label>
+                </div>
+
+                <!-- Wrapper -->
+                <div class="section-title">Wrapper</div>
+                <div class="options-grid scrollable-options" id="wrapper-options">
+                    <label class="option-button">
+                        <img src="../images/wrapper.png" alt="">
+                        <input type="radio" name="wrapper" value="B.png">Blue Wrapper
+                    </label>
+                    <label class="option-button">
+                        <img src="../images/wrapper.png" alt="">
+                        <input type="radio" name="wrapper" value="P.png">Pink Wrapper
+                    </label>
+                    <label class="option-button">
+                        <img src="../images/wrapper.png" alt="">
+                        <input type="radio" name="wrapper" value="B1.png">Black Wrapper
+                    </label>
+                    <label class="option-button">
+                        <img src="../images/wrapper.png" alt="">
+                        <input type="radio" name="wrapper" value="G.png">Green Wrapper
+                    </label>
+                    <label class="option-button">
+                        <img src="../images/wrapper.png" alt="">
+                        <input type="radio" name="wrapper" value="R.png">Red Wrapper
+                    </label>
+                    <label class="option-button">
+                        <img src="../images/wrapper.png" alt="">
+                        <input type="radio" name="wrapper" value="V.png">Violet Wrapper
                     </label>
                 </div>
 
                 <!-- Card -->
                 <div class="section-title">Card</div>
-                <textarea class="message-card" name="card"
-                    placeholder="Enter your message here..."><?php echo isset($message) ? htmlspecialchars($message) : ''; ?></textarea>
-
-                <!-- Add to Cart -->
-                <div class="add-to-cart-container">
-                    <button type="submit" name="save_customflower" class="add-to-cart">Add to Cart</button>
+                    <textarea class="message-card" name="card" placeholder="Enter your message here..."><?php echo isset($message) ? htmlspecialchars($message) : ''; ?></textarea>
                 </div>
-
-            </div>
-
 
             <!-- Right side - Preview -->
             <div class="preview">
                 <div id="preview" style="margin-top: 20px;">
-                    <h4>Live Preview:</h4>
+                    <!-- <h4>Live Preview:</h4> -->
                     <div id="main-flower-preview">
                         <!-- Images will be stacked here -->
                     </div>
                 </div>
             </div>
-
         </div>
     </form>
+
+    <!-- Add to Cart -->
+    <div class="add-to-cart-container">
+        <button type="submit" name="reset_customflower" class="reset-btn">Start Again</button>
+        <button type="submit" name="save_customflower" class="add-to-cart">Add to Cart</button>
+    </div>
 
     <?php include_once 'footer.php'; ?>
 

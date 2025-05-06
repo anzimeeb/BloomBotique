@@ -177,20 +177,21 @@ if (isset($_POST['add_to_cart'])) {
 
 </div><!-- end main -->
 
-<hr>
+<hr class="hr">   
 <!-- Tabs -->
 <nav class="tabs"><!-- tabs -->
+    <a href="#seereviews" class="tab-button">Reviews</a>
     <a href="#additionalinfo" class="tab-button">Additional Information</a>
-    <a href="#sendreview" class="tab-button">Review</a>
+    <a href="#sendreview" class="tab-button">Send Review</a>
 </nav><!-- end tabs -->
-<hr>
+
 
 
 <!-- ADDITIONAL INFORMATION -->
-<div id="additionalinfo" class="linksection">
+<div id="additionalinfo" class="linksection ">
     <div class="addmain"><!-- main additional info -->
         <div class="addinfo"><!-- add info -->
-            <h3>Everlasting Love Package</h3>
+        <h2 class="info-cat-name"><?= $row['product_name']; ?></h2>
             <p>Includes:</p>
             <ul>
                 <li><strong>Bridal Bouquet:</strong> White lilies, peonies, and roses with baby's breath and eucalyptus
@@ -211,9 +212,9 @@ if (isset($_POST['add_to_cart'])) {
     <div class="review-main" id="sendreview"><!-- main review container -->
         <div class="send-review" id="review-id">
             <h3>Add your review</h3>
-            <p>Lorem ipsum dolor sit amet. Ut eaque consectetur sed voluptatibus doloremque ea nobis quis 33 laboriosam
-                aliquid est deleniti eaque ut blanditiis nobis.</p>
-
+            <p>We value your feedback! Share your experience by submitting a review below. 
+                Your insights help us improve and help others make informed decisions.</p>
+            <br>
             <form method="POST" action="">
                 <div class="name-email">
                     <div class="send-input-grp">
@@ -253,43 +254,43 @@ if (isset($_POST['add_to_cart'])) {
                     </label>
                 </div>
 
-                <input type="submit" name="review-submit" value="Submit">
+                <input type="submit" name="review-submit" placeholder="Submit">
             </form>
         </div>
     </div><!-- end main review container -->
 </div>
 
-<!-- reviews -->
-<!-- <h3>Review List</h3>
+<!-- review list -->
+<div id="seereviews" class="linksection">
+<h3 class="rlist-title">Review List</h3>
+<div class="reviews-list">
+    <div class="rlist-container">
+        <div class="customer-feedback">
+            <div class="rlist-image">
+                <img src="../images/yinprofile.jpg" alt="Reviewer">
+                <p class="rev_name"><strong>Roselyn Caampued</strong></p>
+            </div>
+            
+            <p><strong>Perfect for Birthdays and Weddings!</strong></p>
+            <p class="rlist-message">
+                Mahal na mahal ko talaga siya mga beh huhuhu Mahal na mahal ko talaga siya mga beh huhuhu Mahal na mahal ko talaga siya mga beh huhuhu
+                Mahal na mahal ko talaga siya mga beh huhuhu Mahal na mahal ko talaga siya mga beh huhuhu Mahal na mahal ko talaga siya mga beh huhuhu Mahal na mahal ko talaga siya mga beh huhuhu
+            </p>
 
+            <div class="rlist-rating">
+                <h3>⭐⭐⭐⭐⭐</h3>
+                <h5>5.0</h5>
+            </div> 
 
-<div class="reviews">
-        <div class="reviews-container">
-                <div class="feedback">
-                    <div class="review-image">
-                        <img src="../images/reviewer.png" alt="Icon">
-                        <p class="rev_name"><strong>Roselyn Caampued</strong></p>
-                    </div>
-                    
-                    <p><strong>Perfect for Birthdays and Weddings!</strong></p>
-                    <p class="review-message">Mahal na mahal ko talaga siya mga beh huhuhu Mahal na mahal ko talaga siya mga beh huhuhu Mahal na mahal ko talaga siya mga beh huhuhu
-                    Mahal na mahal ko talaga siya mga beh huhuhu Mahal na mahal ko talaga siya mga beh huhuhu Mahal na mahal ko talaga siya mga beh huhuhu Mahal na mahal ko talaga siya mga beh huhuhu
-                    </p>
-
-                    <div class="reviewer-rating">
-                        <h3>⭐⭐⭐⭐⭐<h3>
-                        <h5>5.0</h5>
-                    </div> 
-
-                    <div class="reviews-images">
-                        <img src="../images/picture1.jpg" alt="">
-                        <img src="../images/picture2.jpg" alt="">
-                        <img src="../images/picture3.jpg" alt="">
-                    </div>
-                        
-                </div>
-        </div> -->
+            <div class="rlist-uploads">
+                <img src="../images/contactImage.png" alt="Review image 1">
+                <img src="../images/aboutImage2.png" alt="Review image 2">
+                <img src="../images/aboutImage3.png" alt="Review image 3">
+            </div>
+        </div>
+    </div>
 </div><!-- end reviews -->
+</div>
 
 
 <?php include_once 'footer.php'; ?>

@@ -14,9 +14,23 @@
 <body>
         <section class="account">
             <div class="login-container" id="login-form1">
-                <div id="login-logo">
-                <img src="../images/loginLogo.png" alt="Bloom Boutique">
+                <div class="back-button-container">
+                    <button onclick="goBack()" class="back-button">
+                        <img src="../images/back.png" alt="back">
+                    </button>
                 </div>
+                
+                <script>
+                    function goBack() {
+                        window.history.back();
+                        }
+                </script>
+
+                <div id="login-logo">
+                    <img src="../images/loginLogo.png" alt="Bloom Boutique">
+                </div>
+
+                <p>Lost your access? Let’s find it.</p>
             
                 <?php
                 if(isset($_GET["error"])){
@@ -28,7 +42,7 @@
                 }
                 ?>
 
-                <!-- LOGIN FORM -->
+                <!-- FORGOT PASSWORD FORM -->
                 <form action="forgotPassword.inc.php" method="POST">
                     <label class="label">Email</label>
                     <input type="text" name="email" placeholder="Email" required>

@@ -15,6 +15,18 @@
     <main>
         <section class="account">
             <div class="login-container" id="login-form1">
+                <div class="back-button-container">
+                    <button onclick="goBack()" class="back-button">
+                        <img src="../images/back.png" alt="back">
+                    </button>
+                </div>
+                
+                <script>
+                    function goBack() {
+                        window.history.back();
+                        }
+                </script>
+
                 <div id="signup-logo">
                     <img src="../images/loginLogo.png" alt="Bloom Boutique">
                 </div>

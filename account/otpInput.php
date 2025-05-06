@@ -76,12 +76,26 @@ if (!isset($_SESSION['customerEmail'])){
         </div>
     </header> -->
     
-    <main>
         <section class="account">
-            <div class="login-container" id="account-item1">
-                <h2>Enter your OTP</h2>
+            <div class="login-container" id="login-form1">
+                <div class="back-button-container">
+                    <button onclick="goBack()" class="back-button">
+                        <img src="../images/back.png" alt="back">
+                    </button>
+                </div>
+                
+                <script>
+                    function goBack() {
+                        window.history.back();
+                        }
+                </script>
 
-                <p>OTP has been sent to your email.</p>
+                <div id="login-logo">
+                    <img src="../images/otp.png" alt="Bloom Boutique">
+                </div>
+
+                <!-- <h2>Enter your OTP</h2> -->
+                <p class="otp-message">Please enter the OTP code that has been sent to your email.</p>
 
                 <?php
                 if(isset($_GET["error"])){
@@ -93,19 +107,20 @@ if (!isset($_SESSION['customerEmail'])){
                 }
                 ?>
 
+                <!-- OTP FORM -->
                 <form action="otpInput.inc.php" method="POST">
-                    <input type="text" name="otp" placeholder="OTP" required>
+                    <input type="text" name="otp" placeholder="Enter OTP" required>
                     <br>
                     <input type="submit" name="otpCheck" value="Verify Code">
                     <br>
+                    <p>Back to <a id="signup" href="login.php">Log In</a></p>
                 </form>
             </div>
-            <div id="account-item2">
-                <img src="../img/p_signup.png">
+
+            <div id="login-image">
+                <img src="../images/loginPic.png">
             </div>
         </section>
-    </main>
-
     
 </body>
 </hmtl>

@@ -7,17 +7,31 @@
     <title>Forgot Password</title>
     <link rel="icon" href="../img/icon/coffeLogo.png" type="image/png" media="(prefers-color-scheme: light)">
     <link rel="icon" href="../img/icon/whiteLogo.png" type="image/png" media="(prefers-color-scheme: dark)">
-    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/style.css">
     <link rel="shortcut icon" href="">
 </head>
 
 <body>
     <main>
         <section class="account">
-            <div class="login-container" id="account-item1">
-                <h2>Forgot Password</h2>
+            <div class="login-container" id="login-form1"> <!--id="account-item1"-->
+                <div class="back-button-container">
+                        <button onclick="goBack()" class="back-button">
+                            <img src="../images/back.png" alt="back">
+                        </button>
+                    </div>
+                    
+                    <script>
+                        function goBack() {
+                            window.history.back();
+                            }
+                    </script>
 
-                <p>Lost your access? Let’s find it.</p>
+                    <div id="login-logo">
+                        <img src="../images/loginLogo.png" alt="Bloom Boutique">
+                    </div>
+                    
+                    <p>Lost your access? Let’s find it.</p>
 
                 <?php
                 if(isset($_GET["error"])){
@@ -30,14 +44,15 @@
                 ?>
 
                 <form action="forgot-password.inc.php" method="POST">
-                    <input type="text" name="email" placeholder="Email" required>
+                <label class="label">Email</label>    
+                <input type="text" name="email" placeholder="Email" required>
                     <br>
                     <input type="submit" name="forgotPasswordAdmin" value="Send OTP">
                     <br>
                 </form>
             </div>
-            <div id="account-item2">
-                <img src="../img/forgot.png">
+            <div id="login-image">
+                <img src="../images/loginPic.png">
             </div>
         </section>
     </main>

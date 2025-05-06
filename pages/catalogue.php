@@ -24,7 +24,7 @@ if (isset($_GET['options']) && !empty($_GET['options'])) {
         // Sort options into categories
         if (in_array($option, ["Wedding", "Graduation", "Birthday", "Burial"])) {
             $occasion_filters[] = $option;
-        } elseif (in_array($option, ["Mixed", "White", "Red", "Blue", "Green"])) {
+        } elseif (in_array($option, ["Mixed", "White", "Red", "Blue", "Green", "Pink"])) {
             $color_filters[] = $option;
         } elseif (in_array($option, ["In Stock", "Out of Stock"])) {
             $availability_filters[] = $option;
@@ -144,6 +144,9 @@ if (!$all_product) {
                     <label><input type="checkbox" name="options[]" value="Green" <?php if (isset($_GET['options']) && in_array('Green', $_GET['options']))
                         echo 'checked'; ?>
                             onchange="autoSubmitForm()">Green</label>
+                    <label><input type="checkbox" name="options[]" value="Pink" <?php if (isset($_GET['options']) && in_array('Pink', $_GET['options']))
+                        echo 'checked'; ?>
+                            onchange="autoSubmitForm()">Pink</label>
                 </div>
                 <hr>
 
@@ -205,7 +208,7 @@ if (!$all_product) {
                 }
 
                 echo "</div>";
-                echo "<a href='" . $_SERVER['PHP_SELF'] . "' class='clear-all'>Clear All</a>";
+                echo "<a href='" . $_SERVER['PHP_SELF'] . "' class='catclear-all'>Clear All</a>";
                 echo "</div>";
             }
             ?>

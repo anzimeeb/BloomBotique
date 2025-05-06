@@ -164,7 +164,7 @@ $grandTotal = $totalAfterDiscount + $shipping;
                                 <button onclick="cancelEdit(<?= $cartId; ?>)">Cancel</button>
                             </div>
 
-                            <button onclick="editMessage(<?= $cartId; ?>)">Edit</button>
+                            <button onclick="editMessage(<?= $cartId; ?>)">Edit Card Message</button>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -173,12 +173,12 @@ $grandTotal = $totalAfterDiscount + $shipping;
             <?php else: ?>
                 <div class="cart-empty">
                     <p>Your cart is currently empty.</p>
+                    <img src="../images/emptyCart.png" alt="Empty Cart">
                     <a href="catalogue.php" class="clear-all">← Continue Shopping</a>
                 </div>
             <?php endif; ?>
 
         <?php else: ?>
-            <!-- If the user is not logged in, fetch cart data from cookies -->
             <?php
             if (isset($_COOKIE['cart'])) {
                 $cart = json_decode($_COOKIE['cart'], true);
@@ -255,8 +255,8 @@ $grandTotal = $totalAfterDiscount + $shipping;
                                 <button onclick="saveMessage(<?= $product['id']; ?>)">Save</button>
                                 <button onclick="cancelEdit(<?= $product['id']; ?>)">Cancel</button>
                             </div>
-
-                            <button onclick="editMessage(<?= $product['id']; ?>)">Edit</button>
+                                            
+                            <button onclick="editMessage(<?= $product['id']; ?>)">Edit Card Message</button>
                         </div>
                     </div>
                 <?php endforeach; ?>

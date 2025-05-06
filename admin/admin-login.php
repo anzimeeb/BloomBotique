@@ -12,12 +12,14 @@
 </head>
 
 <body>
-
-    <main>
         <section class="account">
-            <div class="login-container" id="account-item1">
-            <div class="logoAccount"><img src="../img/logoF_black.png"></div>
-                <p>Glad to Have You, Admin! <br> Keeping the Coffee Flowing, One Click at a Time.</p>
+            <div class="login-container" id="login-form1">
+
+            <div id="login-logo">
+                <img src="../images/loginLogo.png" alt="Bloom Boutique">
+            </div>
+
+            <p class="admin-message">Glad to Have You, Admin! <br> Keeping the Business Flowing, One Click at a Time.</p>
                 
                 <?php
                 if(isset($_GET["error"])){
@@ -30,7 +32,7 @@
                 ?>
                 
                 <!-- Login Form -->
-                <form method="POST" action="admin-login.inc.php">
+                <!-- <form method="POST" action="admin-login.inc.php">
                     <input type="text" name="username" placeholder="Username/Email" required>
                     <br>
                     <input type="password" name="password" placeholder="Password" required>
@@ -42,9 +44,22 @@
             </div>
             <div id="account-item2">
                 <img src="../img/adminlogin.png">
-            </div>
+            </div> -->
+
+            
+
+            <form method="POST" action="admin-login.inc.php">
+                    <label class="label">Email</label>
+                    <input type="text" name="username" required><br>
+                    <label class="label">Password</label>
+                    <input type="password" name="password" required><br>
+                    <a id="forgotpw" href="forgot-password.php">Forgot Password?</a>
+                    <br>
+                    <input type="submit" name="loginadmin" value="Login"><br>
+                </form>
+        </div>
+            <div id="login-image"><img src="../images/loginPic.png"></div>
         </section>
-    </main>
 </body>
 
 </html>

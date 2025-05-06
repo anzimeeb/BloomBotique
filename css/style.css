@@ -114,7 +114,7 @@ header .leftside {
   border-radius: 5px;
   background-color: none;
   color: #000;
-  display: inline-flex; /* Ensures both buttons stay inline */
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 }
@@ -147,7 +147,7 @@ header .leftside {
   height: 100%;
   max-height: 300px;
   border-radius: 30px;
-  border: 1px solid black;
+  border: 1px solid #46464675;
 }
 
 .banner-title {
@@ -204,7 +204,7 @@ header .leftside {
 .icon-button img {
   background: white;
   border-radius: 50%;
-  box-shadow: 0px 4px 6px black; /* x, y, blur, color ng shadow */
+  box-shadow: 0px 4px 6px black;
   transition: transform 0.1s ease;
 }
 
@@ -291,6 +291,7 @@ header .leftside {
 
 .discount-wrap {
   width: 100%;
+  height: 100px;
 }
 
 .discount {
@@ -305,7 +306,7 @@ header .leftside {
 }
 
 .image-title {
-  font-size: 48px;
+  font-size: 24px;
   font-weight: bold;
   margin: 0px 0;
   text-decoration: none;
@@ -323,9 +324,18 @@ header .leftside {
   color: white;
 }
 
+.image-description2 {
+  font-size: 14px;
+  font-weight: bold;
+  padding: 10px 50px;
+  opacity: 0.8;
+  width: 70%;
+  color: white;
+}
+
 .shop-button {
   display: flex;
-  padding: 50px 50px;
+  padding: 20px 50px;
 }
 .shop-now-btn {
   top: 300px;
@@ -354,7 +364,6 @@ header .leftside {
 /*half-section*/
 #home-about-description {
   width: 40%;
-  /*padding: 15px 50px;*/
   height: 90vh;
   display: flex;
   flex-direction: column;
@@ -446,14 +455,6 @@ header .leftside {
   margin: 0px 60px;
 }
 
-/* .products-container {
-    display: flex;
-    overflow-x: auto;
-    white-space: nowrap;
-    justify-content: center;
-    gap: 20px;
-} */
-
 .product-card {
   padding: 15px;
   border-radius: 10px;
@@ -508,14 +509,6 @@ header .leftside {
 .scroll-btn:hover {
   background-color: #5f00a3;
 }
-
-/* .prev-btn {
-    left: 10;
-}
-
-.next-btn {
-    right: 10;
-} */
 
 /* Hide buttons when not needed */
 .scroll-btn.hide {
@@ -676,7 +669,7 @@ header .leftside {
   height: 250px;
   border-radius: 20px;
   border: 1px solid rgb(30, 30, 30);
-  box-shadow: 0px 4px 15px gray; /* x, y, blur, color ng shadow */
+  box-shadow: 0px 4px 15px gray;
 }
 
 .feedback h4 {
@@ -791,7 +784,8 @@ footer {
 .footer-section p {
   font-size: 14px;
   width: 80%;
-  margin-left: 20px;
+  text-align: center;
+
 }
 
 .socmed-icons {
@@ -903,20 +897,20 @@ footer {
 }
 
 .aboutIcon img {
-  width: 90px; /* Adjust icon size */
+  width: 90px; 
   height: auto;
   margin-bottom: 10px;
 }
 
 .pictureContainer {
-  width: 50%; /* Ensure images take equal space */
+  width: 50%; 
   display: flex;
   justify-content: center;
 }
 
 .pictureContainer img {
-  width: 100%; /* Make image responsive */
-  max-width: 500px; /* Prevent too large images */
+  width: 100%;
+  max-width: 500px; 
   height: auto;
   border-radius: 10px;
 }
@@ -929,6 +923,30 @@ footer {
   justify-content: space-around;
 }
 
+.back-button-container {
+  position: absolute;
+  top: 8%;
+  left: 5%;
+  z-index: 10;
+}
+
+.back-button {
+  background-color: #5f00a3;
+  border: 1px solid #5f00a3;
+  border-radius: 7px;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.back-button img {
+  height: 20px;
+  width: 20px;
+}
+
+
 #login-logo {
   width: 30%;
   height: 30%;
@@ -937,12 +955,16 @@ footer {
 #login-logo img {
   width: 100%;
   height: 100%;
+  padding-bottom: 0px;
+  margin: 0px;
 }
 
 #signup-logo {
   width: 20%;
   height: 20%;
-  margin-bottom: 0px;
+  margin: 0px auto;
+  padding: 0px;
+  text-align: center;
 }
 
 #signup-logo img {
@@ -1065,6 +1087,14 @@ input[type="password"] {
   border-radius: 20px;
 }
 
+#login-form1 .otp-message {
+  padding: 20px;
+  font-size: 18px;
+  font-family: Raleway, Arial, sans-serif;
+  max-width: 80%;
+  font-weight: 500;
+  text-align: center;
+}
 /**********************************************************CATALOGUE PAGE***************************************************************/
 .catalogue-main {
   display: flex;
@@ -1076,7 +1106,6 @@ input[type="password"] {
 }
 
 /* OTHER HALF (LEFT) - FILTER OPTIONS */
-
 .filter-options {
   width: 15%;
   padding: 15px;
@@ -1119,8 +1148,7 @@ input[type="password"] {
 }
 
 hr {
-  border: none;
-  background-color: #ededed;
+  border: 1px solid #ededed;
   margin: 15px 0;
 }
 
@@ -1143,7 +1171,6 @@ hr {
   background-color: #4c0082;
 }
 
-/* Add this to ensure proper spacing */
 form {
   margin: 0;
 }
@@ -1154,7 +1181,7 @@ form {
   align-items: center;
   padding: 6px 10px;
   font-family: Raleway, Arial, sans-serif;
-  background-color: #f9f9f9;
+  background-color: transparent;
   border-radius: 4px;
   margin: 10px 0;
 }
@@ -1219,16 +1246,19 @@ form {
   opacity: 0.8;
 }
 
-.clear-all {
-  color: #5f00a3;
+.catclear-all {
+  color: white;
+  background-color: #5F00A3;
   text-decoration: none;
   font-weight: bold;
   font-size: 14px;
   margin-left: auto;
   white-space: nowrap;
+  padding: 10px 20px;
+  border-radius: 20px;
 }
 
-.clear-all:hover {
+.catclear-all:hover {
   text-decoration: underline;
 }
 .showcasing {
@@ -1236,69 +1266,6 @@ form {
   flex-direction: column;
   width: 70%;
 }
-/* ACTIVE FILTER */
-/* .active-filter-container {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 0;
-    font-family: Arial, sans-serif;
-    margin-bottom: 15px;
-}
-
-.filter-label {
-    font-weight: bold;
-    margin-right: 10px;
-}
-
-.filter-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-
-}
-
-.filter-tag {
-    display: flex;
-    align-items: center;
-    background-color: #5F00A3;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 14px;
-}
-
-.tag-category {
-    margin-right: 4px;
-}
-
-.remove-tag {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-left: 8px;
-    padding: 0 2px;
-}
-
-.remove-tag:hover {
-    opacity: 0.8;
-}
-
-.clear-all {
-    color: #5F00A3;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 14px;
-    margin-left: auto;
-}
-
-.clear-all:hover {
-    text-decoration: underline;
-} */
 
 /* ALL PRODUCTS */
 .show-products {
@@ -1486,6 +1453,15 @@ textarea {
   padding: 20px;
 }
 
+.card-message {
+  color: black;
+  font-weight: bold;
+}
+
+#message {
+  font-family: Raleway, Arial, sans-serif;
+}
+
 /* QUANTITY */
 .cat-qbb {
   display: flex;
@@ -1544,6 +1520,7 @@ textarea {
 .tabs {
   text-align: center;
   padding: 15px;
+  margin-bottom: 20px;
 }
 
 .tab-button {
@@ -1553,10 +1530,113 @@ textarea {
   font-size: 16px;
   cursor: pointer;
   margin: 0px 30px;
+  text-decoration: none;
+  position: relative;
+  padding-bottom: 5px;
+
 }
 
 .tab-button:hover {
   text-decoration: underline;
+}
+
+.tab-button.active {
+  text-decoration: none;
+}
+
+.tab-button.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #5F00A3;
+}
+
+
+/**********************************************************CATALOGUE PAGE - REVIEWS LIST***************************************************************/
+.rlist-title {
+  text-align: left;
+  padding-left: 170px;
+  font-family: Raleway, Arial, sans-serif;
+  font-size: 20px;
+}
+
+.reviews-list {
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  font-family: Raleway, Arial, sans-serif;
+}
+
+.rlist-container {
+  margin-bottom: 20px;
+  padding: 15px;
+  width: 100%;
+  max-width: 80%;
+  margin-left: 50px;
+}
+
+.customer-feedback {
+  display: flex;
+  flex-direction: column;
+}
+
+.rlist-image {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.rlist-image img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.rev_name {
+  margin: 0;
+  font-size: 16px;
+  font-family: Raleway, Arial, sans-serif;
+}
+
+.rlist-message {
+  margin: 10px 0;
+  line-height: 1.5;
+  color: #333;
+}
+
+.rlist-rating {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+}
+
+.rlist-rating h3 {
+  color: #ffc107;
+  margin: 0;
+  margin-right: 10px;
+  text-align: left;
+}
+
+.rlist-rating h5 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.rlist-uploads {
+  display: flex;
+  margin-top: 15px;
+  gap: 10px;
+}
+
+.rlist-uploads img {
+  width: 200px;
+  height: 200px;
+  border-radius: 4px;
+  object-fit: cover;
 }
 
 /**********************************************************CATALOGUE PAGE - ADDITIONAL INFORMATION***************************************************************/
@@ -1588,14 +1668,13 @@ textarea {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
-  background-color: #faf6ff;
+  padding: 0px;
+
 }
 
 .send-review {
   width: 80%;
-  padding: 20px;
-  border-radius: 10px;
+  padding: 0px;
 }
 
 #review-id {
@@ -1647,7 +1726,7 @@ textarea {
   background-color: white;
   border: 2px solid #46464675;
   border-radius: 10px;
-  width: 100%;
+  width: 102%;
   height: 120px;
   text-align: center;
   cursor: pointer;
@@ -1684,6 +1763,8 @@ textarea {
   font-size: 16px;
   cursor: pointer;
   margin-top: 10px;
+  text-align: center;
+  line-height: 5px;
 }
 
 #review-id input[type="submit"]:hover {
@@ -1768,7 +1849,7 @@ textarea {
   height: 250px;
   border-radius: 20px;
   border: 1px solid rgb(30, 30, 30);
-  box-shadow: 0px 4px 15px gray; /* x, y, blur, color ng shadow */
+  box-shadow: 0px 4px 15px gray;
 }
 
 .feedback h4 {
@@ -1779,7 +1860,7 @@ textarea {
 /**********************************************************CATALOGUE PAGE***************************************************************/
 .container {
   display: flex;
-  max-width: 1200px;
+  max-width: 90%;
   margin: 20px auto;
   gap: 30px;
 }
@@ -1794,7 +1875,12 @@ textarea {
 }
 
 .form-area{
-  width: 500px;
+  border-radius: 10px;
+  border: 1px solid #46464675;
+  margin-top: 30px;
+  width: 45%;
+  height: 100%;
+  padding: 15px;
 }
 
 .customizer h2 {
@@ -1806,10 +1892,10 @@ textarea {
 }
 
 .section-title {
-  font-weight: bold;
+  font-weight: normal;
   margin: 20px 0 10px 0;
-  color: #666;
-  font-size: 1.2rem;
+  color: black;
+  font-size: 1rem;
 }
 
 /* Options Grid */
@@ -1820,32 +1906,26 @@ textarea {
   margin-bottom: 20px;
 }
 
-/* .option-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 60px;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  background-color: white;
-  padding: 0px 5px;
-} */
-
 .option-button {
   flex: 0 0 auto;
-  min-width: 120px; /* important for nice spacing */
-  height: 60px;
+  min-width: 120px;
+  height: 150px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 2px solid #ddd;
+  border: 2px solid #5F00A3;
   border-radius: 8px;
   background-color: #fff;
   cursor: pointer;
   transition: all 0.3s ease;
   scroll-snap-align: start;
+  gap: 10px;
+}
+
+.option-button img {
+  width: 60px;
+  height: 60px;
 }
 
 .option-button:hover {
@@ -1863,17 +1943,6 @@ textarea {
 .option-button input[type="number"] {
   display: none;
 }
-
-/* .option-button:hover {
-  border-color: #aaa;
-  transform: translateY(-2px);
-}
-
-.option-button.selected {
-  border-color: #f19cb7;
-  background-color: #fdf1f5;
-  box-shadow: 0 0 8px rgba(241, 156, 183, 0.5);
-} */
 
 /* Option Content */
 .option-button .option-text {
@@ -1928,13 +1997,13 @@ textarea {
 
 /* Message Card */
 .message-card {
-  width: 100%;
-  min-height: 100px;
+  width: 96%;
+  height: 100px;
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid #46464675;
   border-radius: 8px;
   resize: vertical;
-  font-family: "Arial", sans-serif;
+  font-family: Raleway, Arial, sans-serif;
   margin-bottom: 20px;
 }
 
@@ -1963,24 +2032,27 @@ textarea {
 
 /* Preview Section */
 .preview {
+  height: 1330px;
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 30px;
   padding: 20px;
-  background-color: #f8f8f8;
-  border-radius: 8px;
+  border-radius: 10px;
+  border: 1px solid #46464675;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .preview-container {
+  width: 40%;
   text-align: center;
   margin-bottom: 20px;
 }
 
 .bouquet-preview {
-  max-width: 100%;
+  max-width: 40%;
   height: 800px;
   border-radius: 8px;
 }
@@ -1990,8 +2062,8 @@ textarea {
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
   background: #fff;
-  width: 500px;
-  height: 500px;
+  width: 600px;
+  height: 1200px;
   position: relative;
   margin: 0 auto;
 }
@@ -2016,28 +2088,38 @@ textarea {
 /* Add to Cart Button */
 .add-to-cart-container {
   display: flex;
-  justify-content: center;
-  margin: 20px 0 0 0;
+  justify-content: space-between;
+  width: 90%;
+  max-width: 95%;
+  margin: 20px auto;
+  padding-bottom: 30px;
 }
 
-.add-to-cart {
+.reset-btn, .add-to-cart {
   padding: 12px 30px;
   font-size: 1.1rem;
-  background-color: #f19cb7;
+  width: 200px;
   color: white;
   border: none;
-  border-radius: 30px;
+  border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.add-to-cart:hover {
+.reset-btn {
+  background-color: #5F00A3;
+}
+
+.add-to-cart {
+  background-color: #5F00A3;
+}
+
+.reset-btn:hover, .add-to-cart:hover {
   background-color: #e781a1;
   transform: translateY(-2px);
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
@@ -2143,33 +2225,6 @@ textarea {
   background-color: #2e2e2e;
 }
 
-/** CONTACT INFO (ADDRESS, PHONE, EMAIL) **/
-.contact-options {
-  display: flex;
-  justify-content: center;
-  gap: 50px;
-  padding: 30px;
-}
-
-.contact-indiv {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  background-color: transparent;
-  width: 250px;
-  height: 210px;
-  border-radius: 10px;
-  box-shadow: 0px 5px 6px black;
-}
-
-.contact-indiv img {
-  width: 70px;
-  height: 70px;
-  padding-bottom: 10px;
-}
-
 /* Google Map */
 .map-container {
   display: flex;
@@ -2178,8 +2233,8 @@ textarea {
 }
 
 .map-container iframe {
-  width: 80%;
-  height: 350px;
+  width: 95%;
+  height: 500px;
   border-radius: 10px;
 }
 
@@ -2196,7 +2251,7 @@ textarea {
   justify-content: center;
   align-items: center;
   right: 50%;
-  transform: translateX(50%); /* gitna, pa horizontal */
+  transform: translateX(50%);
   background: white;
   padding: 5px;
 }
@@ -2269,7 +2324,7 @@ h4 {
   padding: 0px;
 }
 
-/* Question Styling */
+/* Question */
 .faq-question {
   border-bottom: 1px solid #eee;
 }
@@ -2297,25 +2352,22 @@ h4 {
 .question-content {
   display: none;
   padding: 10px 50px;
-  color: red;
+  color: #5F00A3;
   line-height: 1.6;
   background-color: white;
   border: 1px solid black;
   font-family: Raleway, Arial, Helvetica, sans-serif;
 }
 
-/* Make question text bold when active */
 .question-active .question-header {
   font-weight: bold;
 }
 
-/* Optional: You could also change the color slightly for better visual indication */
 .question-active .question-header {
   font-weight: bold;
-  color: black; /* Using your purple theme color */
+  color: black; 
 }
 
-/* Active States */
 .category-active .category-content {
   display: block;
 }
@@ -2517,30 +2569,6 @@ h4 {
   cursor: not-allowed;
 }
 
-/* .quantity-selector {
-    display: flex;
-    align-items: center;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    overflow: hidden; 
-}
-
-.quantity-selector button {
-    background: none;
-    border: none;
-    padding: 5px 10px;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-.quantity-selector input {
-    width: 30px;
-    text-align: center;
-    border: none;
-    font-size: 16px;
-    background: transparent;
-} */
-
 .clear-all {
   margin-top: 10px;
   text-align: right;
@@ -2602,8 +2630,8 @@ h4 {
   border: none;
   border-radius: 20px;
   cursor: pointer;
-  font-family: inherit; /* Ensures the button uses the same font as your site */
-  font-size: 1rem; /* Adjust as needed to match your design */
+  font-family: inherit;
+  font-size: 1rem;
 }
 
 .cart-proceed-button:hover {
@@ -2791,8 +2819,8 @@ h4 {
   border: none;
   border-radius: 20px;
   cursor: pointer;
-  font-family: inherit; /* Ensures the button uses the same font as your site */
-  font-size: 1rem; /* Adjust as needed to match your design */
+  font-family: inherit; 
+  font-size: 1rem; 
 }
 
 .proceed-button:hover {
@@ -3122,7 +3150,7 @@ hr.horizontal-divider {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  flex-shrink: 0; /* Prevent shrinking */
+  flex-shrink: 0; 
 }
 
 .nav-button {
@@ -3137,9 +3165,9 @@ hr.horizontal-divider {
   cursor: pointer;
   transition: all 0.2s ease;
   color: #333;
-  text-decoration: none; /* Remove underline from links */
-  display: block; /* Make links block level */
-  box-sizing: border-box; /* Include padding in width calculation */
+  text-decoration: none; 
+  display: block; 
+  box-sizing: border-box; 
 }
 
 .nav-button:hover {
@@ -3156,7 +3184,7 @@ hr.horizontal-divider {
 .profilelinks {
   display: none;
   flex: 1;
-  min-width: 0; /* Allow content to shrink if needed */
+  min-width: 0; 
 }
 
 .profilelinks.active {
@@ -3459,7 +3487,6 @@ input:focus {
   font-weight: bold;
 }
 
-/* Add new address form styling */
 .manageadd-container {
   width: 100%;
 }
@@ -3537,7 +3564,6 @@ input:focus {
   background-color: #4b0082;
 }
 
-/* Make the form responsive */
 @media (max-width: 768px) {
   #manageadd-info {
     flex-direction: column;
@@ -3591,7 +3617,6 @@ input:focus {
   box-sizing: border-box;
 }
 
-/* Eye icon positioning - this assumes you'll add an icon inside the input field */
 .passmngr-grp::after {
   position: absolute;
   right: 15px;

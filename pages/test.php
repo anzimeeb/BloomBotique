@@ -1,155 +1,89 @@
 <?php
-// Default quantity (can be dynamically set from database/session)
-$initialQuantity = 1; 
-$minQuantity = 1; // Minimum allowed quantity
-$maxQuantity = 10; // Maximum allowed quantity (optional)
+include_once 'nav-admin.php';
+require_once 'dba.inc.php';
+
+// Fetch orders from the database
+function getOrders($conn) {
+    $query = "SELECT * FROM orders";
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $orders = [];
+    while ($row = $result->fetch_assoc()) {
+        $orders[] = $row;
+    }
+
+    return $orders;
+}
+
+// Handle order status change (optional, for admin to update)
+if (isset($_POST['updateOrderStatus']) && isset($_POST['order_id'])) {
+    $orderId = $_POST['order_id'];
+    $orderStatus = $_POST['order_status'];
+
+    $query = "UPDATE orders SET order_status = ? WHERE order_id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('si', $orderStatus, $orderId);
+    if ($stmt->execute()) {
+        header("Location: order.php?message=Order status updated successfully.");
+        exit;
+    } else {
+        echo "Error updating order status.";
+    }
+}
+
+$orders = getOrders($conn);
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quantity Selector</title>
-    <style>
-        .quantity-selector {
-            display: flex;
-            align-items: center;
-            border: 2px solid #333;
-            border-radius: 50px;
-            width: 150px;
-            height: 45px;
-            overflow: hidden;
-            font-family: Arial, sans-serif;
-        }
-        
-        .quantity-button {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            cursor: pointer;
-            user-select: none;
-            font-size: 20px;
-            color: #333;
-            transition: background-color 0.2s;
-        }
-        
-        .quantity-button:hover {
-            background-color: #f0f0f0;
-        }
-        
-        .quantity-display {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            font-size: 18px;
-            font-weight: bold;
-            border-left: 1px solid #333;
-            border-right: 1px solid #333;
-        }
-        
-        .disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-    </style>
-</head>
-<body>
-
-<!-- Quantity Selector UI Component -->
-<div class="quantity-selector">
-    <div class="quantity-button minus" id="decrement">−</div>
-    <div class="quantity-display" id="quantity"><?php echo $initialQuantity; ?></div>
-    <div class="quantity-button plus" id="increment">+</div>
+<div class="header-admin">
+    <h1 id="title"><strong>Orders</strong></h1>
 </div>
 
-<form id="quantity-form" method="post" action="process_order.php">
-    <input type="hidden" id="quantity-input" name="quantity" value="<?php echo $initialQuantity; ?>">
-    <!-- Other form fields would go here -->
-</form>
+<div class="order-table">
+    <table class="product-table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>First Name</th>
+                <th>Last Name</th> 
+                <th>Email</th>
+                <th>Total Amount</th>
+                <th>Payment Method</th>
+                <th>Shipping Fee</th>
+                <th>Order Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($orders as $order): ?>
+                <tr>
+                    <td><?= htmlspecialchars($order['order_id']) ?></td>
+                    <td><?= htmlspecialchars($order['firstname']) ?></td>
+                    <td><?= htmlspecialchars($order['lastname']) ?></td>
+                    <td><?= htmlspecialchars($order['email']) ?></td>
+                    <td>₱<?= number_format($order['total_amount'], 2) ?></td>
+                    <td><?= htmlspecialchars($order['payment_method']) ?></td>
+                    <td>₱<?= number_format($order['shipping_fee'], 2) ?></td>
+                    <td><?= htmlspecialchars($order['order_status']) ?></td>
+                    <td>
+                        <!-- Button to open edit form for changing order status -->
+                        <form method="POST" action="order.php">
+                            <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']) ?>">
+                            <select name="order_status">
+                                <option value="Pending" <?= $order['order_status'] == 'Pending' ? 'selected' : '' ?>>Pending</option>
+                                <option value="Accepted" <?= $order['order_status'] == 'Accepted' ? 'selected' : '' ?>>Accepted</option>
+                                <option value="Shipped" <?= $order['order_status'] == 'Shipped' ? 'selected' : '' ?>>Shipped</option>
+                                <option value="Delivered" <?= $order['order_status'] == 'Delivered' ? 'selected' : '' ?>>Delivered</option>
+                                <option value="Cancelled" <?= $order['order_status'] == 'Cancelled' ? 'selected' : '' ?>>Cancelled</option>
+                            </select>
+                            <button type="submit" name="updateOrderStatus" class="update-btn">Update Status</button>
+                        </form>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const decrementBtn = document.getElementById('decrement');
-        const incrementBtn = document.getElementById('increment');
-        const quantityDisplay = document.getElementById('quantity');
-        const quantityInput = document.getElementById('quantity-input');
-        
-        const minQuantity = <?php echo $minQuantity; ?>;
-        const maxQuantity = <?php echo $maxQuantity; ?>;
-        let currentQuantity = <?php echo $initialQuantity; ?>;
-        
-        // Initial state check for min/max limits
-        updateButtonStates();
-        
-        // Decrement button handler
-        decrementBtn.addEventListener('click', function() {
-            if (currentQuantity > minQuantity) {
-                currentQuantity--;
-                updateQuantity();
-            }
-        });
-        
-        // Increment button handler
-        incrementBtn.addEventListener('click', function() {
-            if (currentQuantity < maxQuantity) {
-                currentQuantity++;
-                updateQuantity();
-            }
-        });
-        
-        // Update quantity display and hidden form input
-        function updateQuantity() {
-            quantityDisplay.textContent = currentQuantity;
-            quantityInput.value = currentQuantity;
-            updateButtonStates();
-            
-            // Optional: Make an AJAX call to update cart without page refresh
-            // updateCartAjax(currentQuantity);
-        }
-        
-        // Update button states based on current quantity
-        function updateButtonStates() {
-            // Disable decrement if at minimum
-            if (currentQuantity <= minQuantity) {
-                decrementBtn.classList.add('disabled');
-            } else {
-                decrementBtn.classList.remove('disabled');
-            }
-            
-            // Disable increment if at maximum
-            if (currentQuantity >= maxQuantity) {
-                incrementBtn.classList.add('disabled');
-            } else {
-                incrementBtn.classList.remove('disabled');
-            }
-        }
-        
-        // Optional: AJAX function to update cart in real-time
-        function updateCartAjax(quantity) {
-            // Example AJAX call using fetch API
-            fetch('update_cart.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'product_id=<?php echo isset($product_id) ? $product_id : ""; ?>&quantity=' + quantity
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Handle response - update price, subtotal, etc.
-                console.log('Cart updated:', data);
-            })
-            .catch(error => {
-                console.error('Error updating cart:', error);
-            });
-        }
-    });
-</script>
-
-</body>
-</html>
+<?php include_once 'footer.php'; ?>

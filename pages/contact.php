@@ -77,7 +77,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 </div><!-- end main container -->
 
 <!-- contact info (ADDRESS, PHONE, EMAIL) -->
-<div class="contact-options"><!-- contact options boxes (below form) -->
+<!-- contact options boxes (below form) -->
+<!-- <div class="contact-options">
     <div class="contact-indiv">
         <img src="../images/c-address.png" alt="Address Icon">
         <h5>Address</h5>
@@ -92,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         <img src="../images/c-email.png" alt="Email Icon">
         <h5>Email</h5>
     </div>
-</div><!-- end contact options boxes (below form) -->
+</div>end contact options boxes (below form) -->
 
 <!-- google map -->
 <div class="map-container">

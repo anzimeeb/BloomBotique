@@ -111,6 +111,7 @@ $disc = $conn->query($sql);
                         <div class="discount"><?php echo $row["percent"]; ?>% Discount</div>
                     </div>
                     <div class="image-title"><?php echo $row["discount_title"]; ?></div>
+                    <div class="image-description2"><?php echo $row["discount_promo"]; ?></div>
                     <div class="image-description"><?php echo $row["discount_desc"]; ?></div>
 
                     <div class="shop-button">
@@ -293,7 +294,7 @@ $disc = $conn->query($sql);
             <div class="section-logo">
                 <img src="images/logoFooter.png" alt="Bloom Boutique Logo" class="footer-logo">
                 <div class="underlogo-desc">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.</p>
+                    <p>Blooming marvelous bouquets, delivered with a smile.</p>
                 </div>
             </div>
 
@@ -322,7 +323,7 @@ $disc = $conn->query($sql);
                     <a href="https://www.facebook.com/roselyn.m.s"><img src="images/grab.png" alt="GRAB"></a>
                     <a href="https://www.facebook.com/roselyn.m.s"><img src="images/gmail.png" alt="GMAIL"></a>
                 </div>
-                <p>Ako ay isang magandang babae na nakatira sa inyong mga osup mwehehehe</p>
+                <p>Join us on our social media accounts!</p>
             </div>
 
             <!-- EMAIL SUBMISSION -->

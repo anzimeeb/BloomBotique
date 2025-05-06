@@ -15,67 +15,94 @@ if (isset($_GET['editId'])) {
 }
 ?>
 
-<div class="header-admin">
-    <h1 id="title"><strong>Product</strong></h1>
+<div class="page-header">
+    <div class="header-title">
+        <h1>Product</h1>
+    </div>
     <button class="addProductBtn" onclick="openPopup()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus"
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus"
             viewBox="0 0 16 16">
             <path
                 d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
-        </svg>Add New Product</button>
+        </svg>
+        Add New Product
+    </button>
 </div>
 
 <!-- Add New Product Popup -->
 <div class="popup" id="popUp">
     <div class="popup-content">
-        <button class="close-popup close-button" onclick="closePopup()">X</button>
+        <div class="popup-header">
         <h2>Add New Product</h2>
+        <button class="close-popup close-button" onclick="closePopup()">×</button>
+        </div>
         <form method="POST" action="product.inc.php" enctype="multipart/form-data">
-            <div class="row">
-                <div class="col-md-6">
-                    <label>Name:</label>
-                    <input type="text" name="product_name" required class="form-control">
+            
+            
+            <div class="form-row">
+                <div class="form-column">
+                    <div class="form-group">
+                        <label>Name:</label>
+                        <input type="text" name="product_name" required class="form-control" placeholder="Input here">
+                    </div>
 
-                    <label>Description:</label>
-                    <textarea name="product_description" required class="form-control"></textarea>
+                    <div class="form-group">
+                        <label>Description:</label>
+                        <textarea name="product_description" required class="form-control" placeholder="Input here"></textarea>
+                    </div>
 
-                    <label>Price:</label>
-                    <input type="number" name="product_price" step="0.01" required class="form-control">
+                    <div class="form-group">
+                        <label>Price:</label>
+                        <input type="number" name="product_price" step="0.01" required class="form-control" placeholder="Input here">
+                    </div>
 
-                    <label>Category:</label>
-                    <input type="text" name="product_category" required class="form-control">
+                    <div class="form-group">
+                        <label>Category:</label>
+                        <input type="text" name="product_category" required class="form-control" placeholder="Input here">
+                    </div>
 
-                    <label>Color:</label>
-                    <input type="text" name="product_color" class="form-control">
+                    <div class="form-group">
+                        <label>Color:</label>
+                        <input type="text" name="product_color" class="form-control" placeholder="Input here">
+                    </div>
                 </div>
+                
+                <div class="form-column">
+                    <div class="form-group">
+                        <label>Discount (%):</label>
+                        <input type="number" name="product_discount" step="0.01" min="0" max="100" class="form-control" placeholder="Input here">
+                    </div>
 
-                <div class="col-md-6">
-                    <label>Discount (%):</label>
-                    <input type="number" name="product_discount" step="0.01" min="0" max="100" class="form-control">
+                    <div class="form-group">
+                        <label>Bestseller:</label>
+                        <select name="product_bestseller" class="form-control">
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                    </div>
 
-                    <label>Bestseller:</label>
-                    <select name="product_bestseller" class="form-control">
-                        <option value="0">No</option>
-                        <option value="1">Yes</option>
-                    </select>
+                    <div class="form-group">
+                        <label>Stock Quantity:</label>
+                        <input type="number" name="product_stock" min="0" required class="form-control" placeholder="Input here">
+                    </div>
 
-                    <label>Stock Quantity:</label>
-                    <input type="number" name="product_stock" min="0" required class="form-control">
+                    <div class="form-group">
+                        <label>Status:</label>
+                        <select name="productStatus" class="form-control">
+                            <option value="Available">Available</option>
+                            <option value="Out of Stock">Out of Stock</option>
+                            <option value="Discontinued">Discontinued</option>
+                        </select>
+                    </div>
 
-                    <label>Status:</label>
-                    <select name="productStatus" class="form-control">
-                        <option value="Available" <?php echo ($editProduct['product_status'] == 'Available') ? 'selected' : ''; ?>>Available</option>
-                        <option value="Out of Stock" <?php echo ($editProduct['product_status'] == 'Out of Stock') ? 'selected' : ''; ?>>Out of Stock</option>
-                        <option value="Discontinued" <?php echo ($editProduct['product_status'] == 'Discontinued') ? 'selected' : ''; ?>>Discontinued</option>
-                    </select>
-
-
-                    <label>Image:</label>
-                    <input type="file" name="product_image" id="productImage" class="form-control">
+                    <div class="form-group">
+                        <label>Image:</label>
+                        <input type="file" name="product_image" id="productImage" class="form-control">
+                    </div>
                 </div>
             </div>
 
-            <button type="submit" name="submitProduct" class="btn btn-success mt-3">Submit</button>
+            <button type="submit" name="submitProduct" class="submit-button">Add New Product</button>
         </form>
     </div>
 </div>
@@ -83,82 +110,100 @@ if (isset($_GET['editId'])) {
 
 <!-- Edit Product Popup -->
 <?php if (isset($editProduct)): ?>
-    <div class="popup" id="editPopup" style="display: flex;">
-        <div class="popup-content">
-            <button class="close-popup close-button" onclick="closeEditPopup()">X</button>
+<div class="popup" id="editPopup" style="display: flex;">
+    <div class="popup-content">
+        <div class="popup-header">
             <h2>Edit Product</h2>
-            <form method="POST" action="updateProduct.inc.php" enctype="multipart/form-data">
-                <input type="hidden" name="product_id" value="<?php echo $editProduct['product_id']; ?>">
-
-                <div class="row">
-                    <div class="col-md-6">
+            <button class="close-popup close-button" onclick="closeEditPopup()">×</button>
+        </div>
+        <form method="POST" action="updateProduct.inc.php" enctype="multipart/form-data">
+            <input type="hidden" name="product_id" value="<?php echo $editProduct['product_id']; ?>">
+            
+            <div class="form-row">
+                <div class="form-column">
+                    <div class="form-group">
                         <label>Name:</label>
-                        <input type="text" name="productName"
-                            value="<?php echo htmlspecialchars($editProduct['product_name']); ?>" class="form-control"
-                            required>
+                        <input type="text" name="productName" 
+                            value="<?php echo htmlspecialchars($editProduct['product_name']); ?>" 
+                            class="form-control" required>
+                    </div>
 
+                    <div class="form-group">
                         <label>Description:</label>
-                        <textarea name="productDescription" class="form-control"
+                        <textarea name="productDescription" class="form-control" 
                             required><?php echo htmlspecialchars($editProduct['product_description']); ?></textarea>
+                    </div>
 
-                        <label>Discount (%):</label>
-                        <input type="number" name="productDiscount" step="0.01"
-                            value="<?php echo $editProduct['product_discount']; ?>" class="form-control">
+                    <div class="form-group">
+                        <label>Price:</label>
+                        <input type="number" name="productPrice" step="0.01" 
+                            value="<?php echo $editProduct['product_price']; ?>" 
+                            class="form-control" required>
+                    </div>
 
+                    <div class="form-group">
+                        <label>Category:</label>
+                        <input type="text" name="productCategory" 
+                            value="<?php echo $editProduct['product_category']; ?>" 
+                            class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
                         <label>Color:</label>
-                        <input type="text" name="productColor" value="<?php echo $editProduct['product_color']; ?>"
+                        <input type="text" name="productColor" 
+                            value="<?php echo $editProduct['product_color']; ?>" 
                             class="form-control">
-
-                        <label>Stock Quantity:</label>
-                        <input type="number" name="productStock" value="<?php echo $editProduct['product_stock']; ?>"
+                    </div>
+                </div>
+                
+                <div class="form-column">
+                    <div class="form-group">
+                        <label>Discount (%):</label>
+                        <input type="number" name="productDiscount" step="0.01" min="0" max="100"
+                            value="<?php echo $editProduct['product_discount']; ?>" 
                             class="form-control">
                     </div>
 
-                    <div class="col-md-6">
-                        <label>Price:</label>
-                        <input type="number" name="productPrice" step="0.01"
-                            value="<?php echo $editProduct['product_price']; ?>" class="form-control" required>
-
-                        <label>Category:</label>
-                        <input type="text" name="productCategory" value="<?php echo $editProduct['product_category']; ?>"
-                            class="form-control" required>
-
+                    <div class="form-group">
                         <label>Bestseller:</label>
                         <select name="productBestseller" class="form-control">
-                            <option value="0" <?php echo ($editProduct['product_bestseller'] == 0) ? 'selected' : ''; ?>>No
-                            </option>
-                            <option value="1" <?php echo ($editProduct['product_bestseller'] == 1) ? 'selected' : ''; ?>>Yes
-                            </option>
+                            <option value="0" <?php echo ($editProduct['product_bestseller'] == 0) ? 'selected' : ''; ?>>No</option>
+                            <option value="1" <?php echo ($editProduct['product_bestseller'] == 1) ? 'selected' : ''; ?>>Yes</option>
                         </select>
+                    </div>
 
+                    <div class="form-group">
+                        <label>Stock Quantity:</label>
+                        <input type="number" name="productStock" min="0"
+                            value="<?php echo $editProduct['product_stock']; ?>" 
+                            class="form-control">
+                    </div>
+
+                    <div class="form-group">
                         <label>Status:</label>
                         <select name="productStatus" class="form-control">
                             <option value="Available" <?php echo ($editProduct['product_status'] == 'Available') ? 'selected' : ''; ?>>Available</option>
                             <option value="Out of Stock" <?php echo ($editProduct['product_status'] == 'Out of Stock') ? 'selected' : ''; ?>>Out of Stock</option>
                             <option value="Discontinued" <?php echo ($editProduct['product_status'] == 'Discontinued') ? 'selected' : ''; ?>>Discontinued</option>
                         </select>
+                    </div>
 
-
+                    <div class="form-group">
                         <label>Image:</label>
                         <?php if (!empty($editProduct['product_image'])): ?>
                             <!-- Display current image -->
                             <img src="../uploads/<?php echo $editProduct['product_image']; ?>" alt="Product Image"
-                                style="max-width: 100px; max-height: 100px;">
-                            <p>Current Image</p>
-                        <?php else: ?>
-                            <p>No image available</p>
+                                style="max-width: 100px; max-height: 100px; margin-bottom: 10px; display: block;">
                         <?php endif; ?>
-
-                        <!-- File input for uploading a new image -->
                         <input type="file" name="product_image" id="productImage" class="form-control">
                     </div>
                 </div>
+            </div>
 
-                <button type="submit" name="updateProduct" class="btn btn-primary">Update</button>
-            </form>
-
-        </div>
+            <button type="submit" name="updateProduct" class="submit-button">Update Product</button>
+        </form>
     </div>
+</div>
 <?php endif; ?>
 
 
@@ -170,7 +215,7 @@ if (isset($_GET['editId'])) {
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Product ID</th>
+                        <th>ID</th>
                         <th>Description</th>
                         <th>Price</th>
                         <th>Discount</th>
@@ -184,7 +229,7 @@ if (isset($_GET['editId'])) {
                 </thead>
                 <tbody>
                     <?php
-                    $rowsPerPage = 8;
+                    $rowsPerPage = 9;
                     $currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
                     $offset = ($currentPage - 1) * $rowsPerPage;
 
@@ -211,15 +256,17 @@ if (isset($_GET['editId'])) {
                         echo "<td>" . $row['product_stock'] . "</td>";
                         echo "<td>" . ($row['product_bestseller'] ? 'Yes' : 'No') . "</td>";
                         echo "<td>" . $row['product_status'] . "</td>";
-                        echo "<td>
-                        <form method='GET' action=''>
+                        echo "<td class='action-cell'>
+                        <div class='action-buttons'>
+                        <form method='GET' action='' class='action-form'>
                             <input type='hidden' name='editId' value='" . $row['product_id'] . "'>
                             <button class='edit-btn'>Edit</button>
                         </form>
-                        <form method='POST' action='deleteProduct.inc.php' onsubmit='return confirm(\"Delete this product?\");'>
+                        <form method='POST' action='deleteProduct.inc.php' class='action-form' onsubmit='return confirm(\"Delete this product?\");'>
                             <input type='hidden' name='product_id' value='" . htmlspecialchars($row['product_id'], ENT_QUOTES) . "'>
                             <button type='submit' name='deleteProd' class='delete-btn'>Delete</button>
                         </form>
+                        </div>
                     </td>";
                         echo "</tr>";
                     }

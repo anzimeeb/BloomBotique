@@ -36,27 +36,41 @@ if (isset($_POST['updateOrderStatus']) && isset($_POST['order_id'])) {
 $orders = getOrders($conn);
 ?>
 
-<div class="header-admin">
-    <h1><strong>Orders</strong></h1>
-</div>
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="order-table">
-    <table class="product-table">
-        <thead>
-            <tr>
-                <th>Order ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Total Amount</th>
-                <th>Payment Method</th>
-                <th>Shipping Fee</th>
-                <th>Order Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($orders as $order): ?>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders</title>
+    <link rel="icon" href="../img/icon/coffeLogo.png" type="image/png" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="../img/icon/whiteLogo.png" type="image/png" media="(prefers-color-scheme: dark)">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="shortcut icon" href="">
+</head>
+
+
+<div class="orders-container">
+        <div class="orders-header">
+            <h1>Orders</h1>
+        </div>
+
+        <table class="orders-table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Total Amount</th>
+                    <th>Payment Method</th>
+                    <th>Shipping Fee</th>
+                    <th>Order Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($orders as $order): ?>
                 <tr>
                     <td><?= htmlspecialchars($order['order_id']) ?></td>
                     <td><?= htmlspecialchars($order['firstname']) ?></td>
@@ -65,12 +79,25 @@ $orders = getOrders($conn);
                     <td>₱<?= number_format($order['total_amount'], 2) ?></td>
                     <td><?= htmlspecialchars($order['payment_method']) ?></td>
                     <td>₱<?= number_format($order['shipping_fee'], 2) ?></td>
-                    <td><?= htmlspecialchars($order['order_status']) ?></td>
                     <td>
-                        <!-- Button to open edit form for changing order status -->
+                        <?php
+                        $statusClass = '';
+                        $status = strtolower($order['order_status']);
+                        
+                        if ($status == 'delivered' || $status == 'accepted') {
+                            $statusClass = 'status-done';
+                        } elseif ($status == 'cancelled') {
+                            $statusClass = 'status-cancelled';
+                        } elseif ($status == 'pending' || $status == 'processing' || $status == 'shipped') {
+                            $statusClass = 'status-processing';
+                        }
+                        ?>
+                        <span class="status-badge <?= $statusClass ?>"><?= htmlspecialchars($order['order_status']) ?></span>
+                    </td>
+                    <td class="action-cell">
                         <form method="POST" action="order.php">
                             <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']) ?>">
-                            <select name="order_status">
+                            <select name="order_status" class="status-dropdown">
                                 <option value="Pending" <?= $order['order_status'] == 'Pending' ? 'selected' : '' ?>>Pending</option>
                                 <option value="Accepted" <?= $order['order_status'] == 'Accepted' ? 'selected' : '' ?>>Accepted</option>
                                 <option value="Shipped" <?= $order['order_status'] == 'Shipped' ? 'selected' : '' ?>>Shipped</option>
@@ -81,9 +108,7 @@ $orders = getOrders($conn);
                         </form>
                     </td>
                 </tr>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
         </tbody>
     </table>
 </div>
-
-<?php include_once 'footer.php'; ?>
