@@ -4,14 +4,15 @@ require_once 'connection.php';
 
 $sql = "SELECT * FROM products WHERE product_bestseller = 1 AND product_status = 1";
 $best = $conn->query($sql);
-?>
 
-<?php
-$sql = "SELECT * FROM reviews";
+$sql = "
+    SELECT reviews.*, customerinfo.customerFN, customerinfo.customerLN, customerinfo.profile_image, products.product_name AS product_name
+    FROM reviews
+    JOIN customerinfo ON reviews.customer_id = customerinfo.id
+    JOIN products ON reviews.product_id = products.product_id
+";
 $review = $conn->query($sql);
-?>
 
-<?php
 $sql = "SELECT * FROM discount";
 $disc = $conn->query($sql);
 ?>
@@ -266,25 +267,33 @@ $disc = $conn->query($sql);
     <div class="reviews"><!-- reviews -->
         <div class="reviews-container">
             <?php
+            $count = 0;
             while ($row = mysqli_fetch_assoc($review)) {
-                ?>
-                <div class="feedback">
-                    <div class="review-image">
-                        <img src="images/reviewer.png" alt="Icon">
-                        <p class="rev_name"><strong><?php echo $row["reviewer_name"]; ?></strong></p>
-                    </div>
+                if ($row["rating"] == 5) {
+                    if ($count >= 2)
+                        break;
+                    $count++;
+                    ?>
+                    <div class="feedback">
+                        <div class="review-image">
+                            <img src="images/profilepictures/<?php echo $row['profile_image'] ?>" alt="Icon">
+                            <p class="rev_name"><strong><?php echo $row["customerFN"] . ' ' . $row['customerLN']; ?></strong>
+                            </p>
+                        </div>
 
-                    <div class="reviewer-rating">
-                        <h3>⭐⭐⭐⭐⭐<h3>
-                                <h5><?php echo $row["reviewer_rate"]; ?></h5>
+                        <div class="reviewer-rating">
+                            <h3>⭐⭐⭐⭐⭐</h3>
+                            <h5><?php echo $row["rating"]; ?></h5>
+                        </div>
+                        <p class="review-message"><?php echo $row["review_text"]; ?></p>
                     </div>
-                    <p class="review-message"><?php echo $row["review"]; ?></p>
-                </div>
-                <?php
+                    <?php
+                }
             }
             ?>
         </div>
     </div><!-- end reviews -->
+
 
     <!-- FOOTER -->
     <footer>

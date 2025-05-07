@@ -35,7 +35,7 @@ if (isset($_SESSION['customerEmail'])) {
         <nav class="profile-options">
             <a href="#profinfo" class="nav-button active" data-target="profinfo">Personal Information</a>
             <a href="#myord" class="nav-button" data-target="myord">My Orders</a>
-            <a href="#mngadd" class="nav-button" data-target="mngadd">Manage Address</a>
+            <!-- <a href="#mngadd" class="nav-button" data-target="mngadd">Manage Address</a> -->
             <a href="#passwordmgr" class="nav-button" data-target="passwordmgr">Password Manager</a>
             <a href="../account/logout.php" class="nav-button">Logout</a>
         </nav>

@@ -269,34 +269,34 @@ $result = $stmt->get_result();
 <div id="seereviews" class="linksection">
     <h3 class="rlist-title">Review List</h3>
     <div class="reviews-list">
-        <?php while ($row = $result->fetch_assoc()): ?>
+        <?php while ($rowreview = $result->fetch_assoc()): ?>
             <div class="rlist-container">
                 <div class="customer-feedback">
                     <div class="rlist-image">
-                        <img src="../images/profilepictures/<?php echo $row['profile_image'] ?: 'default-profile.jpg'; ?>"
+                        <img src="../images/profilepictures/<?php echo $rowreview['profile_image'] ?: 'default-profile.jpg'; ?>"
                             alt="Reviewer">
-                        <p class="rev_name"><strong><?php echo $row['customerFN'];
-                        echo ' ' . $row['customerLN']; ?></strong></p>
+                        <p class="rev_name"><strong><?php echo $rowreview['customerFN'];
+                        echo ' ' . $rowreview['customerLN']; ?></strong></p>
                     </div>
 
                     <p class="rlist-message">
-                        <?php echo nl2br(htmlspecialchars($row['review_text'])); ?>
+                        <?php echo nl2br(htmlspecialchars($rowreview['review_text'])); ?>
                     </p>
 
                     <div class="rlist-rating">
                         <h3>⭐⭐⭐⭐⭐</h3>
-                        <h5><?php echo htmlspecialchars($row['rating']); ?>.0</h5>
+                        <h5><?php echo htmlspecialchars($rowreview['rating']); ?>.0</h5>
                     </div>
 
                     <div class="rlist-uploads">
                         <?php
-                        $images = json_decode($row['review_image']);
+                        $images = json_decode($rowreview['review_image']);
                         if ($images) {
                             foreach ($images as $image) {
                                 echo '<img src="' . htmlspecialchars($image) . '" alt="Review image">';
                             }
                         } else {
-                            echo '<img src="' . $row['review_image'] . '" alt="Review image">';
+                            echo '<img src="' . $rowreview['review_image'] . '" alt="Review image">';
 
                         }
                         ?>

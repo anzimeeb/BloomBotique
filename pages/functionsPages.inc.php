@@ -44,11 +44,31 @@ function addToCart($conn, $userId, $productId,  $quantity, $size, $customFlowerI
 
 function getCartData($conn, $userId)
 {
-    // Query to fetch cart items along with product details from the products table
+    // Query to fetch both regular and custom flower cart items
     $query = "
-        SELECT c.id as cart_id, c.user_id, c.product_id, c.quantity, c.message, c.size, p.product_name, p.product_price, p.product_image, p.product_discount
+        SELECT 
+            c.id as cart_id, 
+            c.user_id, 
+            c.product_id, 
+            c.custom_flower_id,
+            c.quantity, 
+            c.message, 
+            c.size,
+
+            -- Regular product fields
+            p.product_name, 
+            p.product_price, 
+            p.product_image, 
+            p.product_discount,
+
+            -- Custom flower fields
+            cf.custom_image,
+            cf.price,
+            cf.card
+
         FROM cart c 
-        JOIN products p ON c.product_id = p.product_id 
+        LEFT JOIN products p ON c.product_id = p.product_id 
+        LEFT JOIN customflowers cf ON c.custom_flower_id = cf.id 
         WHERE c.user_id = ?";
 
     // Prepare and execute the query
@@ -59,11 +79,12 @@ function getCartData($conn, $userId)
 
     $cart = [];
     while ($row = $result->fetch_assoc()) {
-        $cart[] = $row;  // Store each cart item along with product details
+        $cart[] = $row;
     }
 
-    return $cart;  // Return the cart data
+    return $cart;
 }
+
 
 function getUserIdFromSession($conn, $email)
 {
@@ -330,18 +351,21 @@ function getUserOrders($conn, $userId)
 }
 
 function saveCustomFlower($conn, $userId) {
+    // 1. Validate presence of expected POST data
     if (!isset($_POST['save_customflower'])) {
+        echo "Missing POST: save_customflower";
         return false;
     }
 
-    // 1. Get size, ribbon, wrapper, filler, and message
+    // 2. Get inputs
     $size = $_POST['size'] ?? '';
     $ribbon = $_POST['ribbon'] ?? null;
     $wrapper = $_POST['wrapper'] ?? null;
     $filler = $_POST['filler'] ?? null;
-    $card = $_POST['message'] ?? null;
+    $card = $_POST['card'] ?? null;
+    $imageFilename = $_POST['custom_image'] ?? null;
 
-    // 2. Process main flowers
+    // 3. Process main flowers
     $mainFlowersInput = $_POST['main_flower'] ?? [];
     $mainFlowers = [];
 
@@ -354,7 +378,7 @@ function saveCustomFlower($conn, $userId) {
 
     $mainFlowersString = implode(',', $mainFlowers);
 
-    // 3. Calculate price based on size
+    // 4. Calculate price based on size
     switch ($size) {
         case 'Small': $price = 499.00; break;
         case 'Medium': $price = 699.00; break;
@@ -362,14 +386,13 @@ function saveCustomFlower($conn, $userId) {
         default: $price = 0;
     }
 
-    // 4. Get custom image filename from form (hidden input)
-    $imageFilename = $_POST['custom_image'] ?? null;
-
-    // 5. Insert into customflowers table
-    $stmt = $conn->prepare("INSERT INTO customflowers (user_id, size, main_flower, fillers, wrapper, ribbon, card, custom_image, price, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+    // 5. Prepare insert into customflowers
+    $stmt = $conn->prepare("INSERT INTO customflowers (
+        user_id, size, main_flower, fillers, wrapper, ribbon, card, custom_image, price, created_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 
     if (!$stmt) {
-        header("Location: ../customize.php?error=prepare_failed");
+        echo "Error preparing customflowers insert: " . $conn->error;
         exit();
     }
 
@@ -389,11 +412,11 @@ function saveCustomFlower($conn, $userId) {
     if ($stmt->execute()) {
         $customFlowerId = $stmt->insert_id;
 
-        // 6. Insert into cart table
+        // 6. Add to cart
         $cartStmt = $conn->prepare("INSERT INTO cart (user_id, custom_flower_id, quantity, added_at, message) VALUES (?, ?, 1, NOW(), ?)");
 
         if (!$cartStmt) {
-            header("Location: customize.php?error=cart_prepare_failed");
+            echo "Error preparing cart insert: " . $conn->error;
             exit();
         }
 
@@ -405,18 +428,16 @@ function saveCustomFlower($conn, $userId) {
         );
 
         if ($cartStmt->execute()) {
-            header("Location: customize.php?success=addedtocart");
-            exit();
+            echo "Custom flower saved and added to cart.";
+            header("Location: cart.php?message=success_custom");
+            return true;
         } else {
-            header("Location: customize.php?error=cart_execute_failed");
-            exit();
+            echo "Failed to add to cart: " . $cartStmt->error;
+            return false;
         }
     } else {
-        header("Location: customize.php?error=execute_failed");
-        exit();
+        echo "Failed to save custom flower: " . $stmt->error;
+        return false;
     }
 }
-
-
-
 ?>

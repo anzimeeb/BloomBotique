@@ -14,6 +14,7 @@ if (isset($_POST['order_id']) && isset($_POST['order_status'])) {
         $stmt->bind_param("si", $orderStatus, $orderId);
         if ($stmt->execute()) {
             echo "Order status updated successfully";
+            header("Location: orders.php?message=success");
         } else {
             echo "Error updating order status";
         }

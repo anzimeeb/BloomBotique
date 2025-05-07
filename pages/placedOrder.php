@@ -3,27 +3,26 @@ require_once 'header.php';
 require_once '../connection.php';
 
 // Redirect if no order session
-// if (!isset($_SESSION['last_order_id'])) {
-//     header("Location: billing.php");
-//     exit;
-// }
+if (!isset($_SESSION['last_order_id'])) {
+    header("Location: billing.php");
+    exit;
+}
 
-$orderId = 3;
-unset($_SESSION['last_order_id']); // Remove after showing
+// unset($_SESSION['last_order_id']); // Remove after showing
+
+$orderId = $_SESSION['last_order_id'];
 
 // Get order details
 $stmt = $conn->prepare("SELECT * FROM orders WHERE order_id = ?");
 $stmt->bind_param('i', $orderId);
 $stmt->execute();
 $order = $stmt->get_result()->fetch_assoc();
-$stmt->close();
 
 // Get order items
 $stmt = $conn->prepare("SELECT oi.*, p.product_name, p.product_image FROM order_items oi JOIN products p ON oi.product_id = p.product_id WHERE oi.order_id = ?");
 $stmt->bind_param('i', $orderId);
 $stmt->execute();
 $items = $stmt->get_result();
-$stmt->close();
 
 // Estimate delivery date
 $createdDate = new DateTime($order['created_at']);
@@ -59,7 +58,7 @@ $deliveryDate = $createdDate->modify('+7 days')->format('m/d/y');
 
         <div class="column-order">
             <label id="ordercomplete" for="transid">Placed On</label>
-            <p class="get-details"><?= htmlspecialchars($order['created_at']); ?></p>
+            <p class="get-details"><?= $order['created_at'];?></p>
         </div>
         <hr class="vertical-divider">
 

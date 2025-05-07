@@ -92,7 +92,9 @@ $grandTotal = $totalAfterDiscount + $shipping;
             ?>
             <!-- Display the cart items -->
             <?php if (!empty($cart)): ?>
-                <?php foreach ($cart as $product): ?>
+                <?php foreach ($cart as $product):
+                    $isCustom = !empty($product['custom_flower_id']);
+                    ?>
                     <div class="name-categ">
                         <div class="cart-items">
                             <div class="x-name">
@@ -100,10 +102,18 @@ $grandTotal = $totalAfterDiscount + $shipping;
                                     <button class="remove-item" onclick="removeFromCart(<?= $product['cart_id']; ?>)">
                                         <img src="../images/cart-delete.png" alt="">
                                     </button>
-                                    <img src="<?= htmlspecialchars($product['product_image']); ?>" alt="Product Image">
+
+                                    <?php if ($isCustom): ?>
+                                        <img src="../images/custom_flowers/<?= $product['custom_image']; ?>" alt="Custom Flower Image">
+                                    <?php else: ?>
+                                        <img src="<?= htmlspecialchars($product['product_image']); ?>" alt="Product Image">
+                                    <?php endif; ?>
+
                                 </div>
                                 <div class="name-categ">
-                                    <p class="cart-product-name"><?= htmlspecialchars($product['product_name']); ?></p>
+                                    <p class="cart-product-name">
+                                        <?= $isCustom ? 'Custom Flower Arrangement' : htmlspecialchars($product['product_name']); ?>
+                                    </p>
                                 </div>
                             </div>
                             <div class="price-quan">
@@ -119,11 +129,15 @@ $grandTotal = $totalAfterDiscount + $shipping;
 
                                 <!-- New Discounted Price Display -->
                                 <p class="cat-new-price">
-                                    ₱<?= number_format($discountedPrice, 2); ?>
-                                    <?php if ($hasDiscount): ?>
-                                        <span class="cat-old-price">
-                                            <del>₱<?= number_format($price, 2); ?></del>
-                                        </span>
+                                    <?php if (!empty($product['custom_flower_id'])): ?>
+                                        ₱<?= number_format($product['price'], 2); ?>
+                                    <?php else: ?>
+                                        ₱<?= number_format($discountedPrice, 2); ?>
+                                        <?php if ($hasDiscount): ?>
+                                            <span class="cat-old-price">
+                                                <del>₱<?= number_format($price, 2); ?></del>
+                                            </span>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                 </p>
 
@@ -145,7 +159,12 @@ $grandTotal = $totalAfterDiscount + $shipping;
 
                                 <!-- Subtotal -->
                                 <p class="cart-sub-total">
-                                    ₱<?= number_format($subtotal, 2); ?>
+                                    <?php if (!empty($product['custom_flower_id'])): ?>
+                                        <?php $subtotal = $product['price'] * $quantity; ?>
+                                        ₱<?= number_format($subtotal, 2); ?>
+                                    <?php else: ?>
+                                        ₱<?= number_format($subtotal, 2); ?>
+                                    <?php endif; ?>
                                 </p>
                             </div>
                         </div>
@@ -164,7 +183,8 @@ $grandTotal = $totalAfterDiscount + $shipping;
                                 <button class="cart-edit" onclick="cancelEdit(<?= $cartId; ?>)">Cancel</button>
                             </div>
 
-                            <button onclick="editMessage(<?= $cartId; ?>)" class="cart-edit" id="editbutton">Edit Card Message</button>
+                            <button onclick="editMessage(<?= $cartId; ?>)" class="cart-edit" id="editbutton">Edit Card
+                                Message</button>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -174,7 +194,8 @@ $grandTotal = $totalAfterDiscount + $shipping;
                 <div class="cart-empty">
                     <p>Your cart is currently empty.</p>
                     <br>
-                    <img src="../images/emptyCart.png" alt="Empty Cart" style="margin: 50px auto; width: auto; height: 200px; display: block;">
+                    <img src="../images/emptyCart.png" alt="Empty Cart"
+                        style="margin: 50px auto; width: auto; height: 200px; display: block;">
                     <br>
                     <a href="catalogue.php" class="clear-all">← Continue Shopping</a>
                 </div>
@@ -189,7 +210,7 @@ $grandTotal = $totalAfterDiscount + $shipping;
             }
 
             if (!empty($cart)): ?>
-                <?php foreach ($cart as $productId => $product):?>
+                <?php foreach ($cart as $productId => $product): ?>
                     <div class="name-categ">
                         <div class="cart-items">
                             <div class="x-name">
@@ -200,7 +221,7 @@ $grandTotal = $totalAfterDiscount + $shipping;
                                     <img src="<?= htmlspecialchars($product['image']); ?>" alt="Product Image">
                                 </div>
                                 <div class="name-categ">
-                                <p class="cart-product-name"><?= htmlspecialchars($product['name']);?></p>
+                                    <p class="cart-product-name"><?= htmlspecialchars($product['name']); ?></p>
                                 </div>
                             </div>
                             <div class="price-quan">
@@ -257,8 +278,9 @@ $grandTotal = $totalAfterDiscount + $shipping;
                                 <button class="cart-edit" onclick="saveMessage(<?= $product['id']; ?>)">Save</button>
                                 <button class="cart-edit" onclick="cancelEdit(<?= $product['id']; ?>)">Cancel</button>
                             </div>
-                                            
-                            <button class="cart-edit" id="editbutton" onclick="editMessage(<?= $product['id']; ?>)">Edit Card Message</button>
+
+                            <button class="cart-edit" id="editbutton" onclick="editMessage(<?= $product['id']; ?>)">Edit Card
+                                Message</button>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -295,7 +317,7 @@ $grandTotal = $totalAfterDiscount + $shipping;
                 $query = "SELECT c.*, p.* 
                       FROM cart c 
                       JOIN products p ON c.product_id = p.product_id 
-                      WHERE c.user_id = ?";
+                      WHERE c.user_id = ? AND c.custom_flower_id IS NULL";
                 $stmt = $conn->prepare($query);
                 $stmt->bind_param('i', $userId);
                 $stmt->execute();
@@ -322,6 +344,31 @@ $grandTotal = $totalAfterDiscount + $shipping;
                         <p class="items2">₱<?= number_format($itemSubtotalAfter, 2); ?></p>
                     </div>
 
+                <?php }
+                // Fetch custom flower items
+                $queryCustom = "SELECT c.*, cf.*
+                                FROM cart c 
+                                JOIN customflowers cf ON c.custom_flower_id = cf.id 
+                                WHERE c.user_id = ? AND c.custom_flower_id IS NOT NULL";
+                $stmtCustom = $conn->prepare($queryCustom);
+                $stmtCustom->bind_param('i', $userId);
+                $stmtCustom->execute();
+                $resultCustom = $stmtCustom->get_result();
+
+                while ($row = $resultCustom->fetch_assoc()) {
+                    $quantity = (int) $row['quantity'];
+                    $price = (float) $row['price'];
+                    $itemSubtotal = $price * $quantity;
+
+                    $finalTotalBeforeDiscount += $itemSubtotal;
+                    $finalTotal += $itemSubtotal;
+                    $itemCount += $quantity;
+                    ?>
+
+                    <div class="cart-summary-details">
+                        <p> Custom Flower Arrangement × <?= $quantity; ?></p>
+                        <p class="items2">₱<?= number_format($itemSubtotal, 2); ?></p>
+                    </div>
                 <?php } ?>
 
             <?php } else {

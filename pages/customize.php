@@ -162,6 +162,7 @@ if (!isset($_SESSION['customerEmail'])) {
                 </div>
 
                 <input type="hidden" name="custom_image" id="custom_image">
+                <input type="hidden" name="save_customflower" value="1">
 
 
                 <!-- Card -->

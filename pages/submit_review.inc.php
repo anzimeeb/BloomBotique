@@ -30,7 +30,7 @@ if (isset($_POST['review-submit'])) {
     $stmt->execute();
 
     // Redirect or display a success message
-    header('Location: catalouge.php');
+    header('Location: catalogue.php');
 }
 
 
