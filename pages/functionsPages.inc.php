@@ -1,12 +1,12 @@
 <?php
 
-function addToCart($conn, $userId, $productId, $customFlowerId = null, $quantity, $message = null)
+function addToCart($conn, $userId, $productId,  $quantity, $size, $customFlowerId = null, $message = null)
 {
     // Check if the product already exists in the cart for the user
     if ($customFlowerId === null) {
         $query = "SELECT * FROM cart WHERE user_id = ? AND product_id = ? AND custom_flower_id IS NULL";
     } else {
-        $query = "SELECT * FROM cart WHERE user_id = ? AND product_id = ? AND custom_flower_id = ?";
+        $query = "SELECT * FROM cart WHERE user_id = ? AND product_id IS NULL AND custom_flower_id = ?";
     }
 
     $stmt = $conn->prepare($query);
@@ -35,9 +35,9 @@ function addToCart($conn, $userId, $productId, $customFlowerId = null, $quantity
         $updateStmt->execute();
     } else {
         // If the product doesn't exist, insert a new row into the cart
-        $insertQuery = "INSERT INTO cart (user_id, product_id, custom_flower_id, quantity, message) VALUES (?, ?, ?, ?, ?)";
+        $insertQuery = "INSERT INTO cart (user_id, product_id, custom_flower_id, quantity, message, size) VALUES (?, ?, ?, ?, ?, ?)";
         $insertStmt = $conn->prepare($insertQuery);
-        $insertStmt->bind_param('iiiis', $userId, $productId, $customFlowerId, $quantity, $message);
+        $insertStmt->bind_param('iiiisi', $userId, $productId, $customFlowerId, $quantity, $message, $size);
         $insertStmt->execute();
     }
 }
@@ -46,7 +46,7 @@ function getCartData($conn, $userId)
 {
     // Query to fetch cart items along with product details from the products table
     $query = "
-        SELECT c.id as cart_id, c.user_id, c.product_id, c.quantity, c.message, p.product_name, p.product_price, p.product_image, p.product_discount
+        SELECT c.id as cart_id, c.user_id, c.product_id, c.quantity, c.message, c.size, p.product_name, p.product_price, p.product_image, p.product_discount
         FROM cart c 
         JOIN products p ON c.product_id = p.product_id 
         WHERE c.user_id = ?";
@@ -106,10 +106,11 @@ function saveCartToDatabase($conn, $userId)
             $productId = $product['id'];
             $customFlowerId = isset($product['custom_flower_id']) ? $product['custom_flower_id'] : null;
             $quantity = $product['quantity'];
+            $size = $product['size'];
             $message = $product['message'];
 
             // Call the addToCart function to insert the data into the database
-            addToCart($conn, $userId, $productId, $customFlowerId, $quantity, $message);
+            addToCart($conn, $userId, $productId, $quantity, $size, $customFlowerId, $message);
         }
 
         // Clear the cart cookie after saving to the database (optional)
@@ -338,7 +339,7 @@ function saveCustomFlower($conn, $userId) {
     $ribbon = $_POST['ribbon'] ?? null;
     $wrapper = $_POST['wrapper'] ?? null;
     $filler = $_POST['filler'] ?? null;
-    $card = $_POST['message'] ?? null; // corrected: your form input is "message", not "card"
+    $card = $_POST['message'] ?? null;
 
     // 2. Process main flowers
     $mainFlowersInput = $_POST['main_flower'] ?? [];
@@ -346,30 +347,26 @@ function saveCustomFlower($conn, $userId) {
 
     foreach ($mainFlowersInput as $flowerKey => $quantity) {
         if ((int)$quantity > 0) {
-            $flowerName = explode('/', $flowerKey)[0]; // Just get the flower name (before the slash)
-            $mainFlowers[] = $flowerName . $quantity; // Example: Rose3
+            $flowerName = explode('/', $flowerKey)[0];
+            $mainFlowers[] = $flowerName . $quantity;
         }
     }
 
-    $mainFlowersString = implode(',', $mainFlowers); // Final format: "Rose3,Daisy2"
+    $mainFlowersString = implode(',', $mainFlowers);
 
     // 3. Calculate price based on size
     switch ($size) {
-        case 'Small':
-            $price = 499.00;
-            break;
-        case 'Medium':
-            $price = 699.00;
-            break;
-        case 'Large':
-            $price = 899.00;
-            break;
-        default:
-            $price = 0;
+        case 'Small': $price = 499.00; break;
+        case 'Medium': $price = 699.00; break;
+        case 'Large': $price = 899.00; break;
+        default: $price = 0;
     }
 
-    // 4. Insert into customflowers table
-    $stmt = $conn->prepare("INSERT INTO customflowers (user_id, size, main_flower, fillers, wrapper, ribbon, card, price, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+    // 4. Get custom image filename from form (hidden input)
+    $imageFilename = $_POST['custom_image'] ?? null;
+
+    // 5. Insert into customflowers table
+    $stmt = $conn->prepare("INSERT INTO customflowers (user_id, size, main_flower, fillers, wrapper, ribbon, card, custom_image, price, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 
     if (!$stmt) {
         header("Location: ../customize.php?error=prepare_failed");
@@ -377,7 +374,7 @@ function saveCustomFlower($conn, $userId) {
     }
 
     $stmt->bind_param(
-        "issssssd",
+        "isssssssd",
         $userId,
         $size,
         $mainFlowersString,
@@ -385,13 +382,14 @@ function saveCustomFlower($conn, $userId) {
         $wrapper,
         $ribbon,
         $card,
+        $imageFilename,
         $price
     );
 
     if ($stmt->execute()) {
-        $customFlowerId = $stmt->insert_id; // 👈 Get ID of the newly inserted custom flower
-        
-        // 5. Now insert into cart
+        $customFlowerId = $stmt->insert_id;
+
+        // 6. Insert into cart table
         $cartStmt = $conn->prepare("INSERT INTO cart (user_id, custom_flower_id, quantity, added_at, message) VALUES (?, ?, 1, NOW(), ?)");
 
         if (!$cartStmt) {
@@ -418,6 +416,7 @@ function saveCustomFlower($conn, $userId) {
         exit();
     }
 }
+
 
 
 ?>

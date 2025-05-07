@@ -22,7 +22,8 @@ if (isset($_POST['add_to_cart'])) {
     // Product details
     $productId = $_POST['product_id'];  // Make sure the product ID is included
     $productName = $_POST['product_name'];  // Product name
-    $productPrice = $_POST['product_price'];  // Product price
+    $productPrice = $_POST['product_price'];
+    $size = $_POST['size'];  // Product price
     $quantity = $_POST['quantity'];  // Quantity from the form
     $image = $_POST['product_image'];
     $discount = $_POST['product_discount'];
@@ -44,10 +45,10 @@ if (isset($_POST['add_to_cart'])) {
     } else {
         // If not, add a new product to the cart
         $cart[$productId] = [
-
             'id' => $productId,
             'name' => $productName,
             'price' => $productPrice,
+            'size' => $size,
             'image' => $image,
             'quantity' => $quantity,
             'discount' => $discount,
@@ -114,28 +115,6 @@ if (isset($_POST['add_to_cart'])) {
         <p class="info-cat-description"><?= $row['product_description']; ?></p>
         <br>
 
-        <!-- SIZE OPTIONS -->
-        <div class="size-container">
-            <div class="size">
-                <img src="../images/size.png" alt="Size Image">
-                <h5>Standard</h5>
-                <h5 class="size-name">Default Price</h5>
-            </div>
-
-            <div class="size">
-                <img src="../images/size.png" alt="Size Image">
-                <h5>Medium</h5>
-                <h5 class="size-name">+100</h5>
-            </div>
-
-            <div class="size">
-                <img src="../images/size.png" alt="Size Image">
-                <h5>Large</h5>
-                <h5 class="size-name">+200</h5>
-            </div>
-        </div>
-        <br>
-
         <!-- QUANTITY HANDLER -->
         <?php
         $quantity = isset($_POST['quantity']) ? (int) $_POST['quantity'] : 1;
@@ -147,6 +126,37 @@ if (isset($_POST['add_to_cart'])) {
 
         <div>
             <form method="post" action="">
+                <!-- SIZE OPTIONS -->
+                <div class="size-container">
+                    <label class="size-option">
+                        <input type="radio" name="size" value="0" hidden checked>
+                        <div class="size"> <!-- Style target -->
+                            <img src="../images/size.png" alt="Size Image">
+                            <h5>Standard</h5>
+                            <h5 class="size-name">Default Price</h5>
+                        </div>
+                    </label>
+
+                    <!-- <label class="size-option">
+                        <input type="radio" name="size" value="1" hidden>
+                        <div class="size">
+                            <img src="../images/size.png" alt="Size Image">
+                            <h5>Medium</h5>
+                            <h5 class="size-name">+100</h5>
+                        </div>
+                    </label>
+
+                    <label class="size-option">
+                        <input type="radio" name="size" value="2" hidden>
+                        <div class="size">
+                            <img src="../images/size.png" alt="Size Image">
+                            <h5>Large</h5>
+                            <h5 class="size-name">+200</h5>
+                        </div>
+                    </label> -->
+                </div>
+
+                <br>
                 <!-- CARD MESSAGE -->
                 <label class="card-message" for="message">Card Message</label>
                 <br><br>
@@ -177,21 +187,133 @@ if (isset($_POST['add_to_cart'])) {
 
 </div><!-- end main -->
 
-<hr class="hr">   
+<hr class="hr">
 <!-- Tabs -->
 <nav class="tabs"><!-- tabs -->
     <a href="#seereviews" class="tab-button">Reviews</a>
     <a href="#additionalinfo" class="tab-button">Additional Information</a>
-    <a href="#sendreview" class="tab-button">Send Review</a>
+    <?php
+    $showReviewButton = false;
+
+    if (isset($_SESSION['user_id'])) {
+        $customerID = $_SESSION['user_id']; // assuming this is stored in session
+        $productID = $_GET['product_id']; // assuming this variable is already defined
+    
+        // Check if the user has purchased and completed the product
+        $orderQuery = "
+    SELECT COUNT(*) 
+    FROM order_items 
+    INNER JOIN orders ON order_items.order_id = orders.order_id 
+    WHERE orders.user_id = ? 
+    AND order_items.product_id = ? 
+    AND orders.order_status = 'Delivered'
+    ";
+
+        $stmt = $conn->prepare($orderQuery);
+        $stmt->bind_param("ii", $customerID, $productID);
+        $stmt->execute();
+        $stmt->bind_result($orderCount);
+        $stmt->fetch();
+        $stmt->close();
+
+        // If the user has purchased the product and it's delivered
+        if ($orderCount > 0) {
+
+            // Check if the user has already reviewed the product
+            $reviewQuery = "
+        SELECT COUNT(*) 
+        FROM reviews 
+        WHERE customer_id = ? 
+        AND product_id = ?
+        ";
+
+            $stmt = $conn->prepare($reviewQuery);
+            $stmt->bind_param("ii", $customerID, $productID);
+            $stmt->execute();
+            $stmt->bind_result($reviewCount);
+            $stmt->fetch();
+            $stmt->close();
+
+            // If the user has not reviewed yet, show the review button
+            if ($reviewCount == 0) {
+                $showReviewButton = true;
+            }
+        }
+    }
+    ?>
+
+    <?php if ($showReviewButton): ?>
+        <a href="#sendreview" class="tab-button">Send Review</a>
+    <?php endif; ?>
+
 </nav><!-- end tabs -->
 
 
+<!-- review list -->
+<?php
+$product_id = $_GET['product_id']; // Or you can set it manually if needed
+$query = "
+SELECT r.review_text, r.rating, r.created_at, r.review_image, u.customerFN, u.customerLN, u.profile_image
+FROM reviews r
+INNER JOIN customerinfo u ON r.customer_id = u.id
+WHERE r.product_id = ?
+ORDER BY r.created_at DESC
+";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $product_id);
+$stmt->execute();
+$result = $stmt->get_result();
+?>
+
+<!-- review list -->
+<div id="seereviews" class="linksection">
+    <h3 class="rlist-title">Review List</h3>
+    <div class="reviews-list">
+        <?php while ($row = $result->fetch_assoc()): ?>
+            <div class="rlist-container">
+                <div class="customer-feedback">
+                    <div class="rlist-image">
+                        <img src="../images/profilepictures/<?php echo $row['profile_image'] ?: 'default-profile.jpg'; ?>"
+                            alt="Reviewer">
+                        <p class="rev_name"><strong><?php echo $row['customerFN'];
+                        echo ' ' . $row['customerLN']; ?></strong></p>
+                    </div>
+
+                    <p class="rlist-message">
+                        <?php echo nl2br(htmlspecialchars($row['review_text'])); ?>
+                    </p>
+
+                    <div class="rlist-rating">
+                        <h3>⭐⭐⭐⭐⭐</h3>
+                        <h5><?php echo htmlspecialchars($row['rating']); ?>.0</h5>
+                    </div>
+
+                    <div class="rlist-uploads">
+                        <?php
+                        $images = json_decode($row['review_image']);
+                        if ($images) {
+                            foreach ($images as $image) {
+                                echo '<img src="' . htmlspecialchars($image) . '" alt="Review image">';
+                            }
+                        } else {
+                            echo '<img src="' . $row['review_image'] . '" alt="Review image">';
+
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+        <?php endwhile; ?>
+    </div><!-- end reviews -->
+</div>
+<?php
+?>
 
 <!-- ADDITIONAL INFORMATION -->
 <div id="additionalinfo" class="linksection ">
     <div class="addmain"><!-- main additional info -->
         <div class="addinfo"><!-- add info -->
-        <h2 class="info-cat-name"><?= $row['product_name']; ?></h2>
+            <h2 class="info-cat-name"><?= $row['product_name']; ?></h2>
             <p>Includes:</p>
             <ul>
                 <li><strong>Bridal Bouquet:</strong> White lilies, peonies, and roses with baby's breath and eucalyptus
@@ -205,92 +327,51 @@ if (isset($_POST['add_to_cart'])) {
     </div><!-- end main additional info -->
 </div>
 
-
-
 <!-- SEND REVIEW -->
 <div id="sendreview" class="linksection">
     <div class="review-main" id="sendreview"><!-- main review container -->
         <div class="send-review" id="review-id">
             <h3>Add your review</h3>
-            <p>We value your feedback! Share your experience by submitting a review below. 
+            <p>We value your feedback! Share your experience by submitting a review below.
                 Your insights help us improve and help others make informed decisions.</p>
             <br>
-            <form method="POST" action="">
-                <div class="name-email">
-                    <div class="send-input-grp">
-                        <label for="name">Name</label>
-                        <input type="text" name="name" required>
-                    </div>
-
-                    <div class="send-input-grp">
-                        <label for="email">Email</label>
-                        <input type="text" name="email" required>
-                    </div>
-                </div>
-
+            <form method="POST" action="submit_review.inc.php" enctype="multipart/form-data">
                 <div class="send-input-grp">
                     <label>Your Rating</label>
                     <div class="star-rating">
-                        ★ ★ ★ ★ ★
+                        <input type="radio" id="star5" name="rating" value="5">
+                        <label for="star5">★</label>
+                        <input type="radio" id="star4" name="rating" value="4">
+                        <label for="star4">★</label>
+                        <input type="radio" id="star3" name="rating" value="3">
+                        <label for="star3">★</label>
+                        <input type="radio" id="star2" name="rating" value="2">
+                        <label for="star2">★</label>
+                        <input type="radio" id="star1" name="rating" value="1">
+                        <label for="star1">★</label>
                     </div>
                 </div>
 
                 <div class="send-input-grp">
-                    <label for="title">Add Review Title</label>
-                    <input type="text" name="title" required>
+                    <label for="reviewer-input">Detailed Review</label>
+                    <textarea id="reviewer-input" name="review_text" required></textarea>
                 </div>
 
                 <div class="send-input-grp">
-                    <label for="reviewer-input">Add Detailed Review</label>
-                    <textarea id="reviewer-input" required></textarea>
+                    <label>Upload Image (Optional)</label>
+                    <input type="file" name="review_image" accept="image/*">
                 </div>
 
-                <div class="send-input-grp">
-                    <label>Photo / Video (Optional)</label>
-                    <label class="upload-icon">
-                        <img src="../images/upload.png" alt="Upload Icon">
-                        <p>Upload photo</p>
-                        <input type="file" name="evidence" accept="image/*">
-                    </label>
-                </div>
+                <input type="hidden" name="product_id" value="<?php echo $_GET['product_id']; ?>">
 
-                <input type="submit" name="review-submit" placeholder="Submit">
+
+                <input type="submit" name="review-submit" value="Submit Review">
             </form>
+
         </div>
     </div><!-- end main review container -->
 </div>
 
-<!-- review list -->
-<div id="seereviews" class="linksection">
-<h3 class="rlist-title">Review List</h3>
-<div class="reviews-list">
-    <div class="rlist-container">
-        <div class="customer-feedback">
-            <div class="rlist-image">
-                <img src="../images/yinprofile.jpg" alt="Reviewer">
-                <p class="rev_name"><strong>Roselyn Caampued</strong></p>
-            </div>
-            
-            <p><strong>Perfect for Birthdays and Weddings!</strong></p>
-            <p class="rlist-message">
-                Mahal na mahal ko talaga siya mga beh huhuhu Mahal na mahal ko talaga siya mga beh huhuhu Mahal na mahal ko talaga siya mga beh huhuhu
-                Mahal na mahal ko talaga siya mga beh huhuhu Mahal na mahal ko talaga siya mga beh huhuhu Mahal na mahal ko talaga siya mga beh huhuhu Mahal na mahal ko talaga siya mga beh huhuhu
-            </p>
-
-            <div class="rlist-rating">
-                <h3>⭐⭐⭐⭐⭐</h3>
-                <h5>5.0</h5>
-            </div> 
-
-            <div class="rlist-uploads">
-                <img src="../images/contactImage.png" alt="Review image 1">
-                <img src="../images/aboutImage2.png" alt="Review image 2">
-                <img src="../images/aboutImage3.png" alt="Review image 3">
-            </div>
-        </div>
-    </div>
-</div><!-- end reviews -->
-</div>
 
 
 <?php include_once 'footer.php'; ?>

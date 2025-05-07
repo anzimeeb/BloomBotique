@@ -157,14 +157,14 @@ $grandTotal = $totalAfterDiscount + $shipping;
                             </p>
 
                             <!-- Hidden input form -->
-                            <div id="edit-form-<?= $cartId; ?>" style="display: none;">
+                            <div id="edit-form-<?= $cartId; ?>" class="editmessage" style="display: none;">
                                 <textarea class="message-area"
                                     id="message-input-<?= $cartId; ?>"><?= isset($_COOKIE["message_{$cartId}"]) ? htmlspecialchars($_COOKIE["message_{$cartId}"]) : htmlspecialchars($product['message']); ?></textarea>
-                                <button onclick="saveMessage(<?= $cartId; ?>)">Save</button>
-                                <button onclick="cancelEdit(<?= $cartId; ?>)">Cancel</button>
+                                <button class="cart-edit" onclick="saveMessage(<?= $cartId; ?>)">Save</button>
+                                <button class="cart-edit" onclick="cancelEdit(<?= $cartId; ?>)">Cancel</button>
                             </div>
 
-                            <button onclick="editMessage(<?= $cartId; ?>)">Edit Card Message</button>
+                            <button onclick="editMessage(<?= $cartId; ?>)" class="cart-edit" id="editbutton">Edit Card Message</button>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -173,7 +173,9 @@ $grandTotal = $totalAfterDiscount + $shipping;
             <?php else: ?>
                 <div class="cart-empty">
                     <p>Your cart is currently empty.</p>
-                    <img src="../images/emptyCart.png" alt="Empty Cart">
+                    <br>
+                    <img src="../images/emptyCart.png" alt="Empty Cart" style="margin: 50px auto; width: auto; height: 200px; display: block;">
+                    <br>
                     <a href="catalogue.php" class="clear-all">← Continue Shopping</a>
                 </div>
             <?php endif; ?>
@@ -187,7 +189,7 @@ $grandTotal = $totalAfterDiscount + $shipping;
             }
 
             if (!empty($cart)): ?>
-                <?php foreach ($cart as $productId => $product): ?>
+                <?php foreach ($cart as $productId => $product):?>
                     <div class="name-categ">
                         <div class="cart-items">
                             <div class="x-name">
@@ -198,7 +200,7 @@ $grandTotal = $totalAfterDiscount + $shipping;
                                     <img src="<?= htmlspecialchars($product['image']); ?>" alt="Product Image">
                                 </div>
                                 <div class="name-categ">
-                                    <p class="cart-product-name"><?= htmlspecialchars($product['name']); ?></p>
+                                <p class="cart-product-name"><?= htmlspecialchars($product['name']);?></p>
                                 </div>
                             </div>
                             <div class="price-quan">
@@ -252,11 +254,11 @@ $grandTotal = $totalAfterDiscount + $shipping;
                             <div id="edit-form-<?= $product['id']; ?>" style="display: none;">
                                 <textarea class="message-area"
                                     id="message-input-<?= $product['id']; ?>"><?= isset($_COOKIE["message_{$product['id']}"]) ? htmlspecialchars($_COOKIE["message_{$product['id']}"]) : htmlspecialchars($product['message']); ?></textarea>
-                                <button onclick="saveMessage(<?= $product['id']; ?>)">Save</button>
-                                <button onclick="cancelEdit(<?= $product['id']; ?>)">Cancel</button>
+                                <button class="cart-edit" onclick="saveMessage(<?= $product['id']; ?>)">Save</button>
+                                <button class="cart-edit" onclick="cancelEdit(<?= $product['id']; ?>)">Cancel</button>
                             </div>
                                             
-                            <button onclick="editMessage(<?= $product['id']; ?>)">Edit Card Message</button>
+                            <button class="cart-edit" id="editbutton" onclick="editMessage(<?= $product['id']; ?>)">Edit Card Message</button>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -625,11 +627,13 @@ $grandTotal = $totalAfterDiscount + $shipping;
 
     function editMessage(id) {
         document.getElementById(`edit-form-${id}`).style.display = 'block';
+        document.getElementById(`editbutton`).style.display = 'none';
         document.getElementById(`message-text-${id}`).style.display = 'none';
     }
 
     function cancelEdit(id) {
         document.getElementById(`edit-form-${id}`).style.display = 'none';
+        document.getElementById(`editbutton`).style.display = 'block';
         document.getElementById(`message-text-${id}`).style.display = 'block';
     }
 

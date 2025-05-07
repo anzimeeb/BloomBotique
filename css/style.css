@@ -79,8 +79,23 @@ header .leftside {
   padding-bottom: 5px;
 }
 
+.navigation a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background-color: black;
+  bottom: 0;
+  left: 0;
+  transition: width 0.3s ease-in-out;
+}
+
 .navigation a:hover {
   color: black;
+}
+
+.navigation a:hover::after {
+  width: 100%;
 }
 
 .navigation a.active {
@@ -96,6 +111,7 @@ header .leftside {
   bottom: 0;
   left: 0;
 }
+
 
 .auth-links {
   display: flex;
@@ -941,6 +957,10 @@ footer {
   align-items: center;
 }
 
+.back-button:hover {
+  background-color: #4a077a;
+}
+
 .back-button img {
   height: 20px;
   width: 20px;
@@ -1052,7 +1072,7 @@ input[type="password"] {
 }
 
 #login-form1 input[type="submit"]:hover {
-  background-color: #2e2e2e;
+  background-color: #4a007f;
 }
 
 #in_same {
@@ -1087,8 +1107,13 @@ input[type="password"] {
   border-radius: 20px;
 }
 
+#login-form1 h2{
+  margin-bottom: 10px;
+}
+
 #login-form1 .otp-message {
-  padding: 20px;
+  padding: 0px;
+  margin: 0px;
   font-size: 18px;
   font-family: Raleway, Arial, sans-serif;
   max-width: 80%;
@@ -1439,9 +1464,17 @@ form {
   height: 40px;
   padding-bottom: 10px;
 }
+
 .size:hover {
   background-color: #5f00a3;
   color: white;
+}
+
+/* Keep highlight when selected */
+.size-option:has(input[type="radio"]:checked) .size {
+  background-color: #5f00a3;
+  color: white;
+  border-radius: 10px;
 }
 
 /* CARD MESSAGE */
@@ -1713,11 +1746,6 @@ textarea {
   padding-top: 15px;
 }
 
-.star-rating {
-  font-size: 24px;
-  color: #ffb400;
-}
-
 .upload-icon {
   display: flex;
   flex-direction: column;
@@ -1751,6 +1779,31 @@ textarea {
   height: 100%;
   opacity: 0;
   cursor: pointer;
+}
+
+.star-rating {
+  direction: rtl;
+  display: inline-flex;
+}
+
+.star-rating {
+  direction: rtl;
+  display: inline-flex;
+}
+
+.star-rating input {
+  display: none;
+}
+
+.star-rating label {
+  color: #ccc;
+  transition: color 0.2s;
+  font-size: 60px !important; /* Try adding !important */
+}
+
+.star-rating input:checked ~ label,
+.star-rating input:hover ~ label {
+  color: #ffc107; /* gold */
 }
 
 #review-id input[type="submit"] {
@@ -2043,6 +2096,7 @@ textarea {
   border-radius: 10px;
   border: 1px solid #46464675;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background: transparent;
 }
 
 .preview-container {
@@ -2053,7 +2107,7 @@ textarea {
 
 .bouquet-preview {
   max-width: 40%;
-  height: 800px;
+  height: 600px;
   border-radius: 8px;
 }
 
@@ -2063,7 +2117,7 @@ textarea {
   box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
   background: #fff;
   width: 600px;
-  height: 1200px;
+  height: 600px;
   position: relative;
   margin: 0 auto;
 }
@@ -2490,11 +2544,18 @@ h4 {
   border-top: 2px rgb(174, 174, 174) solid;
 }
 
+.editmessage {
+  display: flex;
+  flex-grow: 1;
+  justify-content: center; /* Center content horizontally */
+  align-items: center;
+}
+
 .message-area {
   min-height: 20px;
-  min-width: 500px;
-  max-height: 20px;
-  max-width: 500px;
+  min-width: 300px;
+  max-height: 19px;
+  max-width: 300px;
 }
 
 .cart-product-message {
@@ -2638,6 +2699,21 @@ h4 {
   background-color: #2e2e2e;
 }
 
+.cart-edit {
+  margin: 5px;
+  border: none;
+  width: 12%;
+  height: 40px;
+  background-color: #5f00a3;
+  color: white;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14;
+}
+
+.cart-edit:hover {
+  background-color: #3e0b63;
+}
 /**********************************************************BILLING PAGE***************************************************************/
 .billing-main {
   display: flex;

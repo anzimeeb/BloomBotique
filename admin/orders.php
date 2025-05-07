@@ -95,7 +95,7 @@ $orders = getOrders($conn);
                         <span class="status-badge <?= $statusClass ?>"><?= htmlspecialchars($order['order_status']) ?></span>
                     </td>
                     <td class="action-cell">
-                        <form method="POST" action="order.php">
+                        <form method="POST" action="updateOrderStatus.inc.php">
                             <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']) ?>">
                             <select name="order_status" class="status-dropdown">
                                 <option value="Pending" <?= $order['order_status'] == 'Pending' ? 'selected' : '' ?>>Pending</option>

@@ -128,7 +128,10 @@ function loginUser($conn, $email, $username, $password)
 
         if ($redirect === 'tocart') {
             header("Location: ../pages/cart.php");
-        } else {
+        } else if($redirect ==='tocustomize'){
+            header("Location: ../pages/customize.php");
+        }
+        else {
             header("Location: ../index.php");
         }
     }

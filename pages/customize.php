@@ -1,17 +1,11 @@
 <?php
 include_once 'header.php';
 include 'functionsPages.inc.php';
+if (!isset($_SESSION['customerEmail'])) {
+    header("Location: ../account/login.php?redirect=tocustomize");
 
+}
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Custom Bouquet</title>
-    <link rel="stylesheet" href="../css/style.css">
-</head>
 
 <body>
     <!-- BANNER IMAGE -->
@@ -79,7 +73,7 @@ include 'functionsPages.inc.php';
                     <label class="option-button">
                         <!-- 🌸 Peonies -->
                         <img src="../images/red-rose.png" alt="">
-                        <input type="number" name="main_flower[Peonies/IMG_0627" min="0" value="0">Peony
+                        <input type="number" name="main_flower[Peonies/IMG_0627]" min="0" value="0">Peony
                     </label>
                     <label class="option-button">
                         <!-- 🌟 Stargazer -->
@@ -92,7 +86,7 @@ include 'functionsPages.inc.php';
                 <div class="section-title">Fillers</div>
                 <div class="options-grid scrollable-options" id="filler-options">
                     <label class="option-button">
-                        <img src="../images/filler.png" alt="">
+                        🚫
                         <input type="radio" name="filler" value="None">None
                     </label>
                     <label class="option-button">
@@ -121,7 +115,7 @@ include 'functionsPages.inc.php';
                 <div class="section-title">Ribbon</div>
                 <div class="options-grid scrollable-options" id="ribbon-options">
                     <label class="option-button">
-                        <img src="../images/ribbon.png" alt="">
+                        🚫
                         <input type="radio" name="ribbon" value="None">None
                     </label>
                     <label class="option-button">
@@ -167,10 +161,14 @@ include 'functionsPages.inc.php';
                     </label>
                 </div>
 
+                <input type="hidden" name="custom_image" id="custom_image">
+
+
                 <!-- Card -->
                 <div class="section-title">Card</div>
-                    <textarea class="message-card" name="card" placeholder="Enter your message here..."><?php echo isset($message) ? htmlspecialchars($message) : ''; ?></textarea>
-                </div>
+                <textarea class="message-card" name="card"
+                    placeholder="Enter your message here..."><?php echo isset($message) ? htmlspecialchars($message) : ''; ?></textarea>
+            </div>
 
             <!-- Right side - Preview -->
             <div class="preview">
@@ -187,10 +185,48 @@ include 'functionsPages.inc.php';
     <!-- Add to Cart -->
     <div class="add-to-cart-container">
         <button type="submit" name="reset_customflower" class="reset-btn">Start Again</button>
-        <button type="submit" name="save_customflower" class="add-to-cart">Add to Cart</button>
+        <button type="submit" name="save_customflower" class="add-to-cart" id="savePreviewBtn">Add to Cart</button>
     </div>
 
     <?php include_once 'footer.php'; ?>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script>
+        document.getElementById('savePreviewBtn').addEventListener('click', function (e) {
+            e.preventDefault(); // Stop form submission
+
+            const previewElement = document.getElementById('main-flower-preview');
+
+            html2canvas(previewElement).then(function (canvas) {
+                const imageData = canvas.toDataURL("image/png");
+
+                fetch('save_preview.php', {
+                    method: 'POST',
+                    body: JSON.stringify({ image: imageData }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => response.text())
+                    .then(savedFilename => {
+                        // Append the filename to the form
+                        const form = document.querySelector('form');
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = 'custom_image';
+                        input.value = savedFilename;
+                        form.appendChild(input);
+
+                        // Submit the form
+                        form.submit();
+                    })
+                    .catch(error => {
+                        console.error("Image save failed:", error);
+                    });
+            });
+        });
+    </script>
 
     <script>
         function updatePreview() {
@@ -251,7 +287,7 @@ include 'functionsPages.inc.php';
             });
 
             // Add fillers (after main flowers but before ribbon)
-            if (filler) {
+            if (filler && filler !== "none") {
                 let fillerImg = document.createElement('img');
                 fillerImg.src = "../images/customize/FILLERS/" + filler; // Assuming filler image filenames
                 fillerImg.alt = filler;
@@ -266,7 +302,7 @@ include 'functionsPages.inc.php';
             }
 
             // Add ribbon last (foreground)
-            if (ribbon) {
+            if (ribbon && ribbon !== "none") {
                 let ribbonImg = document.createElement('img');
                 ribbonImg.src = "../images/customize/RIBBONS/" + ribbon;
                 ribbonImg.alt = "Ribbon";

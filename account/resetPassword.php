@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 if (!isset($_SESSION['customerEmail'])){
     header("location:forgotPassword.php");
 }
@@ -16,98 +15,50 @@ if (!isset($_SESSION['customerEmail'])){
     <link rel="icon" href="../img/icon/coffeLogo.png" type="image/png" media="(prefers-color-scheme: light)">
     <link rel="icon" href="../img/icon/whiteLogo.png" type="image/png" media="(prefers-color-scheme: dark)">
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="shortcut icon" href="">
 </head>
 
-<body>    
-    <header>
-        <div class="navbar">
-            <div class="left-menu">
-                <a href="../index.php">Home</a>
-                <a href="../pages/menu.php">Menu</a>
-                <a href="../pages/find-a-store.php">Find a Store</a>
+<body>
+    <section class="account">
+        <div class="login-container" id="login-form1">
+            <!-- Logo -->
+            <div id="login-logo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="230" height="230" fill="currentColor" class="bi bi-lock"
+                    viewBox="0 0 16 16">
+                    <path
+                        d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2M5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1" />
+                </svg>
             </div>
-            <div class="logo">
-                <a href="../index.php"><img src="../img/logoF.png"></a>
-            </div>
-            <div class="right-menu">
-                <a href="#">Contact Us</a>
-                <input type="text" class="search-bar" placeholder="Search">
-                <a class="icon" href="../cart/cart.php"><img src="../img/shoppingcart.png" alt="Cart"></a>
-                <a class="icon" href="login.php"><img src="../img/user.png" alt="User"></a>
-            </div>
-        </div>
-        
-        <img src="../img/logoF.png" class="hdImg">
-        <div id="menuToggleContainer">
-            <nav role="navigation">
-                <div id="menuToggle">
-                    <input type="checkbox">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <ul id="menu">
-                        <a href="../index.php">
-                            <li>Home</li>
-                        </a>
-                        <a href="../pages/menu.php">
-                            <li>Menu</li>
-                        </a>
-                        <a href="../pages/ourstory.php">
-                            <li>Our Story</li>
-                        </a>
-                        <a href="../pages/contactus.php">
-                            <li>Contact Us</li>
-                        </a>
-                        <a href="../cart/cart.php">
-                            <li>Cart</li>
-                        </a>
-                        <?php
-                        if (isset($_SESSION["customerEmail"])) {
-                            echo '<a href="../pages/profile.php"><li>Profile Hi!</li></a>';
-                        } else {
-                            echo '<a href="login.php"><li>Login</li></a>';
-                            echo '<a href="signup.php"><li>Signup</li></a>';
-                        }
-                        ?>
-                    </ul>
-                </div>
-            </nav>
-        </div>
-    </header>
-    
-    <main>
-        <section class="account">
-            <div class="login-container" id="account-item1">
-                <h2>Reset Password</h2>
 
-                <p>Don't wast your time, just enjoy your coffee.</p>
+            <!-- Heading -->
+            <h2>Reset Password</h2>
+            <p class="otp-message">Don't waste your time, just enjoy your coffee.</p>
 
-                <?php
-                if(isset($_GET["error"])){
-                    if($_GET["error"] == "emptyinput"){
-                        echo "<p>Fill in all fields!</p>";
-                    } elseif($_GET["error"] == "wronglogin"){
-                        echo "<p>Incorrect Login Information!</p>";
-                    }
+            <!-- Error Handling -->
+            <?php
+            if (isset($_GET["error"])) {
+                if ($_GET["error"] == "emptyinput") {
+                    echo "<p>Fill in all fields!</p>";
+                } elseif ($_GET["error"] == "wronglogin") {
+                    echo "<p>Incorrect Login Information!</p>";
                 }
-                ?>
+            }
+            ?>
 
-                <form action="resetPassword.inc.php" method="POST">
-                    <input type="password" name="newPassword" placeholder="New Password" required>
-                    <br>
-                    <input type="password" name="confPassword" placeholder="Confirm Password" required>
-                    <br>
-                    <input type="submit" name="resetPassword" value="Reset Password">
-                    <br>
-                </form>
-            </div>
-            <div id="account-item2">
-                <img src="../img/p_signup.png">
-            </div>
-        </section>
-    </main>
+            <!-- Reset Password Form -->
+            <form action="resetPassword.inc.php" method="POST">
+                <input type="password" name="newPassword" placeholder="New Password" required>
+                <br>
+                <input type="password" name="confPassword" placeholder="Confirm Password" required>
+                <br>
+                <input type="submit" name="resetPassword" value="Reset Password">
+                <br>
+            </form>
+        </div>
 
-    
+        <div id="login-image">
+            <img src="../images/loginPic.png">
+        </div>
+    </section>
 </body>
-</hmtl>
+
+</html>

@@ -13,69 +13,12 @@ if (!isset($_SESSION['customerEmail'])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OTP Input</title>
-    <link rel="icon" href="../img/icon/coffeLogo.png" type="image/png" media="(prefers-color-scheme: light)">
-    <link rel="icon" href="../img/icon/whiteLogo.png" type="image/png" media="(prefers-color-scheme: dark)">
+    <link rel="icon" href="../images/logob.png">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="shortcut icon" href="">
 </head>
 
-<body>
-    <!-- <header>
-        <div class="navbar">
-            <div class="left-menu">
-                <a href="../index.php">Home</a>
-                <a href="../pages/menu.php">Menu</a>
-                <a href="../pages/find-a-store.php">Find a Store</a>
-            </div>
-            <div class="logo">
-                <a href="../index.php"><img src="../img/logoF.png"></a>
-            </div>
-            <div class="right-menu">
-                <a href="#">Contact Us</a>
-                <input type="text" class="search-bar" placeholder="Search">
-                <a class="icon" href="../cart/cart.php"><img src="../img/shoppingcart.png" alt="Cart"></a>
-                <a class="icon" href="login.php"><img src="../img/user.png" alt="User"></a>
-            </div>
-        </div>
-        
-        <img src="../img/logoF.png" class="hdImg">
-        <div id="menuToggleContainer">
-            <nav role="navigation">
-                <div id="menuToggle">
-                    <input type="checkbox">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <ul id="menu">
-                        <a href="../index.php">
-                            <li>Home</li>
-                        </a>
-                        <a href="../pages/menu.php">
-                            <li>Menu</li>
-                        </a>
-                        <a href="../pages/ourstory.php">
-                            <li>Our Story</li>
-                        </a>
-                        <a href="../pages/contactus.php">
-                            <li>Contact Us</li>
-                        </a>
-                        <a href="../cart/cart.php">
-                            <li>Cart</li>
-                        </a>
-                        <?php
-                        if (isset($_SESSION["customerEmail"])) {
-                            echo '<a href="../pages/profile.php"><li>Profile Hi!</li></a>';
-                        } else {
-                            echo '<a href="login.php"><li>Login</li></a>';
-                            echo '<a href="signup.php"><li>Signup</li></a>';
-                        }
-                        ?>
-                    </ul>
-                </div>
-            </nav>
-        </div>
-    </header> -->
-    
+<body> 
         <section class="account">
             <div class="login-container" id="login-form1">
                 <div class="back-button-container">
@@ -121,6 +64,3 @@ if (!isset($_SESSION['customerEmail'])){
                 <img src="../images/loginPic.png">
             </div>
         </section>
-    
-</body>
-</hmtl>

@@ -41,7 +41,7 @@ $disc = $conn->query($sql);
                 </div>
             </div>
             <ul class="navigation">
-                <li><a href="index.php">Home</a></li>
+                <li><a href="index.php" class="active">Home</a></li>
                 <li><a href="pages/catalogue.php">Catalogue</a></li>
                 <li><a href="pages/about.php">About Us</a></li>
                 <li><a href="pages/contact.php">Contact Us</a></li>
