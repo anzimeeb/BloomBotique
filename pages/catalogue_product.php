@@ -179,7 +179,7 @@ if (isset($_POST['add_to_cart'])) {
                     </div>
 
                     <button type="submit" name="add_to_cart" class="add-to-cart-btn">Add to Cart</button>
-                    <a href="billing.php"><button class="buy-now-btn">Buy Now</button></a>
+                    <!-- <a href="billing.php"><button class="buy-now-btn">Buy Now</button></a> -->
                 </div>
             </form>
         </div>

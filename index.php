@@ -167,7 +167,7 @@ $disc = $conn->query($sql);
 
     <div class="show-best"><!-- showcase div -->
         <div class="products-container-wrapper">
-            <button id="prev-btn" class="scroll-btn prev-btn">&lt;</button>
+            <button id="prev-btn" class="scroll-btn prev-btn" style="margin-right:20px;">&lt;</button>
             <div class="products-container">
                 <?php
                 if (mysqli_num_rows($best) > 0) {

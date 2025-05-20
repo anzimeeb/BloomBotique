@@ -131,6 +131,31 @@ if ($cartCount === 0) {
                         </div>
 
                     <?php }
+                    // Fetch custom flower items
+                    $queryCustom = "SELECT c.*, cf.*
+                                FROM cart c 
+                                JOIN customflowers cf ON c.custom_flower_id = cf.id 
+                                WHERE c.user_id = ? AND c.custom_flower_id IS NOT NULL";
+                    $stmtCustom = $conn->prepare($queryCustom);
+                    $stmtCustom->bind_param('i', $userId);
+                    $stmtCustom->execute();
+                    $resultCustom = $stmtCustom->get_result();
+
+                    while ($row = $resultCustom->fetch_assoc()) {
+                        $quantity = (int) $row['quantity'];
+                        $price = (float) $row['price'];
+                        $itemSubtotal = $price * $quantity;
+
+                        $finalTotalBeforeDiscount += $itemSubtotal;
+                        $finalTotal += $itemSubtotal;
+                        $itemCount += $quantity;
+                        ?>
+
+                        <div class="cart-summary-details">
+                            <p> Custom Flower Arrangement × <?= $quantity; ?></p>
+                            <p class="items2">₱<?= number_format($itemSubtotal, 2); ?></p>
+                        </div>
+                    <?php }
                 } ?>
 
                 <hr class="gray">

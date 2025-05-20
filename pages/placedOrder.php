@@ -19,7 +19,19 @@ $stmt->execute();
 $order = $stmt->get_result()->fetch_assoc();
 
 // Get order items
-$stmt = $conn->prepare("SELECT oi.*, p.product_name, p.product_image FROM order_items oi JOIN products p ON oi.product_id = p.product_id WHERE oi.order_id = ?");
+$stmt = $conn->prepare("
+    SELECT 
+        oi.*, 
+        p.product_name AS product_name, 
+        p.product_image AS product_image,
+        cf.size AS custom_size, 
+        cf.custom_image AS custom_image
+    FROM order_items oi 
+    LEFT JOIN products p ON oi.product_id = p.product_id 
+    LEFT JOIN customflowers cf ON oi.custom_flower_id = cf.id 
+    WHERE oi.order_id = ?
+");
+
 $stmt->bind_param('i', $orderId);
 $stmt->execute();
 $items = $stmt->get_result();
@@ -32,14 +44,14 @@ $deliveryDate = $createdDate->modify('+7 days')->format('m/d/y');
 <!-- BANNER IMAGE -->
 <div class="banner2">
     <img src="../images/banner2.jpg" alt="BLOOM BOUTIQUE">
-    <h1 class="banner-title">ORDER COMPLETED</h1>
+    <h1 class="banner-title">ORDER SUBMITTED</h1>
 </div>
 
 
 <div class="oc">
     <div class="confirm-complete">
         <img src="../images/ordercomplete_check.png" alt="">
-        <p><strong>Your Order is Completed!</strong></p>
+        <p><strong>Your Order is Submitted!</strong></p>
         <p>Thank you, your order has been received.</p>
     </div>
 
@@ -58,7 +70,7 @@ $deliveryDate = $createdDate->modify('+7 days')->format('m/d/y');
 
         <div class="column-order">
             <label id="ordercomplete" for="transid">Placed On</label>
-            <p class="get-details"><?= $order['created_at'];?></p>
+            <p class="get-details"><?= $order['created_at']; ?></p>
         </div>
         <hr class="vertical-divider">
 
@@ -87,12 +99,21 @@ $deliveryDate = $createdDate->modify('+7 days')->format('m/d/y');
                     $discountedPrice = $price - ($price * $discount / 100);
                     $itemTotal = $discountedPrice * $row['quantity'];
                     $total += $itemTotal;
+
+                    // Determine type
+                    $isCustom = $row['custom_flower_id'] !== null;
+
+                    // Info based on type
+                    $productName = $isCustom ? "Customized Flower" : $row['product_name'];
+                    $productImage = $isCustom ? "custom_flowers/" . $row['custom_image'] : $row['product_image'];
+                    $message = !empty($row['message']) ? "Card: ". $row['message'] : 'No card provided';
                     ?>
                     <tr>
                         <td class="product-detail">
-                            <img src="../images/<?= $row['product_image']; ?>" alt="<?= $row['product_name']; ?>">
+                            <img src="../images/<?= htmlspecialchars($productImage); ?>"
+                                alt="<?= htmlspecialchars($productName); ?>">
                             <div>
-                                <p class="product-name"><?= $row['product_name']; ?></p>
+                                <p class="product-name"><?= htmlspecialchars($productName); ?></p>
                                 <small>Quantity: <?= $row['quantity']; ?></small>
                                 <p class="cat-new-price">
                                     ₱<?= number_format($discountedPrice, 2); ?>
@@ -102,11 +123,13 @@ $deliveryDate = $createdDate->modify('+7 days')->format('m/d/y');
                                         </span>
                                     <?php endif; ?>
                                 </p>
+                                <small><?= $message; ?></small>
                             </div>
                         </td>
                         <td>₱<?= number_format($itemTotal, 2); ?></td>
                     </tr>
                 <?php endwhile; ?>
+
                 <tr>
                     <td>Shipping</td>
                     <td>₱150.00</td>

@@ -37,6 +37,35 @@ if (!isset($_SESSION['customerEmail'])) {
                     </label>
                 </div>
 
+                <!-- Wrapper -->
+                <div class="section-title">Wrapper</div>
+                <div class="options-grid scrollable-options" id="wrapper-options">
+                    <label class="option-button">
+                        <img src="../images/wrapper.png" alt="">
+                        <input type="radio" name="wrapper" value="BLUE.png">Blue Wrapper
+                    </label>
+                    <label class="option-button">
+                        <img src="../images/wrapper.png" alt="">
+                        <input type="radio" name="wrapper" value="PINK.png">Pink Wrapper
+                    </label>
+                    <label class="option-button">
+                        <img src="../images/wrapper.png" alt="">
+                        <input type="radio" name="wrapper" value="BLACK.png">Black Wrapper
+                    </label>
+                    <label class="option-button">
+                        <img src="../images/wrapper.png" alt="">
+                        <input type="radio" name="wrapper" value="GREEN.png">Green Wrapper
+                    </label>
+                    <label class="option-button">
+                        <img src="../images/wrapper.png" alt="">
+                        <input type="radio" name="wrapper" value="RED.png">Red Wrapper
+                    </label>
+                    <label class="option-button">
+                        <img src="../images/wrapper.png" alt="">
+                        <input type="radio" name="wrapper" value="PURPLE.png">Violet Wrapper
+                    </label>
+                </div>
+
                 <!-- Main Flowers -->
                 <div class="section-title">Main Flowers</div>
                 <div class="scrollable-options" id="main-flower-options">
@@ -87,7 +116,7 @@ if (!isset($_SESSION['customerEmail'])) {
                 <div class="options-grid scrollable-options" id="filler-options">
                     <label class="option-button">
                         🚫
-                        <input type="radio" name="filler" value="None">None
+                        <input type="radio" name="filler" value="none">None
                     </label>
                     <label class="option-button">
                         <img src="../images/filler.png" alt="">
@@ -116,7 +145,7 @@ if (!isset($_SESSION['customerEmail'])) {
                 <div class="options-grid scrollable-options" id="ribbon-options">
                     <label class="option-button">
                         🚫
-                        <input type="radio" name="ribbon" value="None">None
+                        <input type="radio" name="ribbon" value="none">None
                     </label>
                     <label class="option-button">
                         <img src="../images/ribbon.png" alt="">
@@ -129,35 +158,6 @@ if (!isset($_SESSION['customerEmail'])) {
                     <label class="option-button">
                         <img src="../images/ribbon.png" alt="">
                         <input type="radio" name="ribbon" value="Grossgrain_.png">Gross Grain
-                    </label>
-                </div>
-
-                <!-- Wrapper -->
-                <div class="section-title">Wrapper</div>
-                <div class="options-grid scrollable-options" id="wrapper-options">
-                    <label class="option-button">
-                        <img src="../images/wrapper.png" alt="">
-                        <input type="radio" name="wrapper" value="B.png">Blue Wrapper
-                    </label>
-                    <label class="option-button">
-                        <img src="../images/wrapper.png" alt="">
-                        <input type="radio" name="wrapper" value="P.png">Pink Wrapper
-                    </label>
-                    <label class="option-button">
-                        <img src="../images/wrapper.png" alt="">
-                        <input type="radio" name="wrapper" value="B1.png">Black Wrapper
-                    </label>
-                    <label class="option-button">
-                        <img src="../images/wrapper.png" alt="">
-                        <input type="radio" name="wrapper" value="G.png">Green Wrapper
-                    </label>
-                    <label class="option-button">
-                        <img src="../images/wrapper.png" alt="">
-                        <input type="radio" name="wrapper" value="R.png">Red Wrapper
-                    </label>
-                    <label class="option-button">
-                        <img src="../images/wrapper.png" alt="">
-                        <input type="radio" name="wrapper" value="V.png">Violet Wrapper
                     </label>
                 </div>
 
@@ -185,7 +185,7 @@ if (!isset($_SESSION['customerEmail'])) {
 
     <!-- Add to Cart -->
     <div class="add-to-cart-container">
-        <button type="submit" name="reset_customflower" class="reset-btn">Start Again</button>
+        <button type="button" class="reset-btn" onclick="location.reload();">Start Again</button>
         <button type="submit" name="save_customflower" class="add-to-cart" id="savePreviewBtn">Add to Cart</button>
     </div>
 
@@ -242,25 +242,36 @@ if (!isset($_SESSION['customerEmail'])) {
             // Add wrapper first (background)
             if (wrapper) {
                 let wrapperImg = document.createElement('img');
-                wrapperImg.src = "../images/customize/BOUQUETS/" + wrapper;
+                wrapperImg.src = "../images/customize/BOUQUETSL/" + wrapper;
                 wrapperImg.alt = "Wrapper";
                 wrapperImg.style.position = "absolute";
                 wrapperImg.style.top = "0";
                 wrapperImg.style.left = "0";
                 wrapperImg.style.width = "100%";
                 wrapperImg.style.height = "100%";
-                wrapperImg.style.zIndex = "1"; // Background layer
+                wrapperImg.style.zIndex = "5"; // Background layer
                 previewDiv.appendChild(wrapperImg);
+
+                let wrapperImgbase = document.createElement('img');
+                wrapperImgbase.src = "../images/customize/BOUQUETSL/BASE.png";
+                wrapperImgbase.alt = "Wrapper";
+                wrapperImgbase.style.position = "absolute";
+                wrapperImgbase.style.top = "0";
+                wrapperImgbase.style.left = "0";
+                wrapperImgbase.style.width = "100%";
+                wrapperImgbase.style.height = "100%";
+                wrapperImgbase.style.zIndex = "1"; // Background layer
+                previewDiv.appendChild(wrapperImgbase);
             }
 
             // Add main flowers
             // Add a flower container inside the previewDiv
             let flowerAreaDiv = document.createElement('div');
             flowerAreaDiv.style.position = "absolute";
-            flowerAreaDiv.style.top = "20%";    // Adjust to your preferred "flower area"
-            flowerAreaDiv.style.left = "30%";
+            flowerAreaDiv.style.top = "30%";    // Adjust to your preferred "flower area"
+            flowerAreaDiv.style.left = "35%";
             flowerAreaDiv.style.width = "40%";
-            flowerAreaDiv.style.height = "40%";
+            flowerAreaDiv.style.height = "20%";
             flowerAreaDiv.style.zIndex = "2";
             flowerAreaDiv.style.pointerEvents = "none"; // Flowers won't block clicks
             previewDiv.appendChild(flowerAreaDiv);
@@ -278,28 +289,59 @@ if (!isset($_SESSION['customerEmail'])) {
                         flowerImg.style.position = "absolute";
                         flowerImg.style.top = Math.random() * 80 + "%";   // Random inside container
                         flowerImg.style.left = Math.random() * 80 + "%";  // Random inside container
-                        flowerImg.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 30 - 15}deg)`; // Center & random rotate
-                        flowerImg.style.width = "60%"; // Slightly smaller maybe
+
+                        // Random rotation and flip
+                        const rotateDeg = Math.random() * 30 - 15; // -15 to 15 deg
+                        const flip = Math.random() < 0.5 ? -1 : 1; // 50% chance to flip
+                        flowerImg.style.transform = `translate(-50%, -50%) rotate(${rotateDeg}deg) scaleX(${flip})`;
+
+                        flowerImg.style.width = "70%";
                         flowerImg.style.height = "auto";
                         flowerImg.style.zIndex = "2";
+
                         flowerAreaDiv.appendChild(flowerImg);
                     }
                 }
             });
 
+            // Create filler container
+            let fillerAreaDiv = document.createElement('div');
+            fillerAreaDiv.style.position = "absolute";
+            fillerAreaDiv.style.top = "30%";    // Adjust as needed
+            fillerAreaDiv.style.left = "35%";
+            fillerAreaDiv.style.width = "40%";
+            fillerAreaDiv.style.height = "25%";
+            fillerAreaDiv.style.zIndex = "2";   // Base z-index
+            fillerAreaDiv.style.pointerEvents = "none"; // Doesn't block clicks
+            previewDiv.appendChild(fillerAreaDiv);
+
             // Add fillers (after main flowers but before ribbon)
             if (filler && filler !== "none") {
-                let fillerImg = document.createElement('img');
-                fillerImg.src = "../images/customize/FILLERS/" + filler; // Assuming filler image filenames
-                fillerImg.alt = filler;
-                fillerImg.style.position = "absolute";
-                fillerImg.style.top = "20%";
-                fillerImg.style.left = "20%";
-                fillerImg.style.width = "40%"; // Maybe slightly smaller than main flowers
-                fillerImg.style.height = "40%";
-                fillerImg.style.margin = "auto";
-                fillerImg.style.zIndex = "2"; // Same layer as flowers
-                previewDiv.appendChild(fillerImg);
+                const fillerCount = Math.floor(Math.random() * 6) + 5; // 5 to 10
+
+                for (let i = 0; i < fillerCount; i++) {
+                    let fillerImg = document.createElement('img');
+                    fillerImg.src = "../images/customize/FILLERS/" + filler;
+                    fillerImg.alt = filler;
+                    fillerImg.style.position = "absolute";
+
+                    // Random positioning inside filler area
+                    fillerImg.style.top = Math.random() * 80 + "%";
+                    fillerImg.style.left = Math.random() * 80 + "%";
+
+                    // Random rotation and optional flip
+                    const rotateDeg = Math.random() * 30 - 15;
+                    const flip = Math.random() < 0.5 ? -1 : 1;
+                    fillerImg.style.transform = `translate(-50%, -50%) rotate(${rotateDeg}deg) scaleX(${flip})`;
+
+                    fillerImg.style.width = "60%";
+                    fillerImg.style.height = "auto";
+
+                    // Randomize z-index between 2 to 4
+                    fillerImg.style.zIndex = (Math.floor(Math.random() * 3) + 2).toString();
+
+                    fillerAreaDiv.appendChild(fillerImg); // Append to filler container
+                }
             }
 
             // Add ribbon last (foreground)
@@ -309,11 +351,11 @@ if (!isset($_SESSION['customerEmail'])) {
                 ribbonImg.alt = "Ribbon";
                 ribbonImg.style.position = "absolute";
                 ribbonImg.style.bottom = "34px";
-                ribbonImg.style.left = "50%";
+                ribbonImg.style.left = "53%";
                 ribbonImg.style.transform = "translateX(-55%)";
                 ribbonImg.style.width = "50%";
                 ribbonImg.style.height = "auto";
-                ribbonImg.style.zIndex = "3"; // Foreground ribbon
+                ribbonImg.style.zIndex = "6"; // Foreground ribbon
                 previewDiv.appendChild(ribbonImg);
             }
         }

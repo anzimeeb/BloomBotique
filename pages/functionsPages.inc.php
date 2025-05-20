@@ -1,6 +1,6 @@
 <?php
 
-function addToCart($conn, $userId, $productId,  $quantity, $size, $customFlowerId = null, $message = null)
+function addToCart($conn, $userId, $productId, $quantity, $size, $customFlowerId = null, $message = null)
 {
     // Check if the product already exists in the cart for the user
     if ($customFlowerId === null) {
@@ -214,7 +214,13 @@ function placeOrder($conn, $userId, $postData)
         $stmt->close();
 
         // Fetch cart items
-        $query = "SELECT c.*, p.* FROM cart c JOIN products p ON c.product_id = p.product_id WHERE c.user_id = ?";
+        $query = "
+            SELECT c.*, p.*, cf.* 
+            FROM cart c 
+            LEFT JOIN products p ON c.product_id = p.product_id 
+            LEFT JOIN customflowers cf ON c.custom_flower_id = cf.id 
+            WHERE c.user_id = ?
+        ";
         $stmt = $conn->prepare($query);
         if (!$stmt) {
             throw new Exception("Prepare failed for cart query: " . $conn->error);
@@ -229,22 +235,35 @@ function placeOrder($conn, $userId, $postData)
 
         // Insert order items
         while ($row = $result->fetch_assoc()) {
-            $quantity = (int) $row['quantity'];
-            $price = (float) $row['product_price'];
-            $discount = (float) $row['product_discount'];
-            $message = $row['message'] ?? null;
+            $productId = !empty($row['product_id']) ? (int) $row['product_id'] : null;
+            $customFlowerId = !empty($row['custom_flower_id']) ? (int) $row['custom_flower_id'] : null;
 
-            $itemStmt = $conn->prepare("INSERT INTO order_items 
-                (order_id, product_id, quantity, price, discount, message) 
-                VALUES (?, ?, ?, ?, ?, ?)");
+            if ($customFlowerId !== null) {
+                $quantity = 1;
+                $price = (float) $row['price']; // from customflowers
+                $discount = 0.0;
+                $message = $row['message'] ?? null;
+            } else {
+                $quantity = (int) $row['quantity'];
+                $price = (float) $row['product_price'];
+                $discount = (float) $row['product_discount'];
+                $message = $row['message'] ?? null;
+            }
+
+            $itemStmt = $conn->prepare("
+                INSERT INTO order_items 
+                (order_id, product_id, custom_flower_id, quantity, price, discount, message) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            ");
             if (!$itemStmt) {
                 throw new Exception("Prepare failed for order items: " . $conn->error);
             }
 
             $itemStmt->bind_param(
-                'iiidds',
+                'iiiddds',
                 $orderId,
-                $row['product_id'],
+                $productId,
+                $customFlowerId,
                 $quantity,
                 $price,
                 $discount,
@@ -275,20 +294,21 @@ function placeOrder($conn, $userId, $postData)
         // Commit transaction
         $conn->commit();
 
-        session_start();
+        // Optional: store order ID in session
         $_SESSION["last_order_id"] = $orderId;
-        header("Location: placedOrder.php?order_id=" . $orderId);
-        exit();
+
+        // ✅ Return the order ID for further processing (e.g. email + redirect)
+        return $orderId;
+
     } catch (Exception $e) {
-        // Rollback on failure
+        // Rollback transaction on error
         $conn->rollback();
 
-        // Optional: log this error somewhere
+        // Log error (optional)
         error_log("Order placement error: " . $e->getMessage());
 
-        // ❌ Redirect to error page or show a user-friendly message
-        header("Location: error.php?message=" . urlencode("Something went wrong while placing your order."));
-        exit();
+        // ❌ Return false so the caller knows it failed
+        return false;
     }
 }
 
@@ -350,7 +370,8 @@ function getUserOrders($conn, $userId)
     return $orders; // Return the orders array
 }
 
-function saveCustomFlower($conn, $userId) {
+function saveCustomFlower($conn, $userId)
+{
     // 1. Validate presence of expected POST data
     if (!isset($_POST['save_customflower'])) {
         echo "Missing POST: save_customflower";
@@ -370,7 +391,7 @@ function saveCustomFlower($conn, $userId) {
     $mainFlowers = [];
 
     foreach ($mainFlowersInput as $flowerKey => $quantity) {
-        if ((int)$quantity > 0) {
+        if ((int) $quantity > 0) {
             $flowerName = explode('/', $flowerKey)[0];
             $mainFlowers[] = $flowerName . $quantity;
         }
@@ -380,10 +401,17 @@ function saveCustomFlower($conn, $userId) {
 
     // 4. Calculate price based on size
     switch ($size) {
-        case 'Small': $price = 499.00; break;
-        case 'Medium': $price = 699.00; break;
-        case 'Large': $price = 899.00; break;
-        default: $price = 0;
+        case 'Small':
+            $price = 499.00;
+            break;
+        case 'Medium':
+            $price = 699.00;
+            break;
+        case 'Large':
+            $price = 899.00;
+            break;
+        default:
+            $price = 0;
     }
 
     // 5. Prepare insert into customflowers
