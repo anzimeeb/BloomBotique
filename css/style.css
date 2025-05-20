@@ -3469,7 +3469,7 @@ input:focus {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 20px;
+  margin: 0px;
 }
 
 .track-order-btn {

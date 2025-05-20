@@ -20,11 +20,11 @@
                         <img src="../images/back.png" alt="back">
                     </button>
                 </div>
-                
+
                 <script>
                     function goBack() {
                         window.history.back();
-                        }
+                    }
                 </script>
 
                 <div id="signup-logo">
@@ -48,7 +48,7 @@
                 ?>
 
                 <!-- SIGNUP FORM -->
-                <form method="POST" action="signup.inc.php">
+                <form method="POST" action="signup.inc.php" onsubmit="return validateSignupForm()">
                     <div id="in_same">
                         <div class="input-grp">
                             <label for="firstname">First Name</label>
@@ -76,15 +76,15 @@
                     </div>
 
                     <label class="label">Email</label>
-                    <input type="text" name="email" required>
+                    <input type="text" name="email" id="email" required>
                     <br>
 
                     <label class="label">Password</label>
-                    <input type="password" name="pass" required>
+                    <input type="password" name="pass" id="pass" required>
                     <br>
 
                     <label class="label">Re-Enter Password</label>
-                    <input type="password" name="cpass" required>
+                    <input type="password" name="cpass" id="cpass" required>
                     <br>
 
                     <input type="submit" name="createaccsubmit" value="Sign Up">
@@ -99,5 +99,33 @@
         </section>
     </main>
 </body>
+<script>
+    function validateSignupForm() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("pass").value;
+        const confirmPassword = document.getElementById("cpass").value;
+
+        // Email check
+        if (!email.includes("@") || !email.includes(".")) {
+            alert("Please enter a valid email address.");
+            return false;
+        }
+
+        // Password length check
+        if (password.length < 8) {
+            alert("Password must be at least 8 characters long.");
+            return false;
+        }
+
+        // Password match check
+        if (password !== confirmPassword) {
+            alert("Passwords do not match.");
+            return false;
+        }
+
+        return true; // ✅ Submit form
+    }
+</script>
+
 
 </html>

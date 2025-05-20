@@ -152,40 +152,42 @@ if (isset($_SESSION['customerEmail'])) {
 
                                 <div class="confirmation">
                                     <?php if ($order['order_status'] === 'Pending'): ?>
-                                        <label id="conf" for="confirmed" style="color: orange;">Pending</label>
+                                        <label id="conf" for="confirmed"
+                                            style="color: orange; border-color: orange;">Pending</label>
                                         <p>Your order is still being processed.</p>
                                     <?php elseif ($order['order_status'] === 'Accepted'): ?>
-                                        <label id="conf" for="confirmed" style="color: green;">Accepted</label>
+                                        <label id="conf" for="confirmed" style="color: green; border-color: green;">Accepted</label>
                                         <p>Your order has been accepted and is being prepared.</p>
                                     <?php elseif ($order['order_status'] === 'Shipped'): ?>
-                                        <label id="conf" for="confirmed" style="color: blue;">Shipped</label>
+                                        <label id="conf" for="confirmed" style="color: blue; border-color: blue;">Shipped</label>
                                         <p>Your order has been shipped and is on its way.</p>
                                     <?php elseif ($order['order_status'] === 'Delivered'): ?>
-                                        <label id="conf" for="confirmed" style="color: #28a745;">Delivered</label>
+                                        <label id="conf" for="confirmed"
+                                            style="color: #28a745; border-color: #28a745;">Delivered</label>
                                         <p>Your order has been delivered successfully.</p>
                                     <?php elseif ($order['order_status'] === 'Cancelled'): ?>
-                                        <label id="conf" for="confirmed" style="color: red;">Cancelled</label>
+                                        <label id="conf" for="confirmed" style="color: red; border-color: red;">Cancelled</label>
                                         <p>Your order has been cancelled.</p>
                                     <?php else: ?>
-                                        <label id="conf" for="confirmed" style="color: grey;">Unknown</label>
+                                        <label id="conf" for="confirmed" style="color: grey; border-color: grey;">Unknown</label>
                                         <p>We could not determine the current status of your order.</p>
                                     <?php endif; ?>
-                                </div>
 
-
-                                <!-- Track and Cancel Buttons (linked to each order) -->
-                                <div class="track-cancel-grp">
-                                    <a href="trackOrder.php?order_id=<?= htmlspecialchars($order['order_id']) ?>">
+                                    <!-- Track and Cancel Buttons (linked to each order) -->
+                                    <div class="track-cancel-grp">
+                                        <!-- <a href="trackOrder.php?order_id=<?= htmlspecialchars($order['order_id']) ?>">
                                         <button class="track-order-btn">Track Order</button>
-                                    </a>
+                                        </a> -->
 
-                                    <?php $orderStatus = htmlspecialchars($order['order_status']);  if ($orderStatus == 'Pending'): ?>
-                                        <div class="track-cancel-grp">
-                                            <a href="cancelOrder.php?order_id=<?= htmlspecialchars($order['order_id']) ?>">
-                                                <button class="cancel-order-btn">Cancel Order</button>
-                                            </a>
-                                        </div>
-                                    <?php endif; ?>
+                                        <?php $orderStatus = htmlspecialchars($order['order_status']);
+                                        if ($orderStatus == 'Pending'): ?>
+                                            <div class="track-cancel-grp">
+                                                <a href="cancelOrder.php?order_id=<?= htmlspecialchars($order['order_id']) ?>">
+                                                    <button class="cancel-order-btn">Cancel Order</button>
+                                                </a>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
                                 <hr>
                             </div>
