@@ -93,22 +93,7 @@ if (isset($_POST['placedorder']) && isset($_SESSION['user_id'])) {
     // 📧 Send Email ONLY to You
     $mail = new PHPMailer(true);
     try {
-        $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com';
-        $mail->SMTPAuth = true;
-        $mail->Username = 'theseatcafewebsite@gmail.com';
-        $mail->Password = 'pkoj eyxd tuhn oppj'; // Gmail app password
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port = 587;
-
-        $mail->setFrom('theseatcafewebsite@gmail.com', 'Bloom Boutique');
-        $mail->addAddress('yourkofishop@gmail.com'); // <-- Only you
-
-        $mail->isHTML(true);
-        $mail->Subject = 'New Order';
-        $mail->Body = $emailBody;
-
-        $mail->send();
+        //try this on your own
     } catch (Exception $e) {
         echo "Mailer Error: {$mail->ErrorInfo}";
     }
