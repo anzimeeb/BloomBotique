@@ -28,31 +28,8 @@ if (isset($_POST['order_id']) && isset($_POST['order_status']) && isset($_POST['
             // Send email
             $mail = new PHPMailer(true);
             try {
-                $mail->isSMTP();
-                $mail->Host = 'smtp.gmail.com';
-                $mail->SMTPAuth = true;
-                $mail->Username = 'Yourkofishop@gmail.com';
-                $mail->Password = 'adkm joci tsbo xdlj';
-                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                $mail->Port = 587;
-
-                $mail->setFrom('Yourkofishop@gmail.com', 'Bloom Boutique');
-                $mail->addAddress($email);
-
-                $mail->isHTML(true);
-                $mail->Subject = 'Your Bloom Boutique Order Update';
-                $mail->Body = "<div style='font-family: Arial, sans-serif; padding: 20px;'>
-                                    <h2 style='color: #d63384;'>Order Update from Bloom Boutique</h2>
-                                    <p>Hi there,</p>
-                                    <p>We're reaching out to let you know that the status of your order <strong>#{$orderId}</strong> has been updated to:</p>
-                                    <p style='font-size: 18px; font-weight: bold; color: #28a745;'>$orderStatus</p>
-                                    <p>Thank you for shopping with us! We hope you enjoy your beautiful blooms.</p>
-                                    <p style='margin-top: 30px;'>Best regards,<br>Bloom Boutique Team</p>
-                                </div>";
-
-                $mail->send();
-                session_start();
-                $_SESSION["customerEmail"] = $email;
+                //try this on your own
+                    
             } catch (Exception $e) {
                 echo "Mailer Error: {$mail->ErrorInfo}";
                 exit();
